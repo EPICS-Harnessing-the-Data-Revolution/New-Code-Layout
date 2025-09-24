@@ -135,7 +135,7 @@ for stationid in station_ids_in_range:
             tp if tp is not None else None,
             eColi if eColi is not None else None)
         )
-        print('Collected data from ' + stationid + '\n')
+        #print('Collected data from ' + stationid + '\n')
 
 conn.commit()
 conn.close()
