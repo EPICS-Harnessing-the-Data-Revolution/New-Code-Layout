@@ -2,6 +2,7 @@ import requests
 from services.backend.datasources.base import DataSource
 from services.backend.datasources.utils import DataParser
 from services.backend.datasources.utils import DateHelper
+from services.backend.datasources.config import SHADEHILL_DATASETS
 
 class ShadehillDataSource(DataSource):
     """
@@ -10,20 +11,7 @@ class ShadehillDataSource(DataSource):
     
     def __init__(self):
         super().__init__("Shadehill", "shadehill")
-        self.datasets = {
-            "AF": "Reservoir Storage Content",
-            "FB": "Reservoir Forebay Elevation",
-            "IN": "Daily Mean Computed Inflow",
-            "MM": "Daily Mean Air Temperature",
-            "MN": "Daily Minimum Air Temperature",
-            "MX": "Daily Maximum Air Temperature",
-            "PP": "Total Precipitation (inches per day)",
-            "PU": "Total Water Year Precipitation",
-            "QD": "Daily Mean Total Discharge",
-            "QRD": "Daily Mean River Discharge",
-            "QSD": "Daily Mean Spillway Discharge",
-            "RAD": "Daily Mean Gate One Opening",
-        }
+        self.datasets = SHADEHILL_DATASETS
         
     def fetch(self, location, dataset = None, start_date = None, end_date = None):
         """
