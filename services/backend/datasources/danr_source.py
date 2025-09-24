@@ -6,7 +6,8 @@ import json
 import sqlite3
 from typing import Dict, List, Tuple, Any, Optional, Union
 import pandas as pd
-from .config import station_ids
+from services.backend.datasources.config import station_ids
+from services.backend.sqlclasses import updateDictionary
 
 
 class DataSource(ABC):
@@ -31,7 +32,6 @@ class DataSource(ABC):
         """
         Store the processed data in the sql database.
         """
-        from backend.sqlclasses import updateDictionary
         updateDictionary(times, values, location, dataset, self.data_type)
 
     def pull(self, location= None, dataset= None, start_date= None, end_date= None):
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS danr (
     tp FLOAT,
     eColi FLOAT
 )''')
-print('Created staitons table\n')
+print('Created stations table\n')
 
 station_ids_in_range = list(station_ids.keys())
 
@@ -109,10 +109,10 @@ for stationid in station_ids_in_range:
         nitrate_nitrite = station.get('nitrateNitrite')
         tp = station.get('tp')
         eColi = station.get('eColi')
-
-        data = {'location': location, 'station_ID': stationid, 'latitude': lat, 'longitude': lon, 'sampleDate': date,
+        #location = station_ids[stationid].get('LocationName', 'Unknown')
+        data = {'station_ID': stationid, 'latitude': lat, 'longitude': lon, 'sampleDate': date,
                 'pH': ph, 'tkn': tkn, 'ammonia': ammonia, 'nitrateNitrite': nitrate_nitrite, 'tp': tp, 'eColi': eColi}
-        data_df = pd.DataFrame(data)
+        data_df = pd.DataFrame([data])
 
 
         for column in data_df.columns:
