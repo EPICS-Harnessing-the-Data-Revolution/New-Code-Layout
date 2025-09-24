@@ -164,3 +164,22 @@ COCORAHS_STATIONS = {
             "Bismarck, ND": ["NDBH0034", "20120416", "Bismarck"],
             "Langdon, ND": ["NDCV0004", "20200311", "Langdon"],
         }
+
+
+
+#SHADEHILL
+
+SHADEHILL_DATASETS = {
+            "AF": "Reservoir Storage Content",
+            "FB": "Reservoir Forebay Elevation",
+            "IN": "Daily Mean Computed Inflow",
+            "MM": "Daily Mean Air Temperature",
+            "MN": "Daily Minimum Air Temperature",
+            "MX": "Daily Maximum Air Temperature",
+            "PP": "Total Precipitation (inches per day)",
+            "PU": "Total Water Year Precipitation",
+            "QD": "Daily Mean Total Discharge",
+            "QRD": "Daily Mean River Discharge",
+            "QSD": "Daily Mean Spillway Discharge",
+            "RAD": "Daily Mean Gate One Opening",
+        }
