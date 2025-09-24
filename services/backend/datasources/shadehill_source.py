@@ -62,7 +62,7 @@ class ShadehillDataSource(DataSource):
                     dataset_code = code
                     break
 
-        lines = raw_data.strip().split('\r')
+        lines = raw_data.splitlines()
         
         times = []
         values = []
@@ -120,4 +120,4 @@ class ShadehillDataSource(DataSource):
 #TESTING
 shadehill = ShadehillDataSource()
 print(DateHelper.string_to_list("20210624"))
-print((shadehill.fetch("Shadehill",dataset="AF", start_date=DateHelper.string_to_list("20210624"), end_date=DateHelper.string_to_list("20230401"))))
+print((shadehill.fetch("Shadehill",dataset="AF", start_date=DateHelper.string_to_list("20210624"), end_date=DateHelper.string_to_list("20240401"))))
