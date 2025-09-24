@@ -6,7 +6,7 @@ import pandas as pd
 from abc import ABC, abstractmethod
 from datetime import datetime, date, timedelta
 from typing import Dict, List, Tuple, Any, Optional, Union
-from .config import station_ids
+from services.backend.datasources.config import station_ids
 from services.backend.sqlclasses import updateDictionary
 
 
