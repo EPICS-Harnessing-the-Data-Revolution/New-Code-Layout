@@ -2,8 +2,8 @@ from json import loads
 
 import requests
 
-from .base import DataSource
-from .config import COCORAHS_STATIONS
+from services.backend.datasources.base import DataSource
+from services.backend.datasources.config import COCORAHS_STATIONS
 
 class CoCoRaHSDataSource(DataSource):
     """
