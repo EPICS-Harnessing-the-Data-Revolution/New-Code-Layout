@@ -17,7 +17,7 @@ class DataSource(ABC):
 
     @abstractmethod
     def fetch(self, location = None, dataset = None, start_date = None, end_date = None):
-        
+        pass
 
     @abstractmethod
     def process(self, raw_data = None, location = None, dataset = None):
@@ -31,7 +31,7 @@ class DataSource(ABC):
         """
         Store the processed data in the sql database.
         """
-        from backend.database.sqlclasses import updateDictionary
+        from backend.sqlclasses import updateDictionary
         updateDictionary(times, values, location, dataset, self.data_type)
 
     def pull(self, location= None, dataset= None, start_date= None, end_date= None):
@@ -109,9 +109,6 @@ for stationid in station_ids_in_range:
         nitrate_nitrite = station.get('nitrateNitrite')
         tp = station.get('tp')
         eColi = station.get('eColi')
-<<<<<<< Updated upstream
-        
-=======
 
         data = {'location': location, 'station_ID': stationid, 'latitude': lat, 'longitude': lon, 'sampleDate': date,
                 'pH': ph, 'tkn': tkn, 'ammonia': ammonia, 'nitrateNitrite': nitrate_nitrite, 'tp': tp, 'eColi': eColi}
@@ -124,7 +121,6 @@ for stationid in station_ids_in_range:
                 data_df[column] = data_df[column].apply(
                     lambda x: "insignificant" if isinstance(x, str) and "<" in x else x)
 
->>>>>>> Stashed changes
         cursor.execute('''INSERT INTO danr (station_ID, latitude, longitude, 
         sampleDate, pH, tkn, ammonia, nitrateNitrite, tp, eColi) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', 
             
