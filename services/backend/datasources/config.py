@@ -156,4 +156,11 @@ station_ids = {
         }
 
 
-#
+#COCORAHS
+
+COCORAHS_STATIONS = {
+            "Bison, SD": ["SDFK0006", "20070624", "Bison"],
+            "Faulkton, SD": ["SDFK0009", "20230401", "Faulkton"],
+            "Bismarck, ND": ["NDBH0034", "20120416", "Bismarck"],
+            "Langdon, ND": ["NDCV0004", "20200311", "Langdon"],
+        }
