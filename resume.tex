@@ -1,0 +1,188 @@
+%-------------------------
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins for better readability
+\addtolength{\oddsidemargin}{-0.1in}
+\addtolength{\evensidemargin}{-0.1in}
+\addtolength{\textwidth}{0.2in}
+\addtolength{\topmargin}{-0.2in}
+\addtolength{\textheight}{0.4in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting - reduced spacing
+\titleformat{\section}{
+  \vspace{-8pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-8pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands - optimized spacing
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \footnotesize#1 & #2 \\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-5pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[topsep=1pt, itemsep=1pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-4pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    \textbf{\Huge \scshape Andrew Vu} \\ \vspace{1pt}
+    \small +1 (945) 426-6340 $|$ \href{mailto:vu89@purdue.edu}{\underline{vu89@purdue.edu}} $|$ 
+    \href{https://www.linkedin.com/in/andrew-vu23/}{\underline{linkedin.com/in/andrew-vu23}}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Purdue University}{West Lafayette, IN}
+      {B.Sc. in Electrical Engineering}{2025 -- Present}
+    \resumeSubheading
+      {Le Quy Don High School for the Gifted}{Vung Tau, Vietnam}
+      {Specialization in Physics}{2022 -- 2025}
+      \resumeItemListStart
+        \resumeItem{\textbf{CGPA: 9.4/10.0}, graduated \textbf{\#1} of class. Full-ride scholarship.} 
+        \resumeItem{\textbf{AP Scores}: Calculus BC: 5, Physics C - Mechanics: 5, Physics C - E\&M: 5.}
+     \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Engineering Intern}{July 2024 -- Aug. 2024}
+      {PetroVietnam Technical Services Corporation}{Vung Tau, Vietnam}
+      \resumeItemListStart
+        \resumeItem{Reviewed technical documents and compiled project progress reports for major oil \& gas construction projects.}
+        \resumeItem{Organized project data (construction metrics, material usage, equipment status) into company tracking systems.}
+      \resumeItemListEnd
+    \resumeSubheading
+      {English Teaching Assistant}{Aug. 2023 -- June 2024}
+      {Pine Education English Center}{Vung Tau, Vietnam}
+      \resumeItemListStart
+        \resumeItem{Mentored over \textbf{30 students} to improve IELTS reading comprehension and brainstorming skills.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------CURRENT PROJECTS-----------
+\section{Current Projects}
+    \resumeSubHeadingListStart
+        \resumeProjectHeading
+          {\textbf{Engineering Projects in Community Service} $|$ \emph{Data Collection}}{Aug. 2025 -- Present}
+          \resumeItemListStart
+            \resumeItem{Contributing to full-stack web application for Standing Rock Tribal environmental monitoring by implementing data collection from \textbf{6 government APIs} and processing \textbf{15+ environmental measurements from 23 stations}.}
+            \resumeItem{Implementing error handling with exponential backoff, parsing multiple data formats \textbf{(CSV, JSON, plain-text)}.}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\textbf{Purdue RoboMaster \& Lunabotics} $|$ \emph{Robotics, Engineering}}{Aug. 2025 -- Present}
+          \resumeItemListStart
+            \resumeItem{Building audio visualizer and low voltage alarm circuits by customizing PCB boards using EasyEDA and KiCad.}
+          \resumeItemListEnd
+    \resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\section{Leadership \& Community Projects}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+        {\textbf{\href{https://www.facebook.com/profile.php?id=61564648592878}{CHAI VILLAGE}} - \textbf{Founder}}{May 2023 -- May 2025}
+          \resumeItemListStart
+            \resumeItem{Raised \textbf{\$500+} to support fishing communities; provided 20 medicine cabinets through \href{https://www.facebook.com/profile.php?id=61564119064491}{\textbf{Nautical Health Initiative}}.}
+            \resumeItem{Collaborated with authorities to install 10 eco-friendly trash bins and signage in public areas.}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
+        {\textbf{\href{https://www.facebook.com/profile.php?id=61564230896327}{BLUE SEA CLUB}} - \textbf{Ambassador}}{Jan. 2023 -- Aug. 2025}
+          \resumeItemListStart
+            \resumeItem{Led monthly cleanups collecting \textbf{100+ tons} of waste with \textbf{500+ volunteers}; featured in major media (\href{https://vnews.gov.vn/video/lan-toa-phong-trao-xanh-tai-vung-tau-130763.htm}{\textbf{VNews}}, \href{https://vtv.vn/video/viet-nam-thuc-giac-07-9-2024-694404.htm}{\textbf{VTV}}).}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
+        {\textbf{\href{https://www.facebook.com/dumbdump.august24/}{DUMB DUMP PROJECT}} - \textbf{Head Organizer}}{Aug. 2024 -- July 2025}
+          \resumeItemListStart
+            \resumeItem{Led 50+ students in producing educational environmental blogs; built handmade products workshop profiting \textbf{\$200+}.}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
+        {\textbf{\href{https://www.facebook.com/profile.php?id=61561098159335}{THE INVENTOR'S CLUB}} - \textbf{Founder}}{July 2024 -- Aug. 2025}
+          \resumeItemListStart
+            \resumeItem{Established Vung Tau's first student-run STEM group with 30 members; mentored 15+ students weekly in Physics.}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
+        {\textbf{\href{https://www.facebook.com/SEAGLEProject}{SEAGLE PROJECT}} - \textbf{Head of Program}}{Nov. 2022 -- Oct. 2024}
+          \resumeItemListStart
+            \resumeItem{Created \href{https://www.youtube.com/watch?v=0mibAtQnGlA}{\textbf{8 financial literacy workshops}} for 100 participants each; developed \href{https://edu2review.com/events/mo-hinh-san-chung-khoan-ao-cho-hoc-sinh-cap-3-tu-su-kien-stowiz-getting-started-1520.html}{\textbf{Virtual Stock Exchange Model}}.}
+          \resumeItemListEnd
+    \resumeSubHeadingListEnd
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{: Python, C/C++, HTML} \\
+     \textbf{Software}{: EasyEDA, KiCad, Notion, Microsoft Office, Cursor, VS Code} \\
+     \textbf{Skills}{: Data Collection \& Analysis, Educational Content Creation, Project Management}
+    }} 
+ \end{itemize}
+
+\end{document}

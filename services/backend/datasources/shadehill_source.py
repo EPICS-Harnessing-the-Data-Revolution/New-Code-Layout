@@ -112,9 +112,12 @@ class ShadehillDataSource(DataSource):
     
     def pull_all(self, start_date, end_date):
         """
-        Pull data for all datasets.
+        Pull data for all datasets and store them together to avoid overwriting.
         """
         print("Pulling Shadehill data...")
+        
+        # Collect all datasets first
+        all_data = {}  # {timestamp: {dataset_name: value}}
         
         for dataset_code, dataset_name in self.datasets.items():
             try:
@@ -125,9 +128,88 @@ class ShadehillDataSource(DataSource):
                 if raw_data:
                     times, values = self.process(raw_data, "Shadehill", dataset_code)
                     if times and values:
-                        self.store(times, values, "Shadehill", dataset_name)
+                        # Store in our collection
+                        for time, value in zip(times, values):
+                            if time not in all_data:
+                                all_data[time] = {}
+                            all_data[time][dataset_name] = value
             except Exception as e:
                 print(f"Error processing Shadehill data for {dataset_name}: {e}")
+        
+        # Now store all datasets together
+        if all_data:
+            print(f"  Storing {len(all_data)} records with all datasets...")
+            self.store_all_datasets(all_data, "Shadehill")
+    
+    def store_all_datasets(self, all_data, location):
+        """
+        Store all datasets for each timestamp in a single database operation.
+        Uses a custom approach to avoid overwriting data.
+        """
+        import sqlite3
+        from services.backend.database.sqlclaases import SQL_CONVERSION
+        
+        # Use direct database connection instead of _get_db_connection
+        conn = None
+        try:
+            conn = sqlite3.connect('./Measurements.db')
+            cursor = conn.cursor()
+            
+            # Get all unique timestamps
+            timestamps = sorted(all_data.keys())
+            
+            for timestamp in timestamps:
+                datasets = all_data[timestamp]
+                
+                # Check if record already exists
+                cursor.execute("SELECT * FROM shadehill WHERE location = ? AND datetime = ?", (location, timestamp))
+                existing_record = cursor.fetchone()
+                
+                if existing_record:
+                    # Update existing record with new values
+                    update_fields = []
+                    update_values = []
+                    
+                    for dataset_name, value in datasets.items():
+                        if value is not None:
+                            sql_field = SQL_CONVERSION.get(dataset_name)
+                            if sql_field:
+                                update_fields.append(f"{sql_field} = ?")
+                                update_values.append(value)
+                    
+                    if update_fields:
+                        update_values.append(location)
+                        update_values.append(timestamp)
+                        sql = f"UPDATE shadehill SET {', '.join(update_fields)} WHERE location = ? AND datetime = ?"
+                        cursor.execute(sql, update_values)
+                else:
+                    # Insert new record with all values
+                    fields = ['location', 'datetime']
+                    values = [location, timestamp]
+                    placeholders = ['?', '?']
+                    
+                    for dataset_name, value in datasets.items():
+                        if value is not None:
+                            sql_field = SQL_CONVERSION.get(dataset_name)
+                            if sql_field:
+                                fields.append(sql_field)
+                                values.append(value)
+                                placeholders.append('?')
+                    
+                    if len(fields) > 2:  # More than just location and datetime
+                        sql = f"INSERT INTO shadehill ({', '.join(fields)}) VALUES ({', '.join(placeholders)})"
+                        cursor.execute(sql, values)
+            
+            conn.commit()
+            print(f"Successfully stored {len(timestamps)} records with all datasets")
+            
+        except Exception as e:
+            print(f"Error storing datasets: {e}")
+            if conn:
+                conn.rollback()
+        finally:
+            if conn:
+                conn.close()
 
 #TESTING
 shadehill = ShadehillDataSource()
