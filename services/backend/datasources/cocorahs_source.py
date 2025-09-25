@@ -3,7 +3,7 @@ from json import loads
 import requests
 
 from services.backend.datasources.base import DataSource
-
+from services.backend.datasources.config import COCORAHS_STATIONS
 
 class CoCoRaHSDataSource(DataSource):
     """
@@ -12,12 +12,7 @@ class CoCoRaHSDataSource(DataSource):
 
     def __init__(self):
         super().__init__("CoCoRaHS", "cocorahs")
-        self.station_dict = {
-            "Bison, SD": ["SDFK0006", "20070624", "Bison"],
-            "Faulkton, SD": ["SDFK0009", "20230401", "Faulkton"],
-            "Bismarck, ND": ["NDBH0034", "20120416", "Bismarck"],
-            "Langdon, ND": ["NDCV0004", "20200311", "Langdon"],
-        }
+        self.station_dict = COCORAHS_STATIONS
 
     def fetch(self, location=None, dataset=None, start_date=None, end_date=None):
         if location not in self.station_dict:

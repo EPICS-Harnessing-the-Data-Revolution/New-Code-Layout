@@ -2,7 +2,7 @@ import logging
 import sqlite3
 from datetime import datetime
 
-from services.backend.constants import (
+from constants import (
     DB_PATH,
     LOCATION_TO_TABLE,
     SQL_CONVERSION,
