@@ -183,3 +183,9 @@ SHADEHILL_DATASETS = {
             "QSD": "Daily Mean Spillway Discharge",
             "RAD": "Daily Mean Gate One Opening",
         }
+NDMES_STATIONS = {
+            "Fort Yates": ["89", "Fort Yates, ND"],
+            "Linton": ["35", "Linton, ND"],
+            "Mott": ["69", "Mott, ND"],
+            "Carson": ["96", "Carson, ND"],
+}
