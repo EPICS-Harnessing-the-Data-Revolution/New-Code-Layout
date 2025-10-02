@@ -3,7 +3,8 @@ Database constants and configuration values.
 """
 
 # Database file path
-DB_PATH = "./Measurements.db"
+import os
+DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "New-Code-Layout 14-19-29-956", "Measurements.db")
 
 # Location lists by data source type
 GAUGES = (
@@ -104,6 +105,23 @@ SQL_CONVERSION = {
     "Average Temperature": "avg_temp",
     "Max Temperature": "max_temp",
     "Min Temperature": "min_temp",
+    # Water Quality Parameters
+    "Phosphorus (Total) (P)": "total_phosphorus",
+    "Phosphorus (Total Kjeldahl) (P)": "total_kjeldahl_phosphorus",
+    "Nitrate + Nitrite (N)": "nitrate_nitrite",
+    "Nitrate Forms Check": "nitrate_forms_check",
+    "Nitrate + Nitrite (N) Dis": "nitrate_nitrite_dissolved",
+    "Nitrogen (Total Kjeldahl)": "total_kjeldahl_nitrogen",
+    "Nitrogen (TKN-Dissolved)": "tkn_dissolved",
+    "Nitrogen (Total-Dis)": "total_nitrogen_dissolved",
+    "E.coli": "e_coli",
+    "Nitrogen (Total)": "total_nitrogen",
+    "pH": "ph",
+    "Ammonia (N)": "ammonia_nitrogen",
+    "Ammonia (N)-Dissolved": "ammonia_nitrogen_dissolved",
+    "Ammonia Forms Check": "ammonia_forms_check",
+    "Diss Ammonia TKN Check": "diss_ammonia_tkn_check",
+    "Dissolved Phosphorus as P": "dissolved_phosphorus",
 }
 
 # Mapping of station IDs to location names
@@ -203,6 +221,29 @@ TABLE_SCHEMAS = {
             max_temp REAL,      -- Corresponds to TMAX
             min_temp REAL,      -- Corresponds to TMIN
             precipitation REAL, -- Corresponds to PRCP
+            PRIMARY KEY(location, datetime)
+        )
+    """,
+    "water_quality": """
+        CREATE TABLE IF NOT EXISTS water_quality(
+            location TEXT,
+            datetime TEXT,
+            total_phosphorus REAL,
+            total_kjeldahl_phosphorus REAL,
+            nitrate_nitrite REAL,
+            nitrate_forms_check REAL,
+            nitrate_nitrite_dissolved REAL,
+            total_kjeldahl_nitrogen REAL,
+            tkn_dissolved REAL,
+            total_nitrogen_dissolved REAL,
+            e_coli REAL,
+            total_nitrogen REAL,
+            ph REAL,
+            ammonia_nitrogen REAL,
+            ammonia_nitrogen_dissolved REAL,
+            ammonia_forms_check REAL,
+            diss_ammonia_tkn_check REAL,
+            dissolved_phosphorus REAL,
             PRIMARY KEY(location, datetime)
         )
     """,

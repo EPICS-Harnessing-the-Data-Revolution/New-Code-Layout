@@ -27,7 +27,10 @@ class DataSource(ABC):
         """
         Store the processed data in the sql database.
         """
-        from services.backend.database.sqlclaases import updateDictionary
+        import sys
+        import os
+        sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from sqlclasses import updateDictionary
 
         updateDictionary(times, values, location, dataset, self.data_type)
 
