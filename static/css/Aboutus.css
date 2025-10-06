@@ -29,7 +29,7 @@ body {
 
 /* Page Title */
 .page-title {
-  color: rgba(24, 86, 76, 1);
+  color: rgb(0, 0, 0);
   font-size: 60px;
   font-weight: 700;
   line-height: 1;
@@ -76,7 +76,7 @@ body {
     Helvetica,
     sans-serif;
   font-size: 20px;
-  color: rgba(24, 86, 76, 1);
+  color: rgb(0, 0, 0);
   font-weight: 600;
   text-align: center;
   letter-spacing: -0.4px;
@@ -139,7 +139,7 @@ body {
 
 /* Section Label */
 .section-label {
-  color: rgba(24, 86, 76, 1);
+  color: rgb(0, 0, 0);
   font-size: 20px;
   font-family:
     Plus Jakarta Sans,
@@ -162,7 +162,7 @@ body {
 
 /* Section Title */
 .section-title {
-  color: rgba(24, 86, 76, 1);
+  color: rgb(0, 0, 0);
   font-size: 48px;
   font-weight: 600;
   letter-spacing: -0.96px;
