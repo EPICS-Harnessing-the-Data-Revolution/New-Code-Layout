@@ -55,7 +55,6 @@ def _initialize_tables():
         logger.error(f"Error initializing tables: {e}")
         conn.rollback()  # Rollback changes on error
 
-
 def updateDictionary(
     times: list = None,
     values: list = None,
