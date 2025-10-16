@@ -21,7 +21,7 @@ body {
 
 /* Heading styles */
 h1 {
-    color: rgba(24, 86, 76, 1);
+    color: rgb(0, 0, 0);
     font-size: 60px;
     font-weight: 700;
     line-height: 1;
