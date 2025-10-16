@@ -6,6 +6,7 @@ import pandas as pd
 import requests
 
 from services.backend.datasources.base import DataSource
+from services.backend.datasources.config import NDMES_STATIONS
 from services.backend.datasources.utils import DataParser, DateHelper
 
 
@@ -16,12 +17,7 @@ class NDMESDataSource(DataSource):
 
     def __init__(self):
         super().__init__("NDMES", "mesonet")
-        self.location_dict = {
-            "Fort Yates": ["89", "Fort Yates, ND"],
-            "Linton": ["35", "Linton, ND"],
-            "Mott": ["69", "Mott, ND"],
-            "Carson": ["96", "Carson, ND"],
-        }
+        self.location_dict = NDMES_STATIONS
 
     def fetch(self, location, dataset=None, start_date=None, end_date=None):
         """
@@ -205,3 +201,25 @@ class NDMESDataSource(DataSource):
                     print(f"Failed to fetch data for {location}")
             except Exception as e:
                 print(f"Error processing NDMES data for {location}: {e}")
+if __name__ == "__main__":
+    ndmes = NDMESDataSource()
+    # Example: print date helper output
+    print(DateHelper.string_to_list("20240601"))
+    # Fetch and print raw data for Fort Yates, Average Air Temperature, for a short date range
+    start = DateHelper.string_to_list("20240601")
+    end = DateHelper.string_to_list("20240607")
+    raw_data = ndmes.fetch("Fort Yates", dataset="Average Air Temperature", start_date=start, end_date=end)
+    print(raw_data)
+    # Process and print times/values for the same
+    if raw_data is not None:
+        times, values = ndmes.process(raw_data, "Fort Yates", "Average Air Temperature")
+        print(times)
+        print(values)
+        # Output to CSV file
+        import csv
+        with open("ndmes_test_output.csv", "w", newline="") as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(["Time", "Average Air Temperature"])
+            for t, v in zip(times, values): 
+                writer.writerow([t, v])
+        print("Results written to ndmes_test_output.csv")

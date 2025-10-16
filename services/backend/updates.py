@@ -1,15 +1,11 @@
-<<<<<<< HEAD
-=======
 #Updates SQL table via pulling data from source files & Creates create graphs for Frontend
->>>>>>> 43a7f77ea9cd2b6777c3bacd1baf1211ec3e8038
 """
 updates.py 
-Pulls all new data, stores in SQL, generates graphs/tables
+Pulls all new data, stores in SQL
 """
-from services.backend.manager import DataSouceManager
+from services.backend.datasources.manager import DataSouceManager
 from services.backend.sqlclasses import get_connection
 import sqlite3
-import matplotlib.pyplot as plt
 import pandas as pd
 import os
 
@@ -40,8 +36,6 @@ def dictpull(conn, dataset, location, table="measurements"):
     return [{"datetime": row[0], "value": row[1]} for row in rows]
 
 
-def customGraphs(sql_data, dataset, location):
-    pass
 
 def makeTable (sql_data, dataset, location):
     pass
@@ -90,16 +84,11 @@ def main():
                 
             sql_data = dictpull(conn, dataset, location)
             if sql_data:
-                customGraphs(sql_data, dataset, location)
                 makeTable(sql_data, dataset, location)
     
     
     conn.close()
-    print("All new data stored and graphs/tables generated.")
+    print("All new data stored and tables generated.")
 
 if __name__ == "__main__":
-<<<<<<< HEAD
     main()            
-=======
-    main() 
->>>>>>> 43a7f77ea9cd2b6777c3bacd1baf1211ec3e8038
