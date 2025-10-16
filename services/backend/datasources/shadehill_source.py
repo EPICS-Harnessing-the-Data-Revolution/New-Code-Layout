@@ -1,3 +1,4 @@
+import os
 import requests
 from services.backend.datasources.base import DataSource
 from services.backend.datasources.utils import DataParser
@@ -140,7 +141,10 @@ class ShadehillDataSource(DataSource):
         # Use direct database connection instead of _get_db_connection
         conn = None
         try:
-            conn = sqlite3.connect('./Measurements.db')
+            # Connect to main Measurements.db in project root
+            project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+            db_path = os.path.join(project_root, "Measurements.db")
+            conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
             
             # Get all unique timestamps

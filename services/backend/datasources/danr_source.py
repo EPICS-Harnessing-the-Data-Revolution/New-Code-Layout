@@ -59,9 +59,9 @@ base = 'https://apps.sd.gov/NR92WQMAP/api/station/'
 #url = 'https://arcgis.sd.gov/arcgis/rest/services/DENR/NR92_WQMAPPublic/MapServer/0/query?f=json&geometry=%7B%22spatialReference%22%3A%7B%22latestWkid%22%3A3857%2C%22wkid%22%3A102100%7D%2C%22xmin%22%3A-11271098.442818994%2C%22ymin%22%3A5322463.153554989%2C%22xmax%22%3A-10958012.374962993%2C%22ymax%22%3A5635549.22141099%7D&outFields=*&outSR=102100&spatialRel=esriSpatialRelIntersects&where=1%3D1&geometryType=esriGeometryEnvelope&inSR=102100'
 #danr = requests.get(url)
 #data = danr.json()
-project_root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 db_path = os.path.join(project_root, "Measurements.db")
-conn = sqlite3.connect('./Measurements.db')
+conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
 cursor.execute('''
