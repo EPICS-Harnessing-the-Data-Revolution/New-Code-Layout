@@ -79,9 +79,17 @@ input:checked + label {
 #tab3:checked ~ #content3,
 #tab4:checked ~ #content4,
 #tab5:checked ~ #content5,
-#tab6:checked ~ #content6{
+#tab6:checked ~ #content6,
+#tab7:checked ~ #content7,
+#tab8:checked ~ #content8,
+#tab9:checked ~ #content9,
+#tab10:checked ~ #content10,
+#tab11:checked ~ #content11,  
+#tab12:checked ~ #content12,
+#tab13:checked ~ #content13 {
   display: block;
 }
+
 
 @media screen and (max-width: 650px) {
   label {
@@ -153,7 +161,8 @@ select {
 
   
   /* Style buttons */
-  button[type="submit"] {
+  button[type="submit"],
+  button[type="button"] {
     display: inline-block;
     padding: 10px 20px;
     background-color: rgb(89, 58, 185);
@@ -163,11 +172,14 @@ select {
     font-size: 14px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-left: 6px; /* add a little space between buttons */
   }
   
-  button[type="submit"]:hover {
+  button[type="submit"]:hover,
+  button[type="button"]:hover {
     background-color: #ff6600;
   }
+  
   
   /* Adjust button styles for smaller screens if needed */
   @media screen and (max-width: 650px) {
