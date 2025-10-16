@@ -59,14 +59,14 @@ base = 'https://apps.sd.gov/NR92WQMAP/api/station/'
 #url = 'https://arcgis.sd.gov/arcgis/rest/services/DENR/NR92_WQMAPPublic/MapServer/0/query?f=json&geometry=%7B%22spatialReference%22%3A%7B%22latestWkid%22%3A3857%2C%22wkid%22%3A102100%7D%2C%22xmin%22%3A-11271098.442818994%2C%22ymin%22%3A5322463.153554989%2C%22xmax%22%3A-10958012.374962993%2C%22ymax%22%3A5635549.22141099%7D&outFields=*&outSR=102100&spatialRel=esriSpatialRelIntersects&where=1%3D1&geometryType=esriGeometryEnvelope&inSR=102100'
 #danr = requests.get(url)
 #data = danr.json()
-project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+# Go up 3 directories from services/backend/datasources/ to reach project root
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 db_path = os.path.join(project_root, "Measurements.db")
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS danr (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
     station_ID TEXT NOT NULL,
     latitude FLOAT, 
     longitude FLOAT, 
@@ -123,20 +123,25 @@ for stationid in station_ids_in_range:
                 data_df[column] = data_df[column].apply(
                     lambda x: "insignificant" if isinstance(x, str) and "<" in x else x)
 
-        cursor.execute('''INSERT INTO danr (station_ID, latitude, longitude, 
-        sampleDate, pH, tkn, ammonia, nitrateNitrite, tp, eColi) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', 
-            
-            (stationid, 
-            lat, 
-            lon, 
-            date if date is not None else None,
-            ph if ph is not None else None,
-            tkn if tkn is not None else None,
-            ammonia if ammonia is not None else None,
-            nitrate_nitrite if nitrate_nitrite is not None else None,
-            tp if tp is not None else None,
-            eColi if eColi is not None else None)
-        )
+        # Check if this record already exists to avoid duplicates
+        cursor.execute('''SELECT COUNT(*) FROM danr WHERE station_ID = ? AND sampleDate = ?''', 
+                      (stationid, date if date is not None else None))
+        
+        if cursor.fetchone()[0] == 0:  # Only insert if record doesn't exist
+            cursor.execute('''INSERT INTO danr (station_ID, latitude, longitude, 
+            sampleDate, pH, tkn, ammonia, nitrateNitrite, tp, eColi) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', 
+                
+                (stationid, 
+                lat, 
+                lon, 
+                date if date is not None else None,
+                ph if ph is not None else None,
+                tkn if tkn is not None else None,
+                ammonia if ammonia is not None else None,
+                nitrate_nitrite if nitrate_nitrite is not None else None,
+                tp if tp is not None else None,
+                eColi if eColi is not None else None)
+            )
         print('Collected data from ' + stationid + '\n')
 
 conn.commit()
