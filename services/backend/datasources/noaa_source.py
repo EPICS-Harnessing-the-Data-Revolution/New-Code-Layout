@@ -13,7 +13,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
 class NOAADataSource(DataSource):
     def __init__(self):
         super().__init__(
@@ -76,7 +75,7 @@ class NOAADataSource(DataSource):
         params = {
             "datasetid": "GHCND",  # Global Historical Climatology Network Daily
             "stationid": station_id,
-            "datatypeid": datatype_id,
+            "datatypeid": datatype_id,  
             "startdate": start_date_str,
             "enddate": end_date_str,
             "units": "standard",  # Use standard units (e.g., Fahrenheit for temp)
@@ -89,6 +88,7 @@ class NOAADataSource(DataSource):
         logger.info(
             f"Fetching NOAA data for {location} ({datatype_id}) from {start_date_str} to {end_date_str}"
         )
+        
         while True:
             try:
                 response = requests.get(

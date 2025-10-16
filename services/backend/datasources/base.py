@@ -33,8 +33,8 @@ class DataSource(ABC):
         """
         Store the processed data in the SQL database.
         """
-        # Import here to avoid circular imports
-        from services.backend.sqlclasses import updateDictionary
+        from services.backend.database.sqlclaases import updateDictionary
+
         updateDictionary(times, values, location, dataset, self.data_type)
 
     def pull(self, location=None, dataset=None, start_date=None, end_date=None):

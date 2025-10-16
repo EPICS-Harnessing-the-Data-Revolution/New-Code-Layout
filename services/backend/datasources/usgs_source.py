@@ -20,7 +20,7 @@ class USGSDataSource(DataSource):
             'Schmidt': ['06349700', 2],
             'Judson': ['06348300', 1], 
             'Mandan': ['06349000', 1],
-            'Breien': ['06354000', 1],
+            'Breien': ['06354000', 1]   ,
             'Wakpala': ['06354881', 4],
             'Little Eagle': ['06357800', 4],
             'Cash': ['06356500', 4],
@@ -51,7 +51,7 @@ class USGSDataSource(DataSource):
             url = f'https://waterdata.usgs.gov/nwis/uv?cb_00060=on&cb_00065=on&format=rdb&site_no={code}&legacy=1&period=&begin_date={s_year}-{s_month}-{s_day}&end_date={e_year}-{e_month}-{e_day}'
             num_sets = 2
             linecount = 54
-        
+         
         linecount2 = linecount + 3
 
         response = requests.get(url)
