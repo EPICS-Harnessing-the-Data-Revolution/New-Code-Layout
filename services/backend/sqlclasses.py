@@ -1,13 +1,7 @@
 import logging
 import sqlite3
 from datetime import datetime
-
-from constants import (
-    DB_PATH,
-    LOCATION_TO_TABLE,
-    SQL_CONVERSION,
-    TABLE_SCHEMAS,
-)
+from services.backend.datasources.config import DB_PATH, LOCATION_TO_TABLE, SQL_CONVERSION, TABLE_SCHEMAS
 
 # Setup logging
 logging.basicConfig(

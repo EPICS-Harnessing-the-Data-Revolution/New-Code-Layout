@@ -4,8 +4,7 @@ updates.py
 Pulls all new data, stores in SQL
 """
 from services.backend.datasources.manager import DataSourceManager
-from services.backend.sqlclasses import get_connection
-import sqlite3
+from services.backend.sqlclasses import _get_db_connection as get_connection
 import matplotlib.pyplot as plt
 import pandas as pd
 import os

@@ -1,3 +1,5 @@
+import os
+
 #DANR
 station_ids = {
             "SWLAZZZ2411A": {"Latitude": 45.3486, "Longitude": -101.0942},
@@ -430,3 +432,21 @@ TABLE_SCHEMAS = {
         )
     """,
 }
+
+DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "New-Code-Layout 14-19-29-956", "Measurements.db")
+
+LOCATION_TO_TABLE = {}
+
+# Fill in the location to table mapping
+for location in GAUGES:
+    LOCATION_TO_TABLE[location] = "gauge"
+for location in DAMS:
+    LOCATION_TO_TABLE[location] = "dam"
+for location in MESONETS:
+    LOCATION_TO_TABLE[location] = "mesonet"
+for location in COCORAHS:
+    LOCATION_TO_TABLE[location] = "cocorahs"
+for location in NOAA:
+    LOCATION_TO_TABLE[location] = "noaa_weather"
+for location in SHADEHILL:
+    LOCATION_TO_TABLE[location] = "shadehill"
