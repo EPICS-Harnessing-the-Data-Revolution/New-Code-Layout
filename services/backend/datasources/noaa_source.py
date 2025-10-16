@@ -4,7 +4,7 @@ from datetime import datetime
 
 import requests
 
-from services.backend.constants import NOAA
+from services.backend.datasources.config import NOAA
 from services.backend.datasources.base import DataSource
 
 # Setup basic logging

@@ -3,7 +3,7 @@
 updates.py 
 Pulls all new data, stores in SQL, generates graphs/tables
 """
-from services.backend.manager import DataSouceManager
+from services.backend.datasources.manager import DataSourceManager
 from services.backend.sqlclasses import get_connection
 import sqlite3
 import matplotlib.pyplot as plt

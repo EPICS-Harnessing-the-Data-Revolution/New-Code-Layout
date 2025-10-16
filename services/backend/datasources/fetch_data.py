@@ -9,7 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 from services.backend.datasources.noaa_source import NOAADataSource
 from services.backend.datasources.usgs_source import USGSDataSource
-from services.backend.constants import NOAA, GAUGES
+from services.backend.datasources.config import NOAA, GAUGES
 
 # Setup logging
 logging.basicConfig(
