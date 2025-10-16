@@ -1,7 +1,7 @@
 #Updates SQL table via pulling data from source files & Creates create graphs for Frontend
 """
 updates.py 
-Pulls all new data, stores in SQL, generates graphs/tables
+Pulls all new data, stores in SQL
 """
 from services.backend.datasources.manager import DataSourceManager
 from services.backend.sqlclasses import get_connection
@@ -37,8 +37,6 @@ def dictpull(conn, dataset, location, table="measurements"):
     return [{"datetime": row[0], "value": row[1]} for row in rows]
 
 
-def customGraphs(sql_data, dataset, location):
-    pass
 
 def makeTable (sql_data, dataset, location):
     pass
@@ -87,12 +85,11 @@ def main():
                 
             sql_data = dictpull(conn, dataset, location)
             if sql_data:
-                customGraphs(sql_data, dataset, location)
                 makeTable(sql_data, dataset, location)
     
     
     conn.close()
-    print("All new data stored and graphs/tables generated.")
+    print("All new data stored and tables generated.")
 
 if __name__ == "__main__":
     main()            
