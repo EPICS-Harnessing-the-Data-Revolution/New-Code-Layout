@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+#Updates SQL table via pulling data from source files & Creates create graphs for Frontend
+>>>>>>> 43a7f77ea9cd2b6777c3bacd1baf1211ec3e8038
 """
 updates.py 
 Pulls all new data, stores in SQL, generates graphs/tables
@@ -94,4 +98,8 @@ def main():
     print("All new data stored and graphs/tables generated.")
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     main()            
+=======
+    main() 
+>>>>>>> 43a7f77ea9cd2b6777c3bacd1baf1211ec3e8038
