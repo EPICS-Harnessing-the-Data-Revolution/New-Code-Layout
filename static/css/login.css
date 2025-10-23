@@ -28,7 +28,7 @@
   }
   
   .login-title {
-    color: #18564c;
+    color: #000000;
     text-align: center;
     font-family: Roboto;
     font-size: 60px;
@@ -54,7 +54,7 @@
   }
   
   .login-subtitle {
-    color: #18564c;
+    color: #000000;
     text-align: center;
     font-family: Roboto;
     font-size: 20px;
@@ -139,7 +139,7 @@
   }
   
   .contact-footer {
-    color: #333;
+    color: #000000;
     text-align: center;
     font-family: Roboto;
     font-size: 20px;
