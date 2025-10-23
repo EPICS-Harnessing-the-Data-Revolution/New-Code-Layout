@@ -8,6 +8,7 @@ from services.backend.sqlclasses import _get_db_connection as get_connection
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
+import sqlite3
 
 #Insert data into SQL
 def sql_store(conn, location, dataset, times, values, table="measurements"):
