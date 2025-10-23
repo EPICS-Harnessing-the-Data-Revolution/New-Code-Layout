@@ -14,7 +14,7 @@ class DataSource(ABC):
         pass
 
     @abstractmethod
-    def _pull(self, location=None, dataset=None, start_date=None, end_date=None):
+    def _pull(self, start_date=None):
         """
         Pulls raw data from the data source and stores data as a member of the class.
         Must be implemented by subclasses.
@@ -43,13 +43,13 @@ class DataSource(ABC):
         """
         pass
 
-    def update(self, location=None, dataset=None, start_date=None, end_date=None):
+    def update(self, start_date=None):
         """
         Fetches the data, processes, and then appends the data to the database
         Public method.
         updates.py should use this
         """
-        self._pull(location=None, dataset=None, start_date=None, end_date=None)
+        self._pull(location=None, start_date=None)
         self._process()
         self._push()
 
