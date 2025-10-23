@@ -10,8 +10,8 @@ import pandas as pd
 import os
 
 #Insert data into SQL
-def sql_store(conn, location, dataset, times, values, table="measurements"):
-    curr = conn.cursor()
+def sql_store(conn, location, dataset, times, values, table="cocorahs"):
+    conn, cursor = get_connection()
     for t, v in zip(times, values):
         try:
             curr.execute(
@@ -26,7 +26,7 @@ def sql_store(conn, location, dataset, times, values, table="measurements"):
     conn.commit()
 
 #Pull existing data from SQL
-def dictpull(conn, dataset, location, table="measurements"):
+def dictpull(conn, curr, dataset, location, table="cocorahs"):
     curr = conn.cursor()
     curr.execute(
         f"SELECT datetime, {dataset} FROM {table} WHERE location=? ORDER BY datetime ASC",
@@ -42,7 +42,7 @@ def makeTable (sql_data, dataset, location):
 
 def main():
     manager = DataSourceManager()
-    conn = get_connection()
+    conn, curr = get_connection()
     
     #pull data
     manager.pull_all_data(num_days=30)
@@ -81,8 +81,8 @@ def main():
                 if times and values:
                     sql_store(conn, location, dataset, times, values)
 
-                
-            sql_data = dictpull(conn, dataset, location)
+
+            sql_data = dictpull(conn, curr, dataset, location)
             if sql_data:
                 makeTable(sql_data, dataset, location)
     
