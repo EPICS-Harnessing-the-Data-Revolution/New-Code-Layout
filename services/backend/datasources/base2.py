@@ -43,7 +43,7 @@ class DataSource(ABC):
         """
         pass
 
-    def pull(self, location=None, dataset=None, start_date=None, end_date=None):
+    def update(self, location=None, dataset=None, start_date=None, end_date=None):
         """
         Fetches the data, processes, and then appends the data to the database
         Public method.
