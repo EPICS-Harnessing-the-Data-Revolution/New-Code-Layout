@@ -433,7 +433,7 @@ TABLE_SCHEMAS = {
     """,
 }
 
-DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "New-Code-Layout 14-19-29-956", "Measurements.db")
+DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "Measurements.db")
 
 LOCATION_TO_TABLE = {}
 
