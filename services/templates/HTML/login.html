@@ -1,143 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+<link rel="stylesheet" href="{% static 'css/Heading.css' %}">
 <html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
-
-    <title>User Registration</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #c35c5c;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-
-        form {
-            margin-top: 150px; 
-            background-color: #de9898;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            width: 400px;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-
-        form:hover {
-            transform: translateY(-5px);
-        }
-
-        h1 {
-            text-align: center;
-            color: #f5ebeb;
-            margin-bottom: 30px;
-            font-size: 28px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #666;
-        }
-
-        input {
-            width: calc(100% - 16px);
-            padding: 12px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            transition: border-color 0.3s ease;
-            font-size: 16px;
-        }
-
-        input:focus {
-            border-color: #4caf50;
-        }
-
-        input[type="submit"] {
-            background-color: #4caf50;
-            color: #fff;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 6px;
-            padding: 12px 0;
-            transition: background-color 0.3s ease;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-
-        input[type="submit"]:disabled {
-            background-color: #ddd;
-            color: #666;
-            cursor: not-allowed;
-        }
-
-        #test {
-            margin-top: 20px;
-            text-align: center;
-            color: #888;
-        }
-
-        .banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000; 
-            background-image: linear-gradient(rgba(0, 0, 0, 0.51), rgba(0, 0, 0, 0.51)), url(https://www.standingrock.org/wp-content/uploads/2021/06/Admin-building.jpg);
-            background-size: cover;
-            background-position: center;
-}
-
-    </style>
-</head>
-<body>
+  <head>
     {% include "HTML/navbar.html" %}
-
-    <form>
-        <h1>User Registration</h1>
-        <label for="user_input">Username</label>
-        <input type="text" id="user_input" name="username" required>
-
-        <label for="pass_input">Password</label>
-        <input type="password" id="pass_input" name="password" required>
-
-        <label for="v_pass_input">Confirm Password</label>
-        <input type="password" id="v_pass_input" name="v_password" required>
-
-        <label for="email">Email</label>
-        <input type="text" id="email" name="email" required>
-
-        <input type="submit" id="register" value="Register" disabled>
-    </form>
-
-    <script>
-        document.querySelector('form').addEventListener('input', function() {
-            const username = document.getElementById('user_input').value;
-            const password = document.getElementById('pass_input').value;
-            const v_password = document.getElementById('v_pass_input').value;
-            const email = document.getElementById('email').value;
-            const submitBtn = document.getElementById('register');
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <main class="page-container">
+      <div class="content-wrapper">
+        <h1 class="login-title">Login</h1>
+        <p class="login-subtitle">
+          Dedicated to displaying high end water quality data.
+        </p>
+        <!-- Show messages for login attempts -->
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          <strong>Message:</strong> {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endfor %}
+        <section class="login-form-container">
+          <form class="login-form" action="/signin" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="username" class="form-label">Username:</label>
+              <input required type="text" id="username" name="username" placeholder="Enter Your Username" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label for="password" class="form-label">Password:</label>
+              <input required type="password" id="pass1" name="pass1"  placeholder="Enter Your Password" class="form-input" />
+            </div>
+            <button type="submit" class="login-button">Login</button>
+          </form>
+          
+          <!-- TODO OLD LOGIN FORM, NOT SURE IF WE NEED THIS VS ABOVE -->
+          <!-- <form action="/signin" method="post">
+            {% csrf_token %}
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter Your Username" required>
+            <br>
+            <label for="pass1">Password</label>
+            <input type="password" id="pass1" name="pass1" placeholder="Enter Your Password" required>
+            <br>
             
-            // Enable submit button if all fields are filled out
-            if (username && password && v_password && email) {
-                submitBtn.disabled = false;
-            } else {
-                submitBtn.disabled = true;
-            }
-        });
-    </script>
-</body>
+            <button type="submit">Sign In</button>
+            <br>
+        </form> -->
+
+        </section>
+        <footer class="contact-footer">
+          <span>Contact Us For More Questions at</span>
+          <a href="mailto:Epics-hdr@ecn.purdue.edu" class="contact-link">
+            Epics-hdr@ecn.purdue.edu
+          </a>
+        </footer>
+      </div>
+    </main>
+  </body>
 </html>

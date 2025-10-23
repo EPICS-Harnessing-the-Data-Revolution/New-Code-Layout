@@ -1,97 +1,76 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]> <html class="no-js lt-ie7"> <![endif]-->
-<!--[if IE 7]> <html class="no-js lt-ie7 lt-ie8"> <![endif]-->
-<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Authentication</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #eef2f7;
-                color: #333;
-            }
+<!doctype html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
+    {% include "HTML/navbar.html" %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration Form</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&family=Roboto:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <main class="registration-container">
+      <h1 class="registration-title">Register</h1>
+      <p class="registration-subtitle">
+        Dedicated to displaying high-end water quality data.
+      </p>
 
-            h3, h4 {
-                color: #1a202c;
-            }
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message:</strong> {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
 
-            .alert {
-                padding: 15px;
-                border-radius: 5px;
-                margin-bottom: 20px;
-                color: white;
-                font-weight: bold;
-            }
-
-            .alert-success {
-                background-color: #38c172;
-            }
-
-            .alert-error {
-                background-color: #e3342f;
-            }
-
-            .alert-warning {
-                background-color: #f6993f;
-            }
-
-            button {
-                background: linear-gradient(to right, #4dc0b5, #3490dc);
-                color: white;
-                border: none;
-                padding: 10px 15px;
-                margin: 5px;
-                border-radius: 5px;
-                cursor: pointer;
-                font-weight: bold;
-            }
-
-            button a {
-                color: white;
-                text-decoration: none;
-            }
-
-            button:hover {
-                background: linear-gradient(to right, #3490dc, #4dc0b5);
-            }
-        </style>
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
-    </head>
-    <body>
-        {% include "HTML/navbar.html" %}
-
-        <!-- Messages and Alerts -->
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            <strong>Message:</strong> {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+      <form method="post" action="/signup" class="registration-form">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="username" class="form-label">Create Username:</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            class="form-input"
+            placeholder="Create A Username (use only letters and numbers)"
+            required
+          />
         </div>
-        {% endfor %}
+        <div class="form-group">
+          <label for="pass1" class="form-label">Create Password:</label>
+          <input
+            type="password"
+            id="pass1"
+            name="pass1"
+            class="form-input"
+            placeholder="Create Your Password"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="pass2" class="form-label">Confirm Password:</label>
+          <input
+            type="password"
+            id="pass2"
+            name="pass2"
+            class="form-input"
+            placeholder="Confirm Your Password"
+            required
+          />
+        </div>
+        <button type="submit" class="register-button">Register</button>
+      </form>
 
-        <!-- Welcome and Authentication -->
-        <h3>Welcome to HDR!</h3>
-
-        {% if user.is_authenticated %}
-        <h3>Hello {{ fname }} </h3>
-        <h4>You're successfully logged in.</h4>
-        <button type="submit"><a href="/signout">SignOut</a></button>
-        {% else %}
-        <button type="submit"><a href="/signup">SignUp</a></button>
-        <button type="submit"><a href="/signin">SignIn</a></button>
-        {% endif %}
-        
-        <script src="" async defer></script>
-    </body>
+      <footer class="contact-info">
+        <span>Contact Us For More Questions at</span>
+        <a href="mailto:Epics-hdr@ecn.purdue.edu">Epics-hdr@ecn.purdue.edu</a>
+      </footer>
+    </main>
+  </body>
 </html>

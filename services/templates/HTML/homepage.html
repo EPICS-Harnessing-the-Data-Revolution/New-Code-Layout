@@ -1,190 +1,133 @@
 <!DOCTYPE html>
-    <html>
-      {% load static %}
-    <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, width=device-width">
-    
-    
-<link rel="stylesheet" href="./static/css/global.css" />
-<link rel="stylesheet"  href="./static/css/index.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus Jakarta Sans:wght@500;600;700&display=swap" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM Sans:wght@400&display=swap" />
-<link rel="stylesheet" href="{% static 'css/Heading.css' %}">
-<title>HDR Data Dashboard - Home</title>
-    
-    
-    
-    </head>
-    <body>
-    
-    <div class="hdr-landingpage-v1">
-      {% include "HTML/navbar.html" %}
-      <div class = flex-cont>
-      <div class="hdr-landingpage-v1-child"></div>
-      
-      <div class="image-card-1 card">
-        <img class="placeholder-image-icon" alt="" src="./static/images/public/dam1.png">
-        
-      </div>
-      <div class="contact-us-for ">Contact Us For More Questions at (email)</div>
-      
-      <b class="standing-rock-community">HDR Water Data Dashboard</b>
-      <b class="services1">Services</b>
-      <div class="image-card-2 card">
-        <img class="placeholder-image-icon1" alt="" src="./static/images/public/gauge.png">
-        
-      </div>
-      <div class="cards-row">
-        <div class="master-content-card">
-          <img class="image-replace-icon" alt="" src="./static/images/public/image-replace@2x.png">
-          
-          <div class="spacer">
-            <div class="px">
+  {% load static %}
+  {% include "HTML/navbar.html" %}
+  <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standing Rock Community</title>
+    <link rel="stylesheet" href="landing-page.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Roboto:wght@400;600&family=Inter:wght@400;600;800&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <main class="landing-page">
+      <header class="community-header">
+        <h1 class="community-title">Standing Rock Community</h1>
+      </header>
+
+      <section class="goals-section">
+        <div class="content-container">
+          <div class="text-column"> 
+            <h2 class="section-subtitle">What Are Our Goals?</h2>
+            <h3 class="section-title">Assist Standing Rock</h3>
+            <p class="section-description">
+              Home to both the Lakota and Dakota people, the Standing Rock
+              Reservation contains land in both North and South Dakota bordering
+              the Missouri River. They dedicate their community to the
+              protection and development of their community, economy, technology
+              and culture.
+            </p>
+            <div class="button-group">
+              <a href="#services" class="button button-filled">Services</a>
+              <a href="/about" class="button button-outlined">About Us</a>
             </div>
-            <div class="text">32</div>
           </div>
-          <div class="text-content">
-            <h4 class="web-design">Interactive Maps</h4>
-            <div class="spacer1">
-              <div class="px">
+          <div class="image-column">
+            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/dc9f399b-02bb-4ea5-b2bb-bbdbfa734725?placeholderIfAbsent=true&apiKey=1c65642a69d24b70abf48ff65c758fe5" alt="Standing Rock Community" class="section-image">
+          </div>
+        </div>
+      </section>
+
+      <section class="what-we-do-section">
+        <div class="content-container reverse">
+          <div class="text-column">
+            <h2 class="section-subtitle">What We Do</h2>
+            <h3 class="section-title">Provide Water Data</h3>
+            <p class="section-description">
+              Welcome to our hub of environmental insight, made especially for
+              Standing Rock Nation. Our site harnesses and displays information
+              from various monitoring sites across North and South Dakota. View
+              our interactive map, where you can effortlessly navigate through
+              various data types and delve into detailed monthly graphs. Want to
+              view more data?
+            </p>
+            <div class="button-group">
+              <a href="#services" class="button button-filled">Services</a>
+              <a href="/about" class="button button-outlined">About Us</a>
+            </div>
+          </div>
+          <div class="image-column">
+            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/250c47b0da4c5e3be607dbad540ea86697f5342539b61ed59c294e3dcaa9eaae?placeholderIfAbsent=true&apiKey=1c65642a69d24b70abf48ff65c758fe5" alt="Standing Rock Community" class="section-image">
+          </div>
+        </div>
+      </section>
+
+      <section id="services" class="services-section">
+        <h2 class="services-title">Services</h2>
+
+        <div class="cards-container">
+          <article class="service-card">
+            <div class="card-image-container">
+              <div class="card-image-bg">
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fb39a51b7cf3bfe9cef6ffe19d4c4da59f9812ed16edee912d3f2bfab800edf1?placeholderIfAbsent=true&apiKey=1c65642a69d24b70abf48ff65c758fe5" alt="Interactive Maps" class="card-icon">
               </div>
-              <div class="text1">24</div>
             </div>
-            <p class="paragraph">Click the learn more button to access the Interactive Maps page.</p>
-            <div class="spacer1">
-              <div class="px">
+            <div class="card-content">
+              <h3 class="card-title">Interactive Maps</h3>
+              <p class="card-description">
+                Click the learn more button to access the Interactive Maps page.
+              </p>
+              <a href="/map" class="card-link">
+                <span class="link-text">Learn more</span>
+                <span class="link-arrow"></span>
+              </a>
+            </div>
+          </article>
+
+          <article class="service-card">
+            <div class="card-image-container">
+              <div class="card-image-bg">
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb0f98e5de768d348fb95a807076e19d3ca5e83b272fe341f0a6a782ebda36d0?placeholderIfAbsent=true&apiKey=1c65642a69d24b70abf48ff65c758fe5" alt="Custom Graphs" class="card-icon">
               </div>
-              <div class="text1">24</div>
             </div>
-            <a class="link" href="/map">
-              <img class="line-roundedhome-icon" alt="" src="./static/images/public/line-roundedhome.svg">
-              
-              <div class="link-item">Learn more</div>
-              <img class="line-roundedarrow-rigth" alt="" src="./static/images/public/line-roundedarrow-rigth.svg">
-              
-            </a>
-          </div>
-          <div class="spacer3">
-            <div class="px">
+            <div class="card-content">
+              <h3 class="card-title">Custom Graphs</h3>
+              <p class="card-description">
+                Click the learn more button to access the Custom Graphs page.
+              </p>
+              <a href="/maptabs" class="card-link">
+                <span class="link-text">Learn more</span>
+                <span class="link-arrow"></span>
+              </a>
             </div>
-            <div class="text3">40</div>
-          </div>
-        </div>
-        <div class="master-content-card">
-          <img class="image-replace-icon" alt="" src="./static/images/public/image-replace1@2x.png">
-          
-          <div class="spacer">
-            <div class="px">
+          </article>
+          <article class="service-card">
+            <div class="card-image-container">
+                <div class="card-image-bg">
+                <img src="static/images/heart_icon.png" alt="Favorites" class="card-full-image" style="width: 50%; height: 50%;"> 
+                </div>
             </div>
-            <div class="text">32</div>
-          </div>
-          <div class="text-content">
-            <h4 class="web-design">Custom Graphs </h4>
-            <div class="spacer1">
-              <div class="px">
-              </div>
-              <div class="text1">24</div>
+            <div class="card-content">
+              <h3 class="card-title">Custom Graphs</h3>
+              <p class="card-description">
+                Click the learn more button to access the Custom Graphs page.
+              </p>
+              <a href="/maptabs" class="card-link">
+                <span class="link-text">Learn more</span>
+                <span class="link-arrow"></span>
+              </a>
             </div>
-            <p class="paragraph">Click the learn more button to access the Custom Graphs page.</p>
-            <div class="spacer1">
-              <div class="px">
-              </div>
-              <div class="text1">24</div>
-            </div>
-            <a class="link" href="/maptabs">
-              <img class="line-roundedhome-icon" alt="" src="./static/images/public/line-roundedhome.svg">
-              
-              <div class="link-item">Learn more</div>
-              <img class="line-roundedarrow-rigth" alt="" src="./static/images/public/line-roundedarrow-rigth1.svg">
-              
-            </a>
-          </div>
-          <div class="spacer3">
-            <div class="px">
-            </div>
-            <div class="text3">40</div>
-          </div>
-        </div>
-        <div class="master-content-card">
-          <img class="image-replace-icon" alt="" src="./static/images/public/image-replace2@2x.png">
-          
-          <div class="spacer">
-            <div class="px">
-            </div>
-            <div class="text">32</div>
-          </div>
-          <div class="text-content">
-            <h4 class="web-design">Favorites</h4>
-            <div class="spacer1">
-              <div class="px">
-              </div>
-              <div class="text1">24</div>
-            </div>
-            <p class="paragraph">Click the learn more button to access the Favorites page.</p>
-            <div class="spacer1">
-              <div class="px">
-              </div>
-              <div class="text1">24</div>
-            </div>
-            <a class="link" href="/favorites">
-              <img class="line-roundedhome-icon" alt="" src="./static/images/public/line-roundedhome.svg">
-              
-              <div class="link-item">Learn more</div>
-              <img class="line-roundedarrow-rigth" alt="" src="./static/images/public/line-roundedarrow-rigth.svg">
-              
-            </a>
-          </div>
-          <div class="spacer3">
-            <div class="px">
-            </div>
-            <div class="text3">40</div>
-          </div>
-        </div>
-      </div>
-      <div class="text-card-1 card">
-        <div class="frame2">
-          <h3 class="what-are-our">What Are Our Goals?</h3>
-          <div class="frame3">
-            <div class="making-water-safer">Making Water Safer</div>
-          </div>
-          <p class="frame4">
-            <div class="lorem-ipsum-dolor">Welcome to our hub of environmental insight, made especially for Standing Rock Nation. Our site harnesses and displays information from various monitoring sites across North and South Dakota. View our interactive map, where you can effortlessly navigate through various data types and delve into detailed monthly graphs. Want to view more data?  </div>
-          </p>
-        </div>
-        <div class="auto-layout-horizontal">
-          <button class="styleoutlined">
-            <div><a href="/about">About Us</a></div>
-          </button>
-          </a>
-        </div>
-      </div>
-      <div class="text-card-2 card">
-        <div class="frame5">
-          <div class="frame6">
-            <div class="what-we-do">What We Do</div>
-          </div>
-          <div class="frame7">
-            <div class="making-water-safer">Visualizing Data</div>
-          </div>
-          <p class="lorem-ipsum-dolor1">Home to both the Lakota and Dakota people, the Standing Rock Reservation contains land in both North and South Dakota bordering the Missouri River. They dedicate their community to the protection and development of their community, economy, technology and culture.</p>
-        </div>
-        <div class="auto-layout-horizontal1">
-          <button class="stylefilled1">
-            <div><a href="/map">Map</a></div>
-          </button>
-          <button class="styleoutlined1">
-            <div><a href="/maptabs">Graphs</a></div>
-          </button>
-        </div>
-      </div>
-    </div>
-    </div>
-    
-    
-    
-    
-    </body>
-  </html>
+          </article>
+      </section>
+
+      <footer class="contact-section">
+        <span>Contact Us For More Questions at</span>
+        <a href="mailto:Epics-hdr@ecn.purdue.edu" class="contact-link">
+          Epics-hdr@ecn.purdue.edu
+        </a>
+      </footer>
+    </main>
+  </body>
+</html>

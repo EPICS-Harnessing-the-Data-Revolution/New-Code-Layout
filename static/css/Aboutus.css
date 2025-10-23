@@ -1,254 +1,366 @@
-* {
+/* Base styles */
+body {
   margin: 0;
   padding: 0;
+  font-family:
+    Roboto,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  background-color: rgba(255, 255, 255, 1);
 }
 
-body {
-  background-color: #FFFDEF;
+/* About Us Page Container */
+.about-us-header {
+  display: flex;
+  padding-top: 184px;
+  padding-bottom: 28px;
+  flex-direction: column;
+  overflow: hidden;
+  align-items: center;
 }
 
-.banner {
+@media (max-width: 991px) {
+  .about-us-header {
+    padding-top: 100px;
+  }
+}
+
+/* Page Title */
+.page-title {
+  color: rgba(24, 86, 76, 1);
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  text-align: center;
+  margin: 0;
+}
+
+@media (max-width: 991px) {
+  .page-title {
+    font-size: 40px;
+  }
+}
+
+/* Main Content */
+.main-content {
   width: 100%;
-  height: 485px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.51), rgba(0, 0, 0, 0.51)), url(https://www.standingrock.org/wp-content/uploads/2021/06/Admin-building.jpg);
-  background-size: cover;
-  background-position: center;
-
+  padding-left: 80px;
+  padding-right: 80px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.icon {
-  height: 100 px;
-  width: 100px;
-  object-fit: cover;
-  display: inline-block;
-  float: left;
-  margin-left: 100px;
-  margin-top: 14px;
+@media (max-width: 991px) {
+  .main-content {
+    max-width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
 
-h1 {
-  font-size: 128px;
-  font-family: 'Koulen', sans-serif;
-  line-height: 95.5%;
-  margin-left: 92px;
-  letter-spacing: 0.4px;
-}
-
-.text1 {
-  position: absolute;
-  margin-top: 10px;
-}
-
-.banner .yellow {
-  color: #FFB422;
-  position: absolute;
-  top: 372px;
-}
-
-.pic1 {
-  border-radius: 20px;
-  height: 392px;
-  width: 650px;
-  object-fit: cover;
-  position: absolute;
-  top: 654px;
-  margin-left: 590px;
-}
-
-
-.yellow2 {
-  color: #FFB422;
-}
-
-.text2 {
-  position: absolute;
-  top: 1087px;
-  margin-top: 20px;
-}
-
-p {
+/* Subtitle Container */
+.subtitle-container {
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  box-sizing: border-box;
+  font-family:
+    Roboto,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 20px;
-  font-family: 'Judson', serif;
-  width: 643px;
-  margin-bottom: 30px;
-  line-height: 117.3%;
+  color: rgba(24, 86, 76, 1);
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: -0.4px;
 }
 
-.para1 {
-  margin-left: 100px;
-  position: absolute;
-  top: 1230px;
+@media (max-width: 991px) {
+  .subtitle-container {
+    max-width: 100%;
+    margin-right: 2px;
+  }
 }
 
-.para2 {
-  margin-left: 100px;
-  position: absolute;
-  top: 2390px;
+/* Subtitle Wrapper */
+.subtitle-wrapper {
+  display: flex;
+  width: 100%;
+  padding: 10px 10px 109px;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
-.pic2 {
-  border-radius: 20px;
-  height: 514px;
-  width: 414px;
-  object-fit: cover;
-  position: absolute;
-  top: 2000px;
-  margin-left: 790px;
+@media (max-width: 991px) {
+  .subtitle-wrapper {
+    max-width: 100%;
+    padding-bottom: 100px;
+  }
 }
 
-.sub {
-  font-size: 59px;
-  margin-left: 100px;
+/* Subtitle Content */
+.subtitle-content {
+  align-self: stretch;
+  display: flex;
+  min-width: 240px;
+  margin: auto;
+  width: 450px;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
 }
 
-.text3 {
-  position: absolute;
-  top: 2200px;
-
+/* Subtitle Text */
+.subtitle-text {
+  align-self: stretch;
+  width: 100%;
+  min-width: 240px;
+  margin: auto;
+  gap: 10px;
+  flex: 1;
+  flex-shrink: 1;
+  flex-basis: 0%;
 }
 
-.treaty {
-  margin-left: 100px;
-  height: 60px;
-  width: 225px;
-  color: white;
-  background-color: #073A4B;
-  font-family: 'Judson', serif;
+@media (max-width: 991px) {
+  .subtitle-text {
+    max-width: 100%;
+  }
+}
+
+/* Section Label */
+.section-label {
+  color: rgba(24, 86, 76, 1);
+  font-size: 20px;
+  font-family:
+    Plus Jakarta Sans,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-weight: 600;
+  line-height: 1.1;
+  text-align: center;
+  margin-top: 161px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 991px) {
+  .section-label {
+    margin-top: 40px;
+  }
+}
+
+/* Section Title */
+.section-title {
+  color: rgba(24, 86, 76, 1);
+  font-size: 48px;
+  font-weight: 600;
+  letter-spacing: -0.96px;
+  text-align: center;
+  margin-top: 6px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 991px) {
+  .section-title {
+    max-width: 100%;
+    font-size: 40px;
+  }
+}
+
+/* Content Row */
+.content-row {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  margin-top: 66px;
+  margin-left: 10px;
+}
+
+@media (max-width: 991px) {
+  .content-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    max-width: 100%;
+    margin-top: 40px;
+  }
+}
+
+/* Content Column */
+.content-column {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  line-height: normal;
+  width: 50%;
+}
+
+.content-row .content-column:nth-child(2) {
+  margin-left: 20px;
+}
+
+@media (max-width: 991px) {
+  .content-column {
+    width: 100%;
+  }
+
+  .content-row .content-column:nth-child(2) {
+    margin-left: 0;
+  }
+}
+
+/* Description Text */
+.description-text {
+  color: rgba(31, 36, 47, 1);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: 0.5px;
+  margin: auto 0;
+}
+
+@media (max-width: 991px) {
+  .description-text {
+    max-width: 100%;
+    margin-top: 40px;
+  }
+}
+
+/* Tribe Image */
+.tribe-image {
+  aspect-ratio: 2.26;
+  object-fit: contain;
+  object-position: center;
+  width: 100%;
+  border-radius: 28px;
+  margin-top: 21px;
+}
+
+@media (max-width: 991px) {
+  .tribe-image {
+    max-width: 100%;
+    margin-top: 40px;
+  }
+}
+
+/* Learn More Link */
+.learn-more-link {
+  display: flex;
+  margin-top: 43px;
+  align-items: center;
+  gap: 7px;
+  font-family:
+    Inter,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 19px;
-  border-radius: 15px;
-  position: absolute;
-  top: 2950px;
-  border-color: #073A4B;
-  border-style: solid;
-  transition: background-color 0.5s;
+  color: rgba(0, 0, 0, 1);
+  font-weight: 600;
+  text-align: center;
+  line-height: 1;
+  justify-content: start;
+  text-decoration: none;
+  align-self: flex-start;
 }
 
-.treaty:hover {
-  background-color: #04202a;
+.learn-more-link.second {
+  margin-left: 116px;
 }
 
-.footer {
-  position: absolute;
-  top: 3150px;
-  background-color: #073A4B;
-  height: 750px;
+@media (max-width: 991px) {
+  .learn-more-link {
+    margin-top: 40px;
+  }
+}
+
+/* Link Text */
+.link-text {
+  align-self: stretch;
+  margin: auto;
+}
+
+/* Link Icon */
+.link-icon {
+  align-self: stretch;
+  display: flex;
+  margin: auto;
+  width: 17px;
+  flex-shrink: 0;
+  height: 17px;
+}
+
+/* What We Do Section */
+.what-we-do-section {
+  display: flex;
+  margin-top: 62px;
+  width: 100%;
+  max-width: 1227px;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 991px) {
+  .what-we-do-section {
+    max-width: 100%;
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 991px) {
+  .placeholder-image {
+    margin-top: 40px;
+    padding: 100px 10px;
+  }
+}
+
+/* Arch Image */
+.team-image {
+justify-content: center;
+align-items: center;
+border-radius: 32px;
+background-color: #eff2f6;
+display: flex;
+min-height: 377px;
+flex-grow: 1;
+/* padding: 141px 10px; */
+gap: 10px;
+width: 100%;
+box-sizing: border-box;
+}
+
+/* Page Footer */
+.page-footer {
   width: 100%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+  margin-top: 291px;
 }
 
-.sign {
-  margin-left: 100px;
-  margin-top: 100px;
-  width: 100%;
+@media (max-width: 991px) {
+  .page-footer {
+    margin-top: 40px;
+  }
 }
 
-.sign .icon2 {
-  width: 247px;
-  height: 247px;
-  object-fit: cover;
-  margin-left: -50px;
-}
-
-h4{
-  color:#51C3EA;
-  font-family: 'Inder', sans-serif;
-  font-size: 18px;
-  margin-top: 5px;
-  text-decoration:none;
-}
-
-.weblink{
-  color:#51C3EA;
-  font-family: 'Inder', sans-serif;
-  font-size:18px;
-}
-
-.maplink{
-  text-decoration:none;
-}
-
-h3{
-  color:#FFFFFF;
-  font-family: 'Koulen', sans-serif;
-  font-size: 34px;
-  margin-top: -30px;;
-  
-}
-
-h2{
-  color: #FFB422;
-  font-family: 'Koulen',sans-serif;
-  font-size: 45px;
-}
-
-h5{
-  color:#FFB422;
-  font-family:'Koulen', sans-serif;
-  font-size: 50px;
-  position:absolute;
-  top: 100px;
-  
-}
-
-/* Style inputs with type="text", select elements and textareas */
-input[type=text], select, textarea {
-  width: 100%; /* Full width */
-  font-size: 16px;
-  font-family:'Judson', serif;
-  background-color: #FFFDEF;
-  padding: 12px; /* Some padding */ 
-  border: none; /* Gray border */
-  border-radius: 4px; /* Rounded borders */
-  box-sizing: border-box; /* Make sure that padding and width stays in place */
-  margin-top: 6px; /* Add a top margin */
-  margin-bottom: 45px; /* Bottom margin */
-  resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
-}
-
-/* Style the submit button with a specific background color etc */
-input[type=submit] {
-  background-color: #FFFDEF;
-  color: #E50A0A;
-  font-family: 'Koulen', sans-serif;
-  font-size: 22px;
-  padding: 5px 25px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  float: right;
-}
-
-/* When moving the mouse over the submit button, add a darker green color */
-input[type=submit]:hover {
-  text-decoration: underline;
-  background-color: #FFFDEF;
-}
-
-label{
-  color:#51C3EA;
-  font-family:'judson',sans-serif;
-  margin-bottom: 10px;
-}
-
-.container2{
-  margin-top: 200px;
-  margin-right: 160px;
-}
-
-.squilt{
-  height: 900px;
-  float: right;
-  position: absolute;
-  top: 1100px;
-  left: 900px;
-}
-
-.squilt2{
-  float:right;
-  position: absolute;
-  top:2800px;
-  left: 600px;
-  height: 400px;
-  object-fit: cover;
+/* Contact Text */
+.contact-text {
+  color: rgba(51, 51, 51, 1);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.1;
+  text-align: center;
+  margin: 0;
 }

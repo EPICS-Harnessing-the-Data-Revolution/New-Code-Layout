@@ -22,8 +22,6 @@
     display: none; /* Hide the modal by default */
     /* Set the width to 1/3 of the screen */
     width: calc(100% / 3);
-    /* Set the height to 100% of the screen */
-    height: 88%;
     /* Add padding to the modal content */
     padding: 20px;
 }

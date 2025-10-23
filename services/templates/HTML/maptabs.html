@@ -2,344 +2,358 @@
 <html style="height: 100%;">
 <head>
   <title>Interactive Map</title>
-  
   {% load static %}
-    <link rel="stylesheet" href="{% static 'css/maptabs.css' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
+  <link rel="stylesheet" href="{% static 'css/maptabs.css' %}">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
 </head>
-
+{% include "HTML/navbar.html" %}
 <body>
-  {% include "HTML/navbar.html" %}
-  <div id="map"></div>
-  <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBE2So6wgKdk3P4hLo8FXgZCvTYMYO0FS0&callback=initMap">
-  </script>
-  <script src="{% static 'js/maptabs.js' %}"></script>
 <div class="tab-container">
 <main>
-  <input id="tab1" type="radio" name="tabs" checked="">
-  <label for="tab1">USGS</label>
-    
+
+  <!-- Tabs (one per location) -->
+  <input id="tab1" type="radio" name="tabs" checked>
+  <label for="tab1">Hazen</label>
+
   <input id="tab2" type="radio" name="tabs">
-  <label for="tab2">USACE</label>
-    
+  <label for="tab2">Stanton</label>
+
   <input id="tab3" type="radio" name="tabs">
-  <label for="tab3">NDMES</label>
+  <label for="tab3">Washburn</label>
 
   <input id="tab4" type="radio" name="tabs">
-  <label for="tab4">CoCoRaHS</label>
-  
+  <label for="tab4">Price</label>
+
   <input id="tab5" type="radio" name="tabs">
-  <label for="tab5">Shadehill</label>
+  <label for="tab5">Bismarck</label>
 
   <input id="tab6" type="radio" name="tabs">
-  <label for="tab6">NOAA</label>
+  <label for="tab6">Schmidt</label>
 
+  <input id="tab7" type="radio" name="tabs">
+  <label for="tab7">Judson</label>
+
+  <input id="tab8" type="radio" name="tabs">
+  <label for="tab8">Mandan</label>
+
+  <input id="tab9" type="radio" name="tabs">
+  <label for="tab9">Breien</label>
+
+  <input id="tab10" type="radio" name="tabs">
+  <label for="tab10">Wakpala</label>
+
+  <input id="tab11" type="radio" name="tabs">
+  <label for="tab11">Little Eagle</label>
+
+  <input id="tab12" type="radio" name="tabs">
+  <label for="tab12">Cash</label>
+
+  <input id="tab13" type="radio" name="tabs">
+  <label for="tab13">Whitehorse</label>
+
+
+  <!-- Hazen -->
   <section id="content1">
-    <br><br>
     <form action="/customgaugegraph/" method="POST">
       {% csrf_token %}
-      <!-- <input type="hidden" name="csrfmiddlewaretoken" value="twoddcSIypaCg1xGN4djumHu7thJmhalDuUTWDNhnadUfcfZNiifPTUuHkvGleRd"> -->
-  
-      <select required="" name="data2see" id="data2see" fdprocessedid="dzzeaq">
-        <option value="" selected="" disabled="">Choose Data Point</option>
+      <h3>Hazen, ND</h3>
+      <select required name="data2see">
+        <option value="" disabled selected>Choose Data Point</option>
         <option value="Gauge Height">Gauge Height</option>
         <option value="Elevation">Elevation</option>
         <option value="Discharge">Discharge</option>
         <option value="Water Temperature">Water Temperature</option>
       </select>
-  
-      <br><br><br><br>
-        <div class="container" id="gaugeContainer" style="display:none">
-          <ul class="ks-cboxtags">
-            <li><input type="checkbox" name="location" id="boxone" value="Hazen ND"onclick="createMarker(map, 47.2852816, -101.6221093, 'Hazen', 'gauge')"><label for="boxone">Hazen</label></li>
-            <li><input type="checkbox" name="location" id="boxtwo" value="Stanton ND"onclick="createMarker(map, 47.287222, -101.3397222, 'Stanton', 'gauge')"><label for="boxtwo">Stanton</label></li>
-            <li><input type="checkbox" name="location" id="boxthree" value="Washburn ND"onclick="createMarker(map, 47.2888822, -101.0379239, 'Washburn', 'gauge')"><label for="boxthree">Washburn</label></li>
-            <li><input type="checkbox" name="location" id="boxfour" value="Price ND"onclick="createMarker(map, 47.07971406, -100.9323594, 'Price', 'gauge')"><label for="boxfour">Price</label></li>
-            <li><input type="checkbox" name="location" id="boxfive" value="Bismarck ND"onclick="createMarker(map, 46.81416667, -100.8213889, 'Bismarck', 'gauge')"><label for="boxfive">Bismarck</label></li>
-            <li><input type="checkbox" name="location" id="boxsix" value="Schmidt ND"onclick="createMarker(map, 46.65638889, -100.7391667, 'Schmidt', 'gauge')"><label for="boxsix">Schmidt</label></li>
-            <li><input type="checkbox" name="location" id="boxseven" value="Judson ND"onclick="createMarker(map, 46.7033333, -101.2136111, 'Judson', 'gauge')"><label for="boxseven">Judson</label></li>
-            <li><input type="checkbox" name="location" id="boxeight" value="Mandan ND"onclick="createMarker(map, 46.8338827, -100.9745789, 'Mandan', 'gauge')"><label for="boxeight">Mandan</label></li>
-            <li><input type="checkbox" name="location" id="boxnine" value="Breien ND"onclick="createMarker(map, 46.3761111, -100.93444, 'Breien', 'gauge')"><label for="boxnine">Breien</label></li>
-            <li><input type="checkbox" name="location" id="boxten" value="Wakpala SD"onclick="createMarker(map, 45.7119422, -100.5593015, 'Wakpala', 'gauge')"><label for="boxten">Wakpala</label></li>
-            <li><input type="checkbox" name="location" id="boxeleven" value="Little Eagle SD"onclick="createMarker(map, 42.74844444, -98.058, 'Little Eagle'), 'gauge'"><label for="boxeleven">Little Eagle</label></li>
-            <li><input type="checkbox" name="location" id="boxtwelve" value="Cash SD"onclick="createMarker(map, 45.6486883, -102.6433259, 'Cash', 'gauge')"><label for="boxtwelve">Cash</label></li>
-            <li><input type="checkbox" name="location" id="boxthirteen" value="Whitehorse SD"onclick="createMarker(map, 45.2558171, -100.8429214, 'Whitehorse', 'gauge')"><label for="boxthirteen">Whitehorse</label></li>
-          </ul>
-        </div>
-        <div class="container" id="elevationContainer" style="display:none">
-            <ul class="ks-cboxtags">
-              <li><input type="checkbox" name="location" id="box1" value="Hazen ND"onclick="createMarker(map, 47.2852816, -101.6221093, 'Hazen', 'gauge')"><label for="box1">Hazen</label></li>
-              <li><input type="checkbox" name="location" id="box2" value="Stanton ND"onclick="createMarker(map, 47.287222, -101.3397222, 'Stanton', 'gauge')"><label for="box2">Stanton</label></li>
-              <li><input type="checkbox" name="location" id="box3" value="Washburn ND"onclick="createMarker(map, 47.2888822, -101.0379239, 'Washburn', 'gauge')"><label for="box3">Washburn</label></li>
-              <li><input type="checkbox" name="location" id="box4" value="Price ND"onclick="createMarker(map, 47.07971406, -100.9323594, 'Price', 'gauge')"><label for="box4">Price</label></li>
-              <li><input type="checkbox" name="location" id="box5" value="Bismarck ND"onclick="createMarker(map, 46.81416667, -100.8213889, 'Bismarck', 'gauge')"><label for="box5">Bismarck</label></li>
-              <li><input type="checkbox" name="location" id="box6" value="Schmidt ND"onclick="createMarker(map, 46.65638889, -100.7391667, 'Schmidt', 'gauge')"><label for="box6">Schmidt</label></li>
-              <li><input type="checkbox" name="location" id="box7" value="Judson ND"onclick="createMarker(map, 46.7033333, -101.2136111, 'Judson', 'gauge')"><label for="box7">Judson</label></li>
-              <li><input type="checkbox" name="location" id="box8" value="Mandan ND"onclick="createMarker(map, 46.8338827, -100.9745789, 'Mandan', 'gauge')"><label for="box8">Mandan</label></li>
-              <li><input type="checkbox" name="location" id="box9" value="Breien ND"onclick="createMarker(map, 46.3761111, -100.93444, 'Breien', 'gauge')"><label for="box9">Breien</label></li>
-            </ul>
-            </div>
-            <div class="container" id="dischargeContainer" style="display:none">
-              <ul class="ks-cboxtags">
-                <li><input type="checkbox" name="location" id="bocone" value="Hazen ND"onclick="createMarker(map, 47.2852816, -101.6221093, 'Hazen', 'gauge')"><label for="bocone">Hazen</label></li>
-                <li><input type="checkbox" name="location" id="bocfive" value="Bismarck ND"onclick="createMarker(map, 46.81416667, -100.8213889, 'Bismarck', 'gauge')"><label for="bocfive">Bismarck</label></li>
-                <li><input type="checkbox" name="location" id="bocseven" value="Judson ND"onclick="createMarker(map, 46.7033333, -101.2136111, 'Judson', 'gauge')"><label for="bocseven">Judson</label></li>
-                <li><input type="checkbox" name="location" id="boceight" value="Mandan ND"onclick="createMarker(map, 46.8338827, -100.9745789, 'Mandan', 'gauge')"><label for="boceight">Mandan</label></li>
-                <li><input type="checkbox" name="location" id="bocnine" value="Breien ND"onclick="createMarker(map, 46.3761111, -100.93444, 'Breien', 'gauge')"><label for="bocnine">Breien</label></li>
-                <li><input type="checkbox" name="location" id="bocten" value="Wakpala SD"onclick="createMarker(map, 45.7119422, -100.5593015, 'Wakpala', 'gauge')"><label for="bocten">Wakpala</label></li>
-                <li><input type="checkbox" name="location" id="boceleven" value="Little Eagle SD"onclick="createMarker(map, 42.74844444, -98.058, 'Little Eagle', 'gauge')"><label for="boceleven">Little Eagle</label></li>
-                <li><input type="checkbox" name="location" id="boctwelve" value="Cash SD"onclick="createMarker(map, 45.6486883, -102.6433259, 'Cash', 'gauge')"><label for="boctwelve">Cash</label></li>
-                <li><input type="checkbox" name="location" id="bocthirteen" value="Whitehorse SD"onclick="createMarker(map, 45.2558171, -100.8429214, 'Whitehorse', 'gauge')"><label for="bocthirteen">Whitehorse</label></li>
-              </ul>
-              </div>
-              <div class="container" id="waterTemperatureContainer" style="display:none">
-                <ul class="ks-cboxtags">
-                  <li><input type="checkbox" name="location" id="Boc1" value="Bismarck ND"onclick="createMarker(map, 46.81416667, -100.8213889, 'Bismarck', 'gauge')"><label for="Boc1">Bismarck</label></li>
-                </ul>
-                </div>
-            <div class="container">
-              <br><br>
-              <h6>Enter Start and End Dates</h6>
-            <input type="date" id="start-date" name="start-date" required="">
-            <input type="date" id="end-date" name="end-date" required="">
-            <br><br>
-            <button type="submit" value="Submit">Submit</button>
-        
-  </div></form></section>
-    
+      <br><br>
+      <h6>Enter Start and End Dates</h6>
+      <input type="date" name="start-date" required>
+      <input type="date" name="end-date" required>
+      <input type="hidden" name="location" value="Hazen ND">
+      <br><br>
+      <button type="submit">Submit</button>
+      <button type="button">Current Data</button>
+    </form>
+  </section>
+
+  <!-- Stanton -->
   <section id="content2">
-    
-    <form action="/customdamgraph/" method="POST">
+    <form action="/customgaugegraph/" method="POST">
       {% csrf_token %}
-        <!-- <input type="hidden" name="csrfmiddlewaretoken" value="twoddcSIypaCg1xGN4djumHu7thJmhalDuUTWDNhnadUfcfZNiifPTUuHkvGleRd"> -->
-        <br><br>
-        <select required="" name="data2see" id="data2see">
-          <option value="" selected="" disabled="">Choose Data Point</option>
-          <option value="Elevation">Elevation</option>
-          <option value="Flow_Spill">Flow Spill</option>
-          <option value="Flow_Powerhouse">Flow Powerhouse</option>
-          <option value="Flow_Out">Flow Out</option>
-          <option value="Tailwater_Elevation">Elevation Tailwater</option>
-          <option value="Energy">Energy</option>
-          <option value="Water_Temperature">Water Temperature</option>
-          <option value="Air_Temperature">Air Temperature</option>
-        </select>
-        <br><br>
+      <h3>Stanton, ND</h3>
+      <select required name="data2see">
+        <option value="" disabled selected>Choose Data Point</option>
+        <option value="Gauge Height">Gauge Height</option>
+        <option value="Elevation">Elevation</option>
+        <option value="Discharge">Discharge</option>
+        <option value="Water Temperature">Water Temperature</option>
+      </select>
+      <br><br>
+      <h6>Enter Start and End Dates</h6>
+      <input type="date" name="start-date" required>
+      <input type="date" name="end-date" required>
+      <input type="hidden" name="location" value="Stanton ND">
+      <br><br>
+      <button type="submit">Submit</button>
+      <button type="button">Current Data</button>
+    </form>
+  </section>
 
-        <div class="container">
-          <ul class="ks-cboxtags">
-            <li><input type="checkbox" name="dam" id="bokone" value="Fort Peck"onclick="createMarker(map, 48.0027953, -106.4183359, 'Fort Peck', 'dam')"><label for="bokone">Fort Peck</label></li>
-            <li><input type="checkbox" name="dam" id="boktwo" value="Garrison"onclick="createMarker(map, 47.4949814, -101.4162492, 'Garrison', 'dam')"><label for="boktwo">Garrison</label></li>
-            <li><input type="checkbox" name="dam" id="bokthree" value="Oahe"onclick="createMarker(map, 44.4512927, -100.4043407, 'Oahe', 'dam')"><label for="bokthree">Oahe</label></li>
-            <li><input type="checkbox" name="dam" id="bokfour" value="Big Bend"onclick="createMarker(map, 44.0516567, -99.4545179, 'Big Bend', 'dam')"><label for="bokfour">Big Bend</label></li>
-            <li><input type="checkbox" name="dam" id="bokfive" value="Fort Randall"onclick="createMarker(map, 43.0661976, -98.5366157, 'Fort Randall', 'dam')"><label for="bokfive">Fort Randall</label></li>
-            <li><input type="checkbox" name="dam" id="boksix" value="Gavins Point"onclick="createMarker(map, 42.8619, -97.4853, 'Gavins Point', 'dam')"><label for="boksix">Gavins Point</label></li>
-          </ul>
-          <br><br>
-          <h6>Enter Start and End Dates</h6>
-          <input type="date" id="start-date-2" name="start-date" required="">
-          <input type="date" id="end-date-2" name="end-date" required="">
-          <br><br>
-        <button type="submit" value="Submit"> Submit 
-
-  </button></div></form></section>
-    
+  <!-- Washburn -->
   <section id="content3">
-    
-    <form action="/custommesonetgraph/" method="POST">
+    <form action="/customgaugegraph/" method="POST">
       {% csrf_token %}
-        <!-- <input type="hidden" name="csrfmiddlewaretoken" value="twoddcSIypaCg1xGN4djumHu7thJmhalDuUTWDNhnadUfcfZNiifPTUuHkvGleRd"> -->
-        <br><br>
-        <select required="" name="data2see" id="data2see">
-          <option value="" selected="" disabled="">Choose Data Point</option>
-          <option value="Average Air Temperature">Average Air Temperature</option>
-          <option value="Average Relative Humidity">Average Relative Humidity</option>
-          <option value="Average Bare Soil Temperature">Average Bare Soil Temperature</option>
-          <option value="Average Turf Soil Temperature">Average Turf Soil Temperature</option>
-          <option value="Maximum Wind Speed">Maximum Wind Speed</option>
-          <option value="Average Wind Direction">Average Wind Direction</option>
-          <option value="Total Solar Radiation">Total Solar Radiation</option>
-          <option value="Total Rainfall">Total Rainfall</option>
-          <option value="Average Baromatric Pressure">Average Baromatric Pressure</option>
-          <option value="Average Dew Point">Average Dew Point</option>
-          <option value="Average Wind Chill">Average Wind Chill</option>
-        </select>
-        <br><br>
+      <h3>Washburn, ND</h3>
+      <select required name="data2see">
+        <option value="" disabled selected>Choose Data Point</option>
+        <option value="Gauge Height">Gauge Height</option>
+        <option value="Elevation">Elevation</option>
+        <option value="Discharge">Discharge</option>
+        <option value="Water Temperature">Water Temperature</option>
+      </select>
+      <br><br>
+      <h6>Enter Start and End Dates</h6>
+      <input type="date" name="start-date" required>
+      <input type="date" name="end-date" required>
+      <input type="hidden" name="location" value="Washburn ND">
+      <br><br>
+      <button type="submit">Submit</button>
+      <button type="button">Current Data</button>
+    </form>
+  </section>
 
-        <div class="container">
-          <ul class="ks-cboxtags">
-            <li><input type="checkbox" name="mesonet" id="bloxone" value="Carson" onclick="createMarker(map, 46.44303, -101.373829, 'Carson', 'mesonet')"><label for="bloxone">Carson</label></li>
-            <li><input type="checkbox" name="mesonet" id="bloxtwo" value="Fort Yates" onclick="createMarker(map, 46.084858, -100.676495, 'Fort Yates', 'mesonet')"><label for="bloxtwo">Fort Yates</label></li>
-            <li><input type="checkbox" name="mesonet" id="bloxthree" value="Linton" onclick="createMarker(map, 46.328, -100.277, 'Linton', 'mesonet')"><label for="bloxthree">Linton</label></li>
-            <li><input type="checkbox" name="mesonet" id="bloxfour" value="Mott" onclick="createMarker(map, 46.38, -102.322, 'Mott', 'mesonet')"><label for="bloxfour">Mott</label></li>
-          </ul>
-          <br><br>
-          <h6>Enter Start and End Dates</h6>
-          <input type="date" id="start-date3" name="start-date" required="">
-          <input type="date" id="end-date3" name="end-date" required="">
-          <br><br>
-        <button type="submit" value="Submit"> Submit 
-    
-  </button></div></form></section>
-
+  <!-- Price -->
   <section id="content4">
-    
-    <form action="/customcocograph/" method="POST">
+    <form action="/customgaugegraph/" method="POST">
       {% csrf_token %}
-        <!-- <input type="hidden" name="csrfmiddlewaretoken" value="twoddcSIypaCg1xGN4djumHu7thJmhalDuUTWDNhnadUfcfZNiifPTUuHkvGleRd"> -->
-        <br><br>
-          <select required="" name="data2see" id="data2see">
-            <option value="" selected="" disabled="">Choose Data Point</option>
-            <option value="Precipitation">Precipitation</option>
-            <option value="Snowfall">Snowfall</option>
-            <option value="Snow Depth">Snow Depth</option>
-          </select>
-        <br><br>
+      <h3>Price, ND</h3>
+      <select required name="data2see">
+        <option value="" disabled selected>Choose Data Point</option>
+        <option value="Gauge Height">Gauge Height</option>
+        <option value="Elevation">Elevation</option>
+        <option value="Discharge">Discharge</option>
+        <option value="Water Temperature">Water Temperature</option>
+      </select>
+      <br><br>
+      <h6>Enter Start and End Dates</h6>
+      <input type="date" name="start-date" required>
+      <input type="date" name="end-date" required>
+      <input type="hidden" name="location" value="Price ND">
+      <br><br>
+      <button type="submit">Submit</button>
+      <button type="button">Current Data</button>
+    </form>
+  </section>
 
-        <div class="container">
-          <ul class="ks-cboxtags">
-            <li><input type="checkbox" name="cocorahs" id="blok1" value="Bismarck"><label for="blok1">Bismarck</label></li>
-            <li><input type="checkbox" name="cocorahs" id="blok2" value="Langdon"><label for="blok2">Langdon</label></li>
-            <li><input type="checkbox" name="cocorahs" id="blok3" value="Faulkton"><label for="blok3">Faulkton</label></li>
-            <li><input type="checkbox" name="cocorahs" id="blok4" value="Bison"><label for="blok4">Bison</label></li>
-          </ul>
-          <br><br>
-          <h6>Enter Start and End Dates</h6>
-          <input type="date" id="start-date4" name="start-date" required="">
-          <input type="date" id="end-date4" name="end-date" required="">
-          <br><br>
-        <button type="submit" value="Submit"> Submit 
-    
-  </button></div></form></section>
-
+  <!-- Bismarck -->
   <section id="content5">
-    
-    <form action="/customshadehillgraph/" method="POST">
+    <form action="/customgaugegraph/" method="POST">
       {% csrf_token %}
-        <!-- <input type="hidden" name="csrfmiddlewaretoken" value="twoddcSIypaCg1xGN4djumHu7thJmhalDuUTWDNhnadUfcfZNiifPTUuHkvGleRd"> -->
-        <br><br>
-          <select required="" name="data2see" id="data2see">
-            <option value="" selected="" disabled="">Choose Data Point</option>
-            <option value="Reservoir Storage Content">Reservoir Storage Content</option>
-            <option value="Reservoir Forebay Elevation">Reservoir Forebay Elevation</option>
-            <option value="Daily Mean Computed Inflow">Daily Mean Computed Inflow</option>
-            <option value="Daily Mean Air Temperature">Daily Mean Air Temperature</option>
-            <option value="Daily Minimum Air Temperature">Daily Minimum Air Temperature</option>
-            <option value="Daily Maximum Air Temperature">Daily Maximum Air Temperature</option>
-            <option value="Total Precipitation (inches per day)">Total Precipitation (inches per day)</option>
-            <option value="Total Water Year Precipitation">Total Water Year Precipitation</option>
-            <option value="Daily Mean Total Discharge">Daily Mean Total Discharge</option>
-            <option value="Daily Mean River Discharge">Daily Mean River Discharge</option>
-            <option value="Daily Mean Spillway Discharge">Daily Mean Spillway Discharge</option>
-            <option value="Daily Mean Gate One Opening">Daily Mean Gate One Opening</option>
-          </select>
-        <br><br>
-        <div class="container">
-          <br><br>
-          <h6>Enter Start and End Dates</h6>
-          <input type="date" id="start-date5" name="start-date" required="">
-          <input type="date" id="end-date5" name="end-date" required="">
-          <br><br>
-        <button type="submit" value="Submit"> Submit 
-    
-  </button></div></form></section>
+      <h3>Bismarck, ND</h3>
+      <select required name="data2see">
+        <option value="" disabled selected>Choose Data Point</option>
+        <option value="Gauge Height">Gauge Height</option>
+        <option value="Elevation">Elevation</option>
+        <option value="Discharge">Discharge</option>
+        <option value="Water Temperature">Water Temperature</option>
+      </select>
+      <br><br>
+      <h6>Enter Start and End Dates</h6>
+      <input type="date" name="start-date" required>
+      <input type="date" name="end-date" required>
+      <input type="hidden" name="location" value="Bismarck ND">
+      <br><br>
+      <button type="submit">Submit</button>
+      <button type="button">Current Data</button>
+    </form>
+  </section>
 
+  <!-- Schmidt -->
   <section id="content6">
-    
-    <form action="/customnoaagraph/" method="POST">
+    <form action="/customgaugegraph/" method="POST">
       {% csrf_token %}
-        <!-- <input type="hidden" name="csrfmiddlewaretoken" value="twoddcSIypaCg1xGN4djumHu7thJmhalDuUTWDNhnadUfcfZNiifPTUuHkvGleRd"> -->
-        <br><br>
-          <select required="" name="data2see" id="data2see">
-            <option value="" selected="" disabled="">Choose Data Point</option>
-            <option value="temperature">Temperature</option>
-            <option value="relativeHumidity">Relative Humidity</option>
-            <option value="dewpoint">Dew Point</option>
-            <option value="windChill">Wind Chill</option>
-          </select>
-        <br><br>
+      <h3>Schmidt, ND</h3>
+      <select required name="data2see">
+        <option value="" disabled selected>Choose Data Point</option>
+        <option value="Gauge Height">Gauge Height</option>
+        <option value="Elevation">Elevation</option>
+        <option value="Discharge">Discharge</option>
+        <option value="Water Temperature">Water Temperature</option>
+      </select>
+      <br><br>
+      <h6>Enter Start and End Dates</h6>
+      <input type="date" name="start-date" required>
+      <input type="date" name="end-date" required>
+      <input type="hidden" name="location" value="Schmidt ND">
+      <br><br>
+      <button type="submit">Submit</button>
+      <button type="button">Current Data</button>
+    </form>
+  </section>
 
-        <div class="container">
-          <ul class="ks-cboxtags">
-            <li><input type="checkbox" name="noaa" id="blook1" value="Williston/Basin"><label for="blook1">Williston/Basin</label></li>
-            <li><input type="checkbox" name="noaa" id="blook2" value="Tioga"><label for="blook2">Tioga</label></li>
-            <li><input type="checkbox" name="noaa" id="blook3" value="Stanley"><label for="blook3">Stanley</label></li>
-            <li><input type="checkbox" name="noaa" id="blook4" value="Minot"><label for="blook4">Minot</label></li>
-            <li><input type="checkbox" name="noaa" id="blook5" value="Sidney/Richland"><label for="blook5">Sidney/Richland</label></li>
-            <li><input type="checkbox" name="noaa" id="blook6" value="Watford City"><label for="blook6">Watford City</label></li>
-            <li><input type="checkbox" name="noaa" id="blook7" value="Garrison"><label for="blook7">Garrison</label></li>
-            <li><input type="checkbox" name="noaa" id="blook8" value="Glendive/Dawson"><label for="blook8">Glendive/Dawson</label></li>
-            <li><input type="checkbox" name="noaa" id="blook9" value="Hazen/Mercer"><label for="blook9">Hazen/Mercer</label></li>
-            <li><input type="checkbox" name="noaa" id="blook10" value="Beach"><label for="blook10">Beach</label></li>
-            <li><input type="checkbox" name="noaa" id="blook11" value="Dickinson/Roosevelt"><label for="blook11">Dickinson/Roosevelt</label></li>
-            <li><input type="checkbox" name="noaa" id="blook12" value="Glen"><label for="blook12">Glen</label></li>
-            <li><input type="checkbox" name="noaa" id="blook13" value="Bismarck"><label for="blook13">Bismarck</label></li>
-            <li><input type="checkbox" name="noaa" id="blook14" value="Miles City/Wiley"><label for="blook14">Miles City/Wiley</label></li>
-            <li><input type="checkbox" name="noaa" id="blook15" value="Baker"><label for="blook15">Baker</label></li>
-            <li><input type="checkbox" name="noaa" id="blook16" value="Bowman"><label for="blook16">Bowman</label></li>
-            <li><input type="checkbox" name="noaa" id="blook17" value="Hettinger"><label for="blook17">Hettinger</label></li>
-            <li><input type="checkbox" name="noaa" id="blook18" value="Linton"><label for="blook18">Linton</label></li>
-            <li><input type="checkbox" name="noaa" id="blook19" value="Buffalo/Harding"><label for="blook19">Buffalo/Harding</label></li>
-            <li><input type="checkbox" name="noaa" id="blook20" value="Mobridge"><label for="blook20">Mobridge</label></li>
-            <li><input type="checkbox" name="noaa" id="blook21" value="Faith"><label for="blook21">Faith</label></li>
-            <li><input type="checkbox" name="noaa" id="blook22" value="Spearfish/Clyde"><label for="blook22">Spearfish/Clyde</label></li>
-            <li><input type="checkbox" name="noaa" id="blook23" value="Pierre"><label for="blook23">Pierre</label></li>
-            <li><input type="checkbox" name="noaa" id="blook24" value="Custer"><label for="blook24">Custer</label></li>
-            <li><input type="checkbox" name="noaa" id="blook25" value="Rapid City"><label for="blook25">Rapid City</label></li>
-            <li><input type="checkbox" name="noaa" id="blook26" value="Philip"><label for="blook26">Philip</label></li>
-          </ul>
-          <br><br>
-          <h6>Enter Start and End Dates</h6>
-          <input type="date" id="start-date6" name="start-date" required="">
-          <input type="date" id="end-date6" name="end-date" required="">
-          <br><br>
-        <button type="submit" value="Submit"> Submit 
-    
-  </button></div></form></section>
-<!-- End of Frame Elements
-End of Tabs  -->
+  <!-- Judson -->
+  <section id="content7">
+    <form action="/customgaugegraph/" method="POST">
+      {% csrf_token %}
+      <h3>Judson, ND</h3>
+      <select required name="data2see">
+        <option value="" disabled selected>Choose Data Point</option>
+        <option value="Gauge Height">Gauge Height</option>
+        <option value="Elevation">Elevation</option>
+        <option value="Discharge">Discharge</option>
+        <option value="Water Temperature">Water Temperature</option>
+      </select>
+      <br><br>
+      <h6>Enter Start and End Dates</h6>
+      <input type="date" name="start-date" required>
+      <input type="date" name="end-date" required>
+      <input type="hidden" name="location" value="Judson ND">
+      <br><br>
+      <button type="submit">Submit</button>
+      <button type="button">Current Data</button>
+    </form>
+  </section>
+
+  <!-- Mandan -->
+  <section id="content8">
+    <form action="/customgaugegraph/" method="POST">
+      {% csrf_token %}
+      <h3>Mandan, ND</h3>
+      <select required name="data2see">
+        <option value="" disabled selected>Choose Data Point</option>
+        <option value="Gauge Height">Gauge Height</option>
+        <option value="Elevation">Elevation</option>
+        <option value="Discharge">Discharge</option>
+        <option value="Water Temperature">Water Temperature</option>
+      </select>
+      <br><br>
+      <h6>Enter Start and End Dates</h6>
+      <input type="date" name="start-date" required>
+      <input type="date" name="end-date" required>
+      <input type="hidden" name="location" value="Mandan ND">
+      <br><br>
+      <button type="submit">Submit</button>
+      <button type="button">Current Data</button>
+    </form>
+  </section>
+
+  <!-- Breien -->
+  <section id="content9">
+    <form action="/customgaugegraph/" method="POST">
+      {% csrf_token %}
+      <h3>Breien, ND</h3>
+      <select required name="data2see">
+        <option value="" disabled selected>Choose Data Point</option>
+        <option value="Gauge Height">Gauge Height</option>
+        <option value="Elevation">Elevation</option>
+        <option value="Discharge">Discharge</option>
+        <option value="Water Temperature">Water Temperature</option>
+      </select>
+      <br><br>
+      <h6>Enter Start and End Dates</h6>
+      <input type="date" name="start-date" required>
+      <input type="date" name="end-date" required>
+      <input type="hidden" name="location" value="Breien ND">
+      <br><br>
+      <button type="submit">Submit</button>
+      <button type="button">Current Data</button>
+    </form>
+  </section>
+
+  <!-- Wakpala -->
+  <section id="content10">
+    <form action="/customgaugegraph/" method="POST">
+      {% csrf_token %}
+      <h3>Wakpala, SD</h3>
+      <select required name="data2see">
+        <option value="" disabled selected>Choose Data Point</option>
+        <option value="Gauge Height">Gauge Height</option>
+        <option value="Elevation">Elevation</option>
+        <option value="Discharge">Discharge</option>
+        <option value="Water Temperature">Water Temperature</option>
+      </select>
+      <br><br>
+      <h6>Enter Start and End Dates</h6>
+      <input type="date" name="start-date" required>
+      <input type="date" name="end-date" required>
+      <input type="hidden" name="location" value="Wakpala SD">
+      <br><br>
+      <button type="submit">Submit</button>
+      <button type="button">Current Data</button>
+    </form>
+  </section>
+
+  <!-- Little Eagle -->
+  <section id="content11">
+    <form action="/customgaugegraph/" method="POST">
+      {% csrf_token %}
+      <h3>Little Eagle, SD</h3>
+      <select required name="data2see">
+        <option value="" disabled selected>Choose Data Point</option>
+        <option value="Gauge Height">Gauge Height</option>
+        <option value="Elevation">Elevation</option>
+        <option value="Discharge">Discharge</option>
+        <option value="Water Temperature">Water Temperature</option>
+      </select>
+      <br><br>
+      <h6>Enter Start and End Dates</h6>
+      <input type="date" name="start-date" required>
+      <input type="date" name="end-date" required>
+      <input type="hidden" name="location" value="Little Eagle SD">
+      <br><br>
+      <button type="submit">Submit</button>
+      <button type="button">Current Data</button>
+    </form>
+  </section>
+
+  <!-- Cash -->
+  <section id="content12">
+    <form action="/customgaugegraph/" method="POST">
+      {% csrf_token %}
+      <h3>Cash, SD</h3>
+      <select required name="data2see">
+        <option value="" disabled selected>Choose Data Point</option>
+        <option value="Gauge Height">Gauge Height</option>
+        <option value="Elevation">Elevation</option>
+        <option value="Discharge">Discharge</option>
+        <option value="Water Temperature">Water Temperature</option>
+      </select>
+      <br><br>
+      <h6>Enter Start and End Dates</h6>
+      <input type="date" name="start-date" required>
+      <input type="date" name="end-date" required>
+      <input type="hidden" name="location" value="Cash SD">
+      <br><br>
+      <button type="submit">Submit</button>
+      <button type="button">Current Data</button>
+    </form>
+  </section>
+
+  <!-- Whitehorse -->
+  <section id="content13">
+    <form action="/customgaugegraph/" method="POST">
+      {% csrf_token %}
+      <h3>Whitehorse, SD</h3>
+      <select required name="data2see">
+        <option value="" disabled selected>Choose Data Point</option>
+        <option value="Gauge Height">Gauge Height</option>
+        <option value="Elevation">Elevation</option>
+        <option value="Discharge">Discharge</option>
+        <option value="Water Temperature">Water Temperature</option>
+      </select>
+      <br><br>
+      <h6>Enter Start and End Dates</h6>
+      <input type="date" name="start-date" required>
+      <input type="date" name="end-date" required>
+      <input type="hidden" name="location" value="Whitehorse SD">
+      <br><br>
+      <button type="submit">Submit</button>
+      <button type="button">Current Data</button>
+    </form>
+  </section>
 
 </main>
 </div>
-<script src="{% static 'js/selectchecks.js' %}"></script>
-
-<script>
-
-function createMarker(map, latitude, longitude, title, type) {
-  
-  if (type === "dam") {
-  imageurl = "{% static 'images/dampic3.png' %}";
-} else if (type === "mesonet") {
-  imageurl = "{% static 'images/mesonetpic.png' %}";
-} else if (type === "gauge") {
-  imageurl = "{% static 'images/gaugepic.png' %}";
-}
-  
-  const image = {
-  url: imageurl,
-  scaledSize: new google.maps.Size(25, 25)};
-
-    const marker = new google.maps.Marker({
-      position: { lat: latitude, lng: longitude },
-      map: map,
-      title: title,
-      icon: image
-    });
-
-    const infowindow = new google.maps.InfoWindow({
-      content: title
-    });
-
-    marker.addListener('click', function() {
-      infowindow.open(map, marker);
-    });
-  }
-
-
-</script>
 </body>
 </html>
+

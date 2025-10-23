@@ -1,10 +1,46 @@
-<div class="banner">
-  <div class="topnav">
-    <img class="icon1" src='/static/images/Standing Rock Crest Logo.png'>
-    <a href="/">Home</a>
-    <a href="/about">About Us</a>
-    <a href="/contactus">Contact Us</a>
-    <a href="/favorites">Favorites</a>
-    <a href="/login">Sign Up/In</a>
-  </div>
-</div>
+<!doctype html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/Heading.css' %}">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navigation Bar</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo-container">
+        <img
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/33a3523fd6976908bc3437ef17e24417ccd1f945"
+          alt="Logo"
+        
+          class="logo-header"
+        />
+      </div>
+      <nav class="nav-menu">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/about" class="nav-link">About Us</a>
+        <div class="dropdown">
+          <a href="#" class="nav-link">Services ▼</a>
+          <div class="dropdown-content">
+            <a href="/map" class="dropdown-link">Interactive Map</a>
+            <a href="/maptabs" class="dropdown-link">Custom Graphs</a>
+            <a href="/favorites" class="dropdown-link">Favorites</a>
+          </div>
+        </div>
+        <span class="divider"></span>
+        {% if user.is_authenticated %}
+          <a href="/signout" class="sign-in-button">Sign Out</a>
+        {% else %}
+          <a href="/register" class="nav-link">Sign Up</a>
+          <a href="/login" class="sign-in-button">Sign In</a>
+        {% endif %}
+      </nav>
+    </header>
+  </body>
+</html>

@@ -1,0 +1,102 @@
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+    background-color: rgba(255, 255, 255, 1);
+    font-family:
+    Roboto,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+    color: #073A4B;
+    margin: 0;
+}
+
+
+/* Heading styles */
+h1 {
+    color: rgba(24, 86, 76, 1);
+    font-size: 60px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.5px;
+    text-align: center;
+    margin: 0;
+}
+
+/* Center content */
+.center {
+    margin: 0 auto;
+    width: 80%;
+    padding-top: 150px; /* Adjust for the height of the banner */
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    background-color: #f5fbfd;
+    border-collapse: collapse;
+    margin-bottom: 20px; /* Add margin-bottom */
+}
+
+th, td {
+    border: 1px solid #000;
+    padding: 10px;
+}
+
+/* Form styles */
+form {
+    margin-top: 20px;
+    text-align: center;
+}
+
+label {
+    color: #51C3EA;
+    font-family: 'Judson', serif;
+    margin-bottom: 10px;
+    display: block;
+}
+
+input[type="text"] {
+    width: 300px;
+    padding: 12px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin: 6px auto 45px;
+}
+
+button {
+    background-color: #f5fbfd;
+    color: #1a202c;
+    font-size: 22px;
+    padding: 10px 30px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 32px;
+    border-width: 1px;
+    border-color: #000;
+}
+
+button:hover {
+    text-decoration: underline;
+    color: #073A4B;
+    transform: scale(1.1); /* Scale up on hover */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add shadow */
+}
+
+/* Keyframe animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

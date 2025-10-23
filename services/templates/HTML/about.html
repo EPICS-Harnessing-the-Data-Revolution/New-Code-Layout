@@ -1,96 +1,100 @@
-<!DOCTYPE html>
-<html>
-  {% load static %}
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <link rel="stylesheet" href="{% static 'css/Aboutus.css' %}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" 
-   crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,300&family=Judson&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Koulen&display=swap" rel="stylesheet">
-  <title>About Standing Rock</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inder&display=swap" rel="stylesheet">
-  <link href="Aboutus.css" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
-  
-</head>
+<!doctype html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/Aboutus.css' %}">
+<link rel="stylesheet" href="{% static 'css/Heading.css' %}">
+{% include "HTML/navbar.html" %}
 
-<body>
-  {% include "HTML/navbar.html" %}
-  <img class="pic1" src="https://d3i6fh83elv35t.cloudfront.net/newshour/app/uploads/2016/09/IMG_0924-1024x768.jpg">
-  <div class="text1">
-    <h1 class='black'>together <br> for Tribal <br>sovereignty.</h1>
-  </div>
-  <div class="text2">
-    <h1 class='yellow2'>Who are <span style="color: #E50A0A">We?</span></h1>
-  </div>
-
-  <div class="para1">
-    <p>Home to both the Lakota and Dakota people, the Standing Rock Reservation contains land in both North and South 
-       Dakota bordering the Missouri River. They dedicate their community to the protection and development of their 
-       community, economy, technology and culture.</p>
-    <p>The Dakota people of Standing Rock include the Upper Yanktonai in their language called Ihanktonwana which 
-      translates “Little End Village” and Lower Yanktonai, called Hunkpatina in their language, “Campers at the Horn” or 
-       “End of the Camping Circle”. When the Middle Sioux moved onto the prairie they had contact with the semisedentary 
-       riverine tribes such as the Mandan, Hidatsa, and Arikara. Eventually the Yanktonai displaced these tribes and 
-      forced them upstream. However, periodically the Yanktonai did engage in trade with these tribes and eventually some 
-       bands adopted the earthlodge, bullboat, and horticultural techniques of these people, though buffalo remained their primary food source. The Yanktonai also maintained aspects of their former Woodland lifestyle. Today Yanktonai people of Standing Rock live primarily in communities on the North Dakota portion of the reservation.</p>
-    <p>The Lakota, as the largest division of the Sioux, subdivided into the Ti Sakowin or Seven Tents and Lakota people of the Standing Rock Reservation included two of these subdivisions, the Hunkpapa which means “Campers at the Horn” in English and Sihasapa or “Blackfeet,” not to be confused with the Algonquian Blackfeet of Montana and Canada which are an entirely different group. By the early 19th century, the Lakota became a northern Plains people and practically divested themselves of most all Woodland traits. The new culture revolved around the horse and buffalo; the people were nomadic and lived in tee pees year-round. The Hunkpapa and Sihasapa ranged in the area between the Cheyenne and Heart Rivers to the south and north and between the Missouri River on the east and Tongue to the west. Today the Lakota at Standing Rock live predominantly in communities located on the South Dakota portion of the reservation.</p>
-  </div>
-  <img class="pic2" src="https://www.cowboysindians.com/wp-content/uploads/2023/10/DignityChamberlainSouthDakota1-scaled.jpg">
-  <div class="text3">
-    <h1 class='yellow2'>The <span style="color: #E50A0A">Founding</span></h1>
-    <h1 class="sub">Of the standing rock tribe</h1>
-  </div>
-  <div class="para2">
-    <p>The Standing Rock Sioux Reservation was originally established as part of the Great Sioux Reservation. It comprised all of present-day South Dakota west of the Missouri River, including the sacred Black Hills and the life-giving Missouri River. Under article 11 of the 1868 Fort Laramie Treaty, the Great Sioux Nation retained off-reservation hunting rights to a much larger area, south to the Republican and Platte Rivers, and east to the Big Horn Mountains. Under article 12, no cession of land would be valid unless approved by three-fourths of the adult males. Nevertheless, the Congress unilaterally passed the Act of February 28, 1877 (19 stat. 254), removing the Sacred Black Hills from the Great Sioux Reservation, without obtaining the required consent of the Sioux. The U.S. Supreme Court concluded that “A more ripe and rank case of dishonorable dealings will never, in all probability, be found in our history.” United States v. Sioux Nation of Indians, 448 U.S. 371, 388 (1980).</p>
-    <p>The Standing Rock Agency was established at Fort Yates in 1873. The Executive Order of March 16, 1875 extended the Reservation’s northern boundary to the Cannon Ball River. In the act of March 2, 1889, however, Congress further reduced the Great Sioux Reservation, dividing it into six separate reservations, including the Standing Rock Sioux Reservation. (25 stat. 889). The Standing Rock Reservation boundaries, delineated in section 3 of the 1889 act, have remained intact since that time.</p>
-  </div>
-  <a href="https://standingrock.org/about/history/fort-laramie-treaty/" target="_blank"><button class="treaty">Fort Laramie Treaty</button></a>
-  <img class='squilt' src='/static/images/Midjourney AI screenshot 1.png'>
-  <img class="squilt2" src='/static/images/Midjourney AI screenshot 2.png'>
-  <div class="footer">
-    <div class="sign">
-      <img class="icon2" src="/static/images/Standing Rock Crest Logo.png">
-      <div class="signature">
-        <h2>Standing Rock</h2>
-        <h3>Sioux Tribe</h3>
-        <a class="maplink" href="https://maps.google.com/?q=1200%201%20Standing%20Rock%20Ave,%20Fort%20Yates,%20ND%2058538"><h4>1 Standing Rock AveFort Yates, ND 58538</h4></a>
-        <h4>Phone: (701)854-8500</h4>
-        <h4>Email: <a class="weblink" href="info@standingrock.org">info@standingrock.org</a></h4>
-      </div>
-    </div>
-
-    <div class="contactform">
-      <h5 class="getintouch">Get in Touch with us!</h5>
-      <div class='container2'>
-        <form action="action_page.php">
-
-          <label for="fname">Your Name</label>
-          <input type="text" id="fname" name="firstname" placeholder="Your name..">
-
-          <label for="lname">Subject</label>
-          <input type="text" id="lname" name="lastname" placeholder="Your last name..">
-
-          <label for="subject">Your Message</label>
-          <textarea id="subject" name="subject" placeholder="Write something.." style="height:102px"></textarea>
-
-          <input type="submit" value="Submit">
-
-        </form>
+<header class="about-us-header">
+  <h1 class="page-title">About Us</h1>
+  <div class="subtitle-container">
+    <div class="subtitle-wrapper">
+      <div class="subtitle-content">
+        <p class="subtitle-text">
+          Dedicated to displaying high end water quality data.
+        </p>
       </div>
     </div>
   </div>
+</header>
 
-  
-</body>
+<main class="main-content">
+  <section class="who-we-are-section">
+    <h2 class="section-label">Who Are We?</h2>
+    <h3 class="section-title">About the Standing Rock Tribe</h3>
 
+    <article class="content-row">
+      <div class="content-column">
+        <p class="description-text">
+          Standing Rock Sioux Tribe is a reservation in North and South Dakota
+          known as the birthplace of prominent Native American civil rights
+          activist Sitting Bull, and are committed to protecting the language,
+          culture and well-being of its people through economic development,
+          technology advancement, community engagement and education. Their
+          overall mission is to create a website for the residents, as well as
+          anyone interested in accessing data collected from the reservation.
+          Being able to track climate change and relationships between their
+          crop output and the weather is important for their economy and
+          well-being as a tribe.
+        </p>
+      </div>
+      <div class="image-column">
+        <img
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/5e243547241bf0fd72fbf1144f2a533c3d31fd7dc0e5e564d7b87b2aa29c5be2?placeholderIfAbsent=true&apiKey=1c65642a69d24b70abf48ff65c758fe5"
+          alt="Standing Rock Tribe"
+          class="tribe-image"
+        />
+      </div>
+    </article>
 
+    <a href="#" class="learn-more-link">
+      <span class="link-text">Learn more</span>
+      <span class="link-icon"></span>
+    </a>
+  </section>
 
-  </html>
+  <section class="what-we-do-section">
+    <h2 class="section-label">What We Do?</h2>
+    <h3 class="section-title">About the HDR Team</h3>
+
+    <article class="content-row reverse">
+      <div class="content-column">
+        <div class="purdue-arch-image">
+          <img
+            src="{% static 'images/purdue_arch.jpg' %}"
+            alt="HDR Team"
+            class="team-image"
+          />
+        </div>
+      </div>
+      <div class="content-column">
+        <p class="description-text">
+          EPICS HDR (Harnessing Data Revolution) is a team within the EPICS
+           program, a service-learning initiative where students collaborate 
+           with communities to design solutions for human, environmental, and 
+           societal challenges. The HDR team develops interactive, user-friendly 
+           dashboards that synthesize complex environmental datasets into 
+           accessible visualizations. By integrating historical and real-time 
+           information, their platforms empower communities to analyze trends, 
+           monitor resources, and make data-driven decisions. Through the 
+           empowerment of the EPICS program, the HDR teams’ goals are to support 
+           sustainable practices and economic resilience using technology. EPICS 
+           HDR focuses on merging technical expertise with community-centered design, 
+           creating partnerships that bridge technology and real-world impact while 
+           equipping Purdue students with skills to address real-world challenges.
+        </p>
+      </div>
+    </article>
+
+    <a href="#" class="learn-more-link second">
+      <span class="link-text">Learn more</span>
+      <span class="link-icon"></span>
+    </a>
+  </section>
+</main>
+
+<footer class="page-footer">
+  <span>Contact Us For More Questions at</span>
+  <a href="mailto:Epics-hdr@ecn.purdue.edu" class="contact-link">
+    Epics-hdr@ecn.purdue.edu
+  </a>
+</footer>

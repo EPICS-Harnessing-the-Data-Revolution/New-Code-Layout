@@ -1,57 +1,188 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700");
-@import url("https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css");
-
-* {
+/* Navigation Bar Styles */
+body {
   margin: 0;
   padding: 0;
-  list-style: none;
+  font-family: "Plus Jakarta Sans", sans-serif !important;/*override the css for homepage*/
+  /*this is a test to see if this effects header sizing */
+}
+
+.navbar {
+  width: 100%;
+  height: 138px;
+  background: linear-gradient(
+    90deg,
+    rgba(209, 32, 45, 0.4) 0%,
+    rgba(252, 202, 23, 0.4) 100%
+  );
+  border: 1px solid #90a3bf;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 55px;
+  box-sizing: border-box;
+}
+
+.logo {
+  width: 115px;
+  height: 114px;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 44px;
+}
+
+.nav-link {
+  font-size: 16px;
+  font-weight: 500;
+  color: #18564c;
+  opacity: 0.9;
+  letter-spacing: -0.48px;
+  cursor: pointer;
   text-decoration: none;
 }
 
-/* Styles for the navigation bar */
-.topnav {
-  background-color: rgba(18, 12, 41, 0.8); /* Darken the background color */
-  height: 10vh; /* Increase the height */
-  width: 100%;
-  overflow: hidden;
-  backdrop-filter: blur(9px);
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+.divider {
+  width: 21px;
+  height: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.8);
 }
 
-/* Styles for the links inside the navigation bar */
-.topnav a {
-  color: white;
-  font-size: 2.8vh; /* Increase font size */
-  padding: 0 2vw;
-  text-align: center;
-  flex: 1;
-  font-family: 'Open Sans', sans-serif; /* Match the font-family */
-}
-
-/* Styles for the logo image */
-.icon1 {
-  height: 15vh;
-  width: auto;
-  object-fit: contain;
+.sign-in-button {
+  border-radius: 4px;
+  padding: 8px 20px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.42px;
+  cursor: pointer;
+  background-color: #18564c;
+  text-decoration: none;
   display: inline-block;
-  margin-right: 0.5vw;
-  margin-left: 2vw;
 }
 
-.imgcontainer {
-  position: fixed;
-  top: 1vh;
-  left: 1vw;
-  z-index: 999;
+/* Media Queries */
+@media (max-width: 991px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .nav-menu {
+    gap: 20px;
+  }
 }
 
-.imgcontainer img {
-  width: 6vw;
-  height: auto;
+@media (max-width: 640px) {
+  .navbar {
+    padding: 0 16px;
+    height: 80px;
+  }
+
+  .logo-header {
+    width: 80px;
+    height: 80px;
+  }
+
+  .nav-menu {
+    display: none;
+  }
 }
+
+/*THIS IS ALL NEW STUFF FOR DROP DOWN MENU*/
+body, .dropdown-content, .dropdown-link {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+
+/* Update dropdown styles */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/*below is the old code 
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  z-index: 1000;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+*/
+/* Updated dropdown styles with hover fix */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  z-index: 1000;
+  padding: 10px 0;
+  margin-top: 0; /* Remove problematic margin */
+  padding-top: 10px; /* Add padding to create hover-safe gap */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+.dropdown-link {
+  display: block;
+  padding: 10px 20px;
+  color: #18564c;
+  text-decoration: none;
+  font-size: 16px; /* Match nav-link font size */
+  font-weight: 500; /* Match nav-link font weight */
+  transition: all 0.3s ease;
+  opacity: 0.9; /* Match nav-link opacity */
+  letter-spacing: -0.48px; /* Match nav-link letter spacing */
+}
+
+.dropdown-link:hover {
+  background-color: rgba(24, 86, 76, 0.1);
+  color: #18564c;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .dropdown-content {
+    position: static;
+    transform: none;
+    box-shadow: none;
+    display: none;
+    width: 100%;
+    background-color: rgba(209, 32, 45, 0.1);
+    border-radius: 0;
+    margin-top: 0;
+  }
+  
+  .dropdown.active .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown-link {
+    padding: 12px 20px;
+  }
+}
+

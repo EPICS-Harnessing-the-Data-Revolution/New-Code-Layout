@@ -11,7 +11,8 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
+from django.contrib.auth import login as d_login # our login opage func is called login... thus overriding django login unless we rename
 from django.core.mail import send_mail
 from django.http import HttpResponse
 import csv
@@ -32,8 +33,13 @@ import csv
 #         return HttpResponse('Data stored successfully')
 #     else:
 #         return HttpResponse('Invalid request method')
+
 def favorites(request):
-    return render(request, 'HTML/favorites.html')
+    favorites = []
+    if request.user.is_authenticated:
+        favorites = request.user.favorites.all()
+    return render(request, 'HTML/favorites.html', {"favorites": favorites})
+
 def contactus(request):
     return render(request,'HTML/contactus.html')
 def register(request):
@@ -44,75 +50,75 @@ def signup(request):
 
     if request.method == "POST":
         username = request.POST['username']
-        fname = request.POST['fname']
-        lname = request.POST['lname']
-        email = request.POST['email']
         pass1 = request.POST['pass1']
         pass2 = request.POST['pass2']
 
-                
+        # can't just call signup function because then we recurse
+        # so redirect back to page manually
         if User.objects.filter(username=username):
-            messages.error(request, "Username already exist! Please try some other username.")
-            return redirect('home')
-        
-        if User.objects.filter(email=email).exists():
-            messages.error(request, "Email Already Registered!!")
-            return redirect('home')
+            messages.error(request, "Username is taken. Please try another username")
+            # return redirect('register/')
+            return register(request)
         
         if len(username)>20:
-            messages.error(request, "Username must be under 20 charcters!!")
-            return redirect('home')
+            messages.error(request, "Username must be less than 20 charcters")
+            return register(request)
         
         if pass1 != pass2:
-            messages.error(request, "Passwords didn't matched!!")
-            return redirect('home')
+            messages.error(request, "Pelase ensure both passwords match")
+            return register(request)
         
+        # TODO not sure why this is here, but we probably don't need to require this
         if not username.isalnum():
-            messages.error(request, "Username must be Alpha-Numeric!!")
-            return redirect('home')
+            messages.error(request, "Please only include letters and numbers")
+            return register(request)
         
-        myuser = User.objects.create_user(username, email, pass1)
-        myuser.first_name = fname
-        myuser.last_name = lname
-
+        myuser = User.objects.create_user(username=username, password=pass1)
         myuser.save()
 
-        messages.success(request, "Your account has been succefully created. We have sent you a confirmation email, please confirm your email in order to activate your account")
+        '''
+        Email message from previous semesters
+        As of Spring 25 we're not storing any email info but if that changes most of the code is here
+        Just make sure to get email from user and save above
+        '''
+        # messages.success(request, "Your account has been succefully created. We have sent you a confirmation email, please confirm your email in order to activate your account")
 
-        #Welcome email
+        # #Welcome email
 
-        subject = "Welcome to HDR - Django Login!"
-        message = "Hello" + myuser.first_name + "!! \n" + "Welcome to HDR!! \n Thank you for visiting our website \n We habe also sent you a confirmation email, please comfirm email adress in order to activate your account. \n\n Thanking you \n HDR TEAM"
-        from_email = settings.EMAIL_HOST_USER
-        to_list = [myuser.email]
-        send_mail(subject, message, from_email, to_list, fail_silently = True)
+        # subject = "Welcome to HDR - Django Login!"
+        # message = "Hello" + myuser.first_name + "!! \n" + "Welcome to HDR!! \n Thank you for visiting our website \n We habe also sent you a confirmation email, please comfirm email adress in order to activate your account. \n\n Thanking you \n HDR TEAM"
+        # from_email = settings.EMAIL_HOST_USER
+        # to_list = [myuser.email]
+        # send_mail(subject, message, from_email, to_list, fail_silently = True)
 
-        return redirect('signin')
+        messages.success(request, "Your account has been created succesfully")
+        return login(request)
 
-    return render(request, "HTML/signup.html")
+    return register(request)
 
 def signin(request):
     if request.method == 'POST':
         username = request.POST['username']
         pass1 = request.POST['pass1']
         
-        user = authenticate(username=username, password=pass1)
+        user = authenticate(request, username=username, password=pass1)
         
-        if user is not None:
-            login(request, user)
-            fname = user.first_name
-            
-            return render(request, "HTML/register.html",{"fname":fname})
-        else:
-            messages.error(request, "Bad Credentials!!")
-            return redirect('home')
+        if user is None:
+            messages.error(request, "We were unable to find an account with that username and password.")
+            return login(request)
+        
+        d_login(request, user)
+        uname = user.username
+
+        messages.success(request, f"You're logged in! Hello {uname}")
+        print(f"user {uname} logged in")
     
-    return render(request, "HTML/signin.html")
+    # bring user to homepage after they've logged in
+    return homepage(request)
 
 def signout(request):
     logout(request)
-    messages.success(request, "Logged Out Successfully")
-    return redirect('/register')
+    return homepage(request)
 
 def about(request):
     return render(request, 'HTML/about.html')
