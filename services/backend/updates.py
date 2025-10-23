@@ -36,11 +36,6 @@ def dictpull(conn, dataset, location, table="measurements"):
     rows = curr.fetchall()
     return [{"datetime": row[0], "value": row[1]} for row in rows]
 
-
-
-def makeTable (sql_data, dataset, location):
-    pass
-
 def main():
     manager = DataSourceManager()
     conn = get_connection()
