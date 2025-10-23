@@ -1,94 +1,141 @@
-#Updates SQL table via pulling data from source files & Creates create graphs for Frontend
 """
-updates.py 
-Pulls all new data, stores in SQL
+updates.py
+Pulls all new data via DataSourceManager and generates tables for each dataset/location.
 """
 from services.backend.datasources.manager import DataSourceManager
 from services.backend.sqlclasses import _get_db_connection as get_connection
-import matplotlib.pyplot as plt
-import pandas as pd
 import os
+import re
 import sqlite3
 
-#Insert data into SQL
-def sql_store(conn, location, dataset, times, values, table="cocorahs"):
-    conn, cursor = get_connection()
+# optional graph/table helper
+try:
+    from services.backend.graphgeneration.createCustom import makeTable
+except Exception:
+    makeTable = None
+
+
+def normalize_field(name: str) -> str:
+    field = name.lower()
+    field = re.sub(r"[\/\-\s]+", "_", field)
+    field = re.sub(r"[^0-9a-z_]", "", field)
+    if re.match(r"^\d", field):
+        field = "_" + field
+    return field
+
+
+def ensure_table_and_column(curr: sqlite3.Cursor, table: str, column: str):
+    # ensure table exists
+    curr.execute(
+        f"""
+        CREATE TABLE IF NOT EXISTS {table} (
+            datetime TEXT NOT NULL,
+            location TEXT NOT NULL,
+            PRIMARY KEY(datetime, location)
+        )
+        """
+    )
+    # ensure column exists
+    curr.execute(f"PRAGMA table_info({table})")
+    cols = [r[1] for r in curr.fetchall()]
+    if column not in cols:
+        curr.execute(f'ALTER TABLE {table} ADD COLUMN "{column}" REAL')
+
+
+def sql_store(conn: sqlite3.Connection, curr: sqlite3.Cursor, location: str, dataset: str, times, values, table="measurements"):
+    """
+    Store times/values into measurements table under normalized column for dataset.
+    """
+    if not times or not values:
+        return
+    field = normalize_field(dataset)
+    ensure_table_and_column(curr, table, field)
+
     for t, v in zip(times, values):
-        try:
-            curr.execute(
-                f"""
-                INSERT OR IGNORE INTO {table} (datetime, location, {dataset})
-                VALUES (?, ?, ?)
-                """,
-                (t, location, v),
-            )
-        except sqlite3.Error as e:
-            print(f"Error storing {dataset} for {location} at {t}: {e}")
+        # insert row if missing
+        curr.execute(
+            f"INSERT OR IGNORE INTO {table} (datetime, location) VALUES (?, ?)",
+            (t, location),
+        )
+        # update value
+        curr.execute(
+            f'UPDATE {table} SET "{field}" = ? WHERE datetime = ? AND location = ?',
+            (None if v is None else v, t, location),
+        )
     conn.commit()
 
-#Pull existing data from SQL
-def dictpull(conn, curr, dataset, location, table="cocorahs"):
-    curr = conn.cursor()
-    curr.execute(
-        f"SELECT datetime, {dataset} FROM {table} WHERE location=? ORDER BY datetime ASC",
-        (location,),
-    )
+
+def dictpull(conn: sqlite3.Connection, curr: sqlite3.Cursor, dataset: str, location: str, table="measurements"):
+    """
+    Return (times, values) for a dataset/location from measurements table.
+    """
+    field = normalize_field(dataset)
+    try:
+        curr.execute(
+            f'SELECT datetime, "{field}" FROM {table} WHERE location=? ORDER BY datetime ASC',
+            (location,),
+        )
+    except sqlite3.Error:
+        return [], []
     rows = curr.fetchall()
-    return [{"datetime": row[0], "value": row[1]} for row in rows]
+    times = [r[0] for r in rows]
+    values = [r[1] for r in rows]
+    return times, values
 
-def main():
+
+def main(num_days: int = 30):
     manager = DataSourceManager()
+
+    # establish DB connection from project's sqlclasses
     conn, curr = get_connection()
-    
-    #pull data
-    manager.pull_all_data(num_days=30)
-    
+
+    # Pull everything once via manager (manager should call each source.store internally)
+    print(f"Pulling last {num_days} days from all sources...")
+    try:
+        manager.pull_all_data(num_days=num_days)
+    except Exception as e:
+        print(f"Error during manager.pull_all_data: {e}")
+
+    # After pulling/storing, iterate sources/locations and generate tables per dataset
     locations_map = manager.location_sets
-    sources = manager.sources.keys()
-    
+    sources = list(manager.sources.keys())
+
     for source in sources:
-        for location in locations_map.get(source, []):
-            data_source = manager.get_source(source)
-            print(f"\nProcessing {location} from {source}...")
-            
-            #pull data for location (range input)
-            data_source.pull_all({'year': '2023', 'month': '01', 'day': '01'},
-                                 {'year': '2023', 'month': '12', 'day': '31'})
-            
-            #Find datasets
-            if hasattr(data_source, "datasets"):
-                dataset_names = list(data_source.datasets.values())
-            elif hasattr(data_source, "dataset_map"):
-                dataset_names = list(data_source.dataset_map.keys())
-            else:
-                dataset_names = []
+        data_source = manager.get_source(source)
+        locs = locations_map.get(source, [])
+        if not locs:
+            continue
 
-            for dataset in dataset_names:
-                #Fetch time/values for each one
-                times = getattr(data_source, f"{dataset}_times", None)
-                values = getattr(data_source, f"{dataset}_values", None)
-                
-                if times is None or values is None:
-                    data_attr = getattr(data_source, "data", {})
-                    if dataset in data_attr:
-                        times = data_attr[dataset].get("times", [])
-                        values = data_attr[dataset].get("values", [])
-                
+        # determine display dataset names (what is stored as columns)
+        if hasattr(data_source, "datasets") and isinstance(data_source.datasets, dict):
+            # mapping like {code: display_name} -> use display_name for DB column
+            dataset_display = list(data_source.datasets.values())
+        elif hasattr(data_source, "dataset_map") and isinstance(data_source.dataset_map, dict):
+            dataset_display = list(data_source.dataset_map.keys())
+        else:
+            dataset_display = []
+
+        for location in locs:
+            print(f"Generating tables for {location} from source {source}...")
+            for dataset in dataset_display:
+                times, values = dictpull(conn, curr, dataset, location)
                 if times and values:
-                    sql_store(conn, location, dataset, times, values)
+                    # write table using helper if available, otherwise print a small summary
+                    title = f"{location} {dataset} Table"
+                    if makeTable:
+                        try:
+                            makeTable([values], title)
+                        except Exception as e:
+                            print(f"makeTable error for {title}: {e}")
+                    else:
+                        print(f"[TABLE] {title}  rows={len(times)}  sample_times={times[:3]} sample_values={values[:3]}")
 
-
-            sql_data = dictpull(conn, curr, dataset, location)
-            if sql_data:
-                makeTable(sql_data, dataset, location)
-    
-    
     conn.close()
-    print("All new data stored and tables generated.")
+    print("All updates and table generation complete.")
+
 
 if __name__ == "__main__":
-    main()          
-
+    main(num_days=30)
 
 
 

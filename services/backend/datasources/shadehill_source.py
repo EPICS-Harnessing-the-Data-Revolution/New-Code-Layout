@@ -4,7 +4,7 @@ from services.backend.datasources.utils import DataParser
 from services.backend.datasources.utils import DateHelper
 from services.backend.datasources.config import SHADEHILL_DATASETS
 import sqlite3
-from services.backend.database.sqlclaases import SQL_CONVERSION
+from services.backend.sqlclasses import SQL_CONVERSION
 
 class ShadehillDataSource(DataSource):
     """

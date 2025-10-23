@@ -121,11 +121,14 @@ def updateDictionary(
                     )  # Handle 'Z' for UTC
                     formatted_time = dt_obj.strftime("%Y-%m-%d %H:%M:%S")
                 except ValueError:
-                    # If parsing fails, assume it's already in the desired format or log a warning
-                    logger.warning(
-                        f"Could not parse timestamp string '{timestamp}'. Assuming 'YYYY-MM-DD HH:MM:SS' format."
-                    )
-                    formatted_time = timestamp  # Use as is, hoping it's correct
+                    try:
+                        formatted_time = dt_obj.strftime("%Y-%m-%d %H:%M")
+                    except ValueError:
+                        # If parsing fails, assume it's already in the desired format or log a warning
+                        logger.warning(
+                            f"Could not parse timestamp string '{timestamp}'. Assuming 'YYYY-MM-DD HH:MM:SS' format."
+                        )
+                        formatted_time = timestamp  # Use as is, hoping it's correct
             else:
                 logger.warning(
                     f"Unsupported timestamp type '{type(timestamp)}'. Skipping record."
