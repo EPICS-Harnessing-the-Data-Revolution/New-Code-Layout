@@ -7,8 +7,297 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
 </head>
-{% include "HTML/navbar.html" %}
+
 <body>
+  {% include "HTML/navbar.html" %}
+<style>
+  .graph-slot { margin-top: 16px; }
+  .graph-frame {
+    display: block;
+    width: 100%;
+    min-height: 700px;   /* initial height */
+    border: 0;
+    border-radius: 8px;
+  }
+  @media (min-width: 1200px) {
+    .graph-frame { min-height: 820px; }
+  }
+</style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const normDate = v => { const d = new Date(v); d.setHours(0,0,0,0); return d; };
+
+  // --- Tunables ------------------------------------------------------------
+  const ENABLE_PROBE = true;                 // set false to bypass the pre-check
+  const TREAT_ALL_500_AS_NO_DATA = true;     // your backend 500s on no-data; treat as "no data"
+  const NO_DATA_PATTERNS = [
+    /IndexError/i, /list index out of range/i, /moving_avg/i, /sqlclasses\.py/i
+  ];
+  // -------------------------------------------------------------------------
+
+  // Create (or find) the graph container under a form
+  function ensureGraphSlot(form) {
+    let slot = form.parentElement.querySelector('.graph-slot');
+    if (!slot) {
+      slot = document.createElement('div');
+      slot.className = 'graph-slot';
+      form.insertAdjacentElement('afterend', slot);
+    }
+    return slot;
+  }
+
+  // Show a full HTML page returned by Django inside an iframe (safe for <html>/<head> docs)
+function renderHtmlIntoSlot(slot, html) {
+  slot.innerHTML = '';
+
+  // Ensure relative URLs (css/js) inside the HTML still resolve
+  const srcdoc = html.includes('<base')
+    ? html
+    : html.replace('<head>', `<head><base href="${window.location.origin}/">`);
+
+  const iframe = document.createElement('iframe');
+  iframe.className = 'graph-frame';
+  iframe.title = 'Graph';
+  iframe.srcdoc = srcdoc;
+  slot.appendChild(iframe);
+
+  // Autosize to content
+  function resize() {
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      const h = Math.max(
+        doc.body.scrollHeight, doc.documentElement.scrollHeight,
+        doc.body.offsetHeight, doc.documentElement.offsetHeight
+      );
+      iframe.style.height = Math.max(760, h) + 'px';
+    } catch (_) {}
+  }
+
+  iframe.addEventListener('load', () => {
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+
+    // 1) Find the Plotly graph container
+    //    Plotly adds .js-plotly-plot / .plotly-graph-div
+    let graphEl = doc.querySelector('.js-plotly-plot, .plotly-graph-div, #graph, #graph-container');
+
+    // 2) Find the stats table (prefer one near the graph)
+    let statsEl = null;
+    if (graphEl) {
+      // try sibling or any table inside the same section
+      statsEl =
+        graphEl.parentElement?.querySelector('table') ||
+        (graphEl.nextElementSibling && graphEl.nextElementSibling.tagName === 'TABLE'
+          ? graphEl.nextElementSibling
+          : null);
+    }
+    if (!statsEl) statsEl = doc.querySelector('table');
+
+    // 3) Rebuild the iframe body to keep only graph + stats
+    if (graphEl) {
+      const wrapper = doc.createElement('div');
+      wrapper.style.maxWidth = '1200px';
+      wrapper.style.margin = '0 auto';
+      wrapper.style.padding = '8px 0 24px';
+
+      // Move nodes into wrapper (keeps rendered SVG/Canvas intact)
+      wrapper.appendChild(graphEl);
+      if (statsEl) wrapper.appendChild(statsEl);
+
+      // Nuke everything else
+      doc.body.innerHTML = '';
+      doc.body.appendChild(wrapper);
+
+      // Make Plotly fill width/height
+      const style = doc.createElement('style');
+      style.textContent = `
+        html, body { height: 100%; margin: 0; }
+        .plot-container.plotly { width: 100% !important; height: 100% !important; }
+        .main-svg { width: 100% !important; }
+        table { width: 100%; border-collapse: collapse; }
+        table td, table th { padding: .5rem .75rem; }
+      `;
+      doc.head.appendChild(style);
+    } else {
+      // Fallback: just hide common site chrome if we didn't find the graph node
+      const style = doc.createElement('style');
+      style.textContent = `
+        header, nav, .navbar, .Heading, .site-header, .site-footer, footer { display:none !important; }
+      `;
+      doc.head.appendChild(style);
+    }
+
+    resize();
+    setTimeout(resize, 350);
+    setTimeout(resize, 1200);
+    window.addEventListener('resize', resize);
+  });
+
+  slot.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+
+
+  // Probe the SAME endpoint your form posts to; classify "no data" vs real server error
+  async function probeHasData(form) {
+    if (!ENABLE_PROBE) return { state: 'skip' };
+
+    const action = form.getAttribute('action') || window.location.pathname;
+    const fd = new FormData(form);
+    fd.append('check_only', '1');
+
+    try {
+      const resp = await fetch(action, {
+        method: 'POST',
+        body: new URLSearchParams(fd),  // includes csrfmiddlewaretoken
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        redirect: 'manual'
+      });
+
+      if (resp.status === 200) return { state: 'hasData', html: await resp.text() };
+
+      if (resp.status >= 500) {
+        if (TREAT_ALL_500_AS_NO_DATA) return { state: 'empty' };
+        const text = await resp.text().catch(() => '');
+        const looksNoData = NO_DATA_PATTERNS.some(rx => rx.test(text));
+        return looksNoData ? { state: 'empty' } : { state: 'serverError', status: resp.status, html: text };
+      }
+
+      // 3xx/4xx: let normal path decide; we’ll still try to render it inline below
+      return { state: 'unknown', status: resp.status, html: await resp.text().catch(() => '') };
+
+    } catch (err) {
+      return { state: 'networkError', error: err };
+    }
+  }
+
+  // Simple date validation + messages per form
+  function attachHandlers(form) {
+    const startInput = form.querySelector('input[name="start-date"]');
+    const endInput   = form.querySelector('input[name="end-date"]');
+    const datasetSel = form.querySelector('select[name="data2see"]');
+    const locationEl = form.querySelector('input[name="location"]');
+
+    const ensureMsg = (cls) => {
+      let el = form.querySelector('.' + cls);
+      if (!el) {
+        el = document.createElement('p');
+        el.className = cls;
+        el.style.cssText = 'color:#B00020;margin-top:6px;font-weight:500;display:none;';
+        endInput.insertAdjacentElement('afterend', el);
+      }
+      return el;
+    };
+
+    const dateError   = ensureMsg('date-error');
+    const nodataError = ensureMsg('nodata-error');
+    const serverError = ensureMsg('server-error');
+
+    const clearMsgs = () => {
+      [dateError, nodataError, serverError].forEach(el => { el.textContent=''; el.style.display='none'; });
+    };
+
+    function validateDates() {
+      clearMsgs();
+      if (!startInput.value || !endInput.value) return false;
+      const s = normDate(startInput.value);
+      const e = normDate(endInput.value);
+      if (s > today) { dateError.textContent = '⚠️ Start date cannot be in the future.'; dateError.style.display='block'; return false; }
+      if (e > today) { dateError.textContent = '⚠️ End date cannot be in the future.';   dateError.style.display='block'; return false; }
+      if (s > e)     { dateError.textContent = '⚠️ Start date must be earlier than end date.'; dateError.style.display='block'; return false; }
+      return true;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      if (!form.checkValidity()) return;
+      if (!validateDates()) { e.preventDefault(); return; }
+
+      e.preventDefault();                    // stay on the same tab
+      const slot = ensureGraphSlot(form);
+      slot.innerHTML = '<div class="graph-loading">Loading…</div>';
+
+      const res = await probeHasData(form);
+      clearMsgs();
+
+      if (res.state === 'empty') {
+        const loc = (locationEl?.value || '').replace(/\s+(ND|SD)$/i, '');
+        slot.innerHTML = '';
+        nodataError.textContent = `ℹ️ No data for "${datasetSel.value}" at ${loc} in that date range.`;
+        nodataError.style.display = 'block';
+        return;
+      }
+
+      if (res.state === 'serverError') {
+        slot.innerHTML = '';
+        serverError.textContent = `⚠️ Server error while generating the graph (${res.status}).`;
+        serverError.style.display = 'block';
+        return;
+      }
+
+      if (res.state === 'networkError') {
+        slot.innerHTML = '';
+        serverError.textContent = '⚠️ Network error while requesting the graph.';
+        serverError.style.display = 'block';
+        return;
+      }
+
+      // If we already have the HTML (200 OK in probe), render it.
+      if (res.state === 'hasData' && res.html) {
+        renderHtmlIntoSlot(slot, res.html);
+        return;
+      }
+
+      // Otherwise, do a second request to actually get the HTML and embed it.
+      const action = form.getAttribute('action') || window.location.pathname;
+      const fd = new FormData(form);
+
+      try {
+        const resp = await fetch(action, {
+          method: 'POST',
+          body: new URLSearchParams(fd),
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          redirect: 'manual'
+        });
+
+        const html = await resp.text();
+        if (resp.status === 200) {
+          renderHtmlIntoSlot(slot, html);
+        } else if (resp.status >= 500 && TREAT_ALL_500_AS_NO_DATA) {
+          slot.innerHTML = '';
+          nodataError.textContent = 'ℹ️ No data for the selected range.';
+          nodataError.style.display = 'block';
+        } else {
+          slot.innerHTML = '';
+          serverError.textContent = `⚠️ Could not render graph (${resp.status}).`;
+          serverError.style.display = 'block';
+        }
+      } catch (err) {
+        slot.innerHTML = '';
+        serverError.textContent = '⚠️ Network error while requesting the graph.';
+        serverError.style.display = 'block';
+      }
+    });
+  }
+
+  // Attach to all your forms
+  document.querySelectorAll('section form[action="/customgaugegraph/"]').forEach(attachHandlers);
+});
+</script>
+
+
+
+
+
 <div class="tab-container">
 <main>
 
