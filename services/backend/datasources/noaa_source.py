@@ -1,11 +1,13 @@
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, date
 
 import requests
+import time
 
 from services.backend.datasources.config import NOAA
-from services.backend.datasources.base import DataSource
+from services.backend.datasources.base2 import DataSource
+from services.backend.sqlclasses import updateDictionary
 
 # Setup basic logging
 logging.basicConfig(
@@ -14,10 +16,9 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 class NOAADataSource(DataSource):
-    def __init__(self):
-        super().__init__(
-            "NOAA", "noaa_weather"
-        )  # Changed data_type slightly for clarity
+    def __init__(self, start_date=None, format=None):
+        # base2.DataSource expects (source, start_date, format)
+        super().__init__("NOAA", start_date, format)
         # Using GHCND station IDs found via NOAA's tool
         self.location_dict = {
             "Bismarck, ND": "GHCND:USW00024011",
@@ -31,288 +32,212 @@ class NOAADataSource(DataSource):
             "Max Temperature": "TMAX",
             "Min Temperature": "TMIN",
             "Precipitation": "PRCP",
-            # Add more mappings as needed (e.g., AWND for wind speed)
         }
         # Map from constants.NOAA location names to self.location_dict keys
         self.location_name_mapping = {
             "Bismarck": "Bismarck, ND",
             "Minot": "Minot, ND",
             "Williston/Basin": "Williston, ND",
-            # Add more mappings as needed
+            # Extended approximations to nearest supported GHCND stations
+            "Tioga": "Williston, ND",
+            "Stanley": "Minot, ND",
+            "Sidney/Richland": "Williston, ND",
+            "Watford City": "Williston, ND",
+            "Garrison": "Minot, ND",
+            "Glendive/Dawson": "Williston, ND",
+            "Hazen/Mercer": "Bismarck, ND",
+            "Beach": "Williston, ND",
+            "Dickinson/Roosevelt": "Williston, ND",
+            "Glen": "Williston, ND",
+            "Miles City/Wiley": "Williston, ND",
+            "Baker": "Williston, ND",
+            "Bowman": "Williston, ND",
+            "Hettinger": "Williston, ND",
+            "Linton": "Bismarck, ND",
+            "Buffalo/Harding": "Bismarck, ND",
+            "Mobridge": "Bismarck, ND",
+            "Faith": "Bismarck, ND",
+            "Spearfish/Clyde": "Bismarck, ND",
+            "Pierre": "Bismarck, ND",
+            "Custer": "Bismarck, ND",
+            "Rapid City": "Bismarck, ND",
+            "Philip": "Bismarck, ND",
         }
         self.api_base_url = "https://www.ncdc.noaa.gov/cdo-web/api/v2/data"
-        # IMPORTANT: NOAA API requires a token. This should be securely managed.
-        # Using an environment variable 'NOAA_API_TOKEN' is recommended.
+        # Token from env with provided fallback
         self.api_token = os.getenv(
             "NOAA_API_TOKEN", "WkaDdDnFDuEUpiUEFiNMFcLcNKVsQgtp"
-        )  # Replace YOUR_DEFAULT_TOKEN or set env var
-        if self.api_token == "YOUR_DEFAULT_TOKEN":
-            logger.warning(
-                "NOAA_API_TOKEN environment variable not set. Using default placeholder."
-            )
+        )
+        # Holder for pulled raw payloads and processed series
+        self.data = []
+        self.processed = []
 
-    def fetch(self, location=None, dataset=None, start_date=None, end_date=None):
+    def _pull(self):
         """
-        Fetches data from the NOAA CDO API V2.
+        Pull raw NOAA data for all configured locations/datasets from cutoff to today.
+        Stores raw payloads in self.data.
         """
-        if not location or location not in self.location_dict:
-            logger.error(f"Invalid or missing location: {location}")
-            return None
-        if not dataset or dataset not in self.dataset_map:
-            logger.error(f"Invalid or missing dataset: {dataset}")
-            return None
-        if not start_date or not end_date:
-            logger.error("Start date and end date are required.")
-            return None
-
-        station_id = self.location_dict[location]
-        datatype_id = self.dataset_map[dataset]
-        # Format dates as YYYY-MM-DD strings
-        start_date_str = start_date.strftime("%Y-%m-%d")
-        end_date_str = end_date.strftime("%Y-%m-%d")
+        self.data = []
+        start_dt = self.cutoff.date() if isinstance(self.cutoff, datetime) else date.today()
+        end_dt = date.today()
 
         headers = {"token": self.api_token}
-        params = {
-            "datasetid": "GHCND",  # Global Historical Climatology Network Daily
-            "stationid": station_id,
-            "datatypeid": datatype_id,  
-            "startdate": start_date_str,
-            "enddate": end_date_str,
-            "units": "standard",  # Use standard units (e.g., Fahrenheit for temp)
-            "limit": 1000,  # Max limit per request
-            "offset": 0,
-            "includemetadata": "false",  # Don't need metadata for processing
-        }
 
-        all_results = []
-        logger.info(
-            f"Fetching NOAA data for {location} ({datatype_id}) from {start_date_str} to {end_date_str}"
-        )
-        
-        while True:
-            try:
-                response = requests.get(
-                    self.api_base_url, headers=headers, params=params
-                )
-                response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
-                data = response.json()
-
-                results = data.get("results", [])
-                if not results:
-                    logger.info(
-                        f"No results found for {location} ({datatype_id}) in this batch (offset {params['offset']})."
-                    )
-                    break  # Exit loop if no results in the current response
-
-                all_results.extend(results)
-
-                # Check pagination metadata
-                metadata = data.get("metadata", {}).get("resultset", {})
-                count = metadata.get("count", 0)
-                offset = metadata.get("offset", 0)
-                limit = metadata.get("limit", 0)
-
-                logger.debug(
-                    f"Fetched batch: offset={offset}, limit={limit}, count={count}, results_in_batch={len(results)}"
-                )
-
-                if (offset + limit) >= count:
-                    logger.info(f"Finished fetching all {count} records.")
-                    break  # Exit loop if all results fetched
-
-                # Prepare for the next request
-                params["offset"] += limit
-                logger.debug(f"Requesting next batch with offset {params['offset']}")
-
-            except requests.exceptions.HTTPError as e:
-                # Specifically log HTTP errors like 4xx/5xx
-                logger.error(
-                    f"HTTP Error fetching NOAA data for {location} ({datatype_id}): {e.response.status_code} - {e.response.text}"
-                )
-                return None  # Stop fetching on error
-            except requests.exceptions.RequestException as e:
-                logger.error(
-                    f"Network error fetching NOAA data for {location} ({datatype_id}): {e}"
-                )
-                return None  # Stop fetching on error
-            except Exception as e:
-                logger.error(
-                    f"An unexpected error occurred during fetch for {location} ({datatype_id}): {e}"
-                )
-                return None  # Stop fetching on unexpected error
-
-        logger.info(
-            f"Successfully fetched {len(all_results)} records for {location} - {dataset}"
-        )
-        return all_results
-
-    def process(self, raw_data=None, location=None, dataset=None):
-        """
-        Processes raw data fetched from NOAA API.
-        """
-        if raw_data is None:
-            logger.warning(
-                f"No raw data provided for processing: {location} - {dataset}"
-            )
-            return [], []
-        if not isinstance(raw_data, list):
-            logger.error(
-                f"Invalid raw_data format for processing: Expected list, got {type(raw_data)}"
-            )
-            return [], []
-
-        times = []
-        values = []
-
-        # NOAA GHCND temperature values are often in tenths of degrees C/F.
-        # Precipitation is often in tenths of mm/inches.
-        # Assuming 'standard' units: Temp in F, Precip in inches.
-        # We divide by 10.0 for these specific datasets.
-        needs_scaling = dataset in [
-            "Average Temperature",
-            "Max Temperature",
-            "Min Temperature",
-            "Precipitation",
-        ]
-        scaling_factor = 10.0 if needs_scaling else 1.0
-
-        logger.info(
-            f"Processing {len(raw_data)} raw records for {location} - {dataset}"
-        )
-        for record in raw_data:
-            try:
-                # Ensure record is a dictionary
-                if not isinstance(record, dict):
-                    logger.warning(f"Skipping non-dictionary record: {record}")
-                    continue
-
-                # Date format from API is typically 'YYYY-MM-DDTHH:MM:SS'
-                timestamp_str = record.get("date")
-                value_str = record.get("value")  # Value comes as a number in JSON
-
-                if timestamp_str and value_str is not None:
-                    # Parse the timestamp
-                    timestamp = datetime.fromisoformat(timestamp_str)
-                    times.append(timestamp)
-
-                    # Convert value to float and scale if necessary
-                    processed_value = float(value_str) / scaling_factor
-                    values.append(processed_value)
-                else:
-                    logger.warning(
-                        f"Skipping record with missing date or value: {record}"
-                    )
-
-            except ValueError as e:
-                logger.error(f"Error processing record value {record}: {e}")
-            except TypeError as e:
-                logger.error(f"Type error processing record {record}: {e}")
-            except Exception as e:
-                logger.error(
-                    f"An unexpected error occurred during processing record {record}: {e}"
-                )
-
-        logger.info(
-            f"Successfully processed {len(times)} data points for {location} - {dataset}"
-        )
-        return times, values
-
-    def pull_all(self, start_date=None, end_date=None):
-        """
-        Pull all NOAA data for all supported locations and datasets.
-
-        Args:
-            start_date: Dictionary with 'year', 'month', 'day' keys
-            end_date: Dictionary with 'year', 'month', 'day' keys
-        """
-        if not start_date or not end_date:
-            logger.error("Start date and end date dictionaries are required.")
-            return False
-
-        # Convert date dictionaries to datetime objects
-        try:
-            start_datetime = datetime(
-                int(start_date["year"]),
-                int(start_date["month"]),
-                int(start_date["day"]),
-            )
-
-            end_datetime = datetime(
-                int(end_date["year"]), int(end_date["month"]), int(end_date["day"])
-            )
-        except (ValueError, KeyError) as e:
-            logger.error(f"Invalid date format: {e}")
-            return False
-
-        # Ensure dates are in the correct order
-        if start_datetime > end_datetime:
-            logger.error(
-                f"Start date {start_datetime} is after end date {end_datetime}"
-            )
-            return False
-
-        success_count = 0
-        error_count = 0
-
-        # Loop through all locations in the NOAA list (from constants)
         for loc_name in NOAA:
-            # Try to map the location name to a key in self.location_dict
             mapped_location = self.location_name_mapping.get(loc_name)
-
-            if not mapped_location:
-                logger.warning(
-                    f"No mapping found for NOAA location: {loc_name}. Skipping."
-                )
+            if not mapped_location or mapped_location not in self.location_dict:
+                logger.warning(f"Skipping unmapped location: {loc_name}")
                 continue
 
-            if mapped_location not in self.location_dict:
-                logger.warning(
-                    f"Location '{mapped_location}' not in self.location_dict. Skipping."
-                )
-                continue
+            station_id = self.location_dict[mapped_location]
+            for dataset_name, datatype_id in self.dataset_map.items():
+                params = {
+                    "datasetid": "GHCND",
+                    "stationid": station_id,
+                    "datatypeid": datatype_id,
+                    "startdate": start_dt.strftime("%Y-%m-%d"),
+                    "enddate": end_dt.strftime("%Y-%m-%d"),
+                    "units": "standard",
+                    "limit": 1000,
+                    "offset": 1,  # NOAA CDO offset is 1-based
+                    "includemetadata": "true",
+                }
 
-            logger.info(
-                f"Processing data for NOAA location: {loc_name} (mapped to {mapped_location})"
+                all_results = []
+                page_counter = 0
+                max_pages = 2000
+                logger.info(
+                    f"Fetching NOAA data for {mapped_location} ({datatype_id}) from {params['startdate']} to {params['enddate']}"
+                )
+
+                backoff_seconds = 1
+                consecutive_429 = 0
+                while True:
+                    try:
+                        response = requests.get(self.api_base_url, headers=headers, params=params)
+                        response.raise_for_status()
+                        payload = response.json()
+                        results = payload.get("results", [])
+                        if not results:
+                            break
+                        prev_len = len(all_results)
+                        all_results.extend(results)
+                        if len(all_results) == prev_len:
+                            logger.warning("No new results added; breaking to avoid infinite loop")
+                            break
+                        metadata = payload.get("metadata", {}).get("resultset", {})
+                        count = metadata.get("count")
+                        offset = metadata.get("offset")
+                        limit = metadata.get("limit", params["limit"]) or params["limit"]
+                        # If metadata is present, use it; otherwise, fall back to length-based pagination
+                        if isinstance(count, int) and isinstance(offset, int) and isinstance(limit, int):
+                            if (offset + limit) >= count:
+                                break
+                            params["offset"] += limit
+                        else:
+                            # Fallback: if we received less than limit rows, we're done
+                            if len(results) < params["limit"]:
+                                break
+                            params["offset"] += params["limit"]
+                        # light throttle between pages
+                        time.sleep(0.25)
+                        page_counter += 1
+                        if page_counter >= max_pages:
+                            logger.warning("Reached max page cap; stopping pagination to avoid infinite loop")
+                            break
+                    except requests.exceptions.HTTPError as e:
+                        status = getattr(getattr(e, 'response', None), 'status_code', None)
+                        retry_after = getattr(getattr(e, 'response', None), 'headers', {}).get('Retry-After') if getattr(e, 'response', None) else None
+                        if status == 429:
+                            consecutive_429 += 1
+                            if consecutive_429 > 5:
+                                logger.error("Too many 429s in a row; skipping this dataset/location")
+                                break
+                            sleep_for = int(retry_after) if retry_after and str(retry_after).isdigit() else backoff_seconds
+                            logger.warning(f"Rate limited by NOAA (429). Sleeping {sleep_for}s and retrying...")
+                            time.sleep(sleep_for)
+                            backoff_seconds = min(backoff_seconds * 2, 60)
+                            continue
+                        logger.error(f"HTTP error {status} fetching NOAA data for {mapped_location} ({datatype_id}): {e}")
+                        break
+                    except requests.exceptions.RequestException as e:
+                        logger.error(f"Error fetching NOAA data for {mapped_location} ({datatype_id}): {e}")
+                        break
+
+                self.data.append(
+                    {
+                        "loc_key": loc_name,  # original constants.NOAA name
+                        "mapped_location": mapped_location,
+                        "dataset": dataset_name,
+                        "datatypeid": datatype_id,
+                        "results": all_results,
+                    }
+                )
+                # light throttle between dataset requests
+                time.sleep(0.25)
+
+    def _process(self):
+        """
+        Process self.data into time/value series per (location, dataset).
+        Stores results in self.processed.
+        """
+        self.processed = []
+        for entry in self.data:
+            raw_data = entry.get("results", [])
+            loc_key = entry.get("loc_key")
+            dataset_name = entry.get("dataset")
+
+            times = []
+            values = []
+
+            needs_scaling = dataset_name in [
+                "Average Temperature",
+                "Max Temperature",
+                "Min Temperature",
+                "Precipitation",
+            ]
+            scaling_factor = 10.0 if needs_scaling else 1.0
+
+            for record in raw_data:
+                try:
+                    if not isinstance(record, dict):
+                        continue
+                    timestamp_str = record.get("date")
+                    value_val = record.get("value")
+                    if timestamp_str and value_val is not None:
+                        timestamp = datetime.fromisoformat(timestamp_str)
+                        # filter by cutoff if provided
+                        if isinstance(self.cutoff, datetime) and timestamp <= self.cutoff:
+                            continue
+                        processed_value = float(value_val) / scaling_factor
+                        times.append(timestamp)
+                        values.append(processed_value)
+                except Exception as e:
+                    logger.error(f"Error processing record for {loc_key} - {dataset_name}: {e}")
+
+            # Ensure chronological order
+            if times:
+                paired = sorted(zip(times, values), key=lambda x: x[0])
+                times, values = [t for t, _ in paired], [v for _, v in paired]
+
+            self.processed.append(
+                {
+                    "location": loc_key,
+                    "dataset": dataset_name,
+                    "times": times,
+                    "values": values,
+                }
             )
 
-            # Loop through all datasets
-            for dataset in self.dataset_map.keys():
-                logger.info(f"Pulling {dataset} data for {mapped_location}")
-
-                try:
-                    # Fetch data
-                    raw_data = self.fetch(
-                        mapped_location, dataset, start_datetime, end_datetime
-                    )
-
-                    if raw_data:
-                        # Process and store data
-                        times, values = self.process(raw_data, mapped_location, dataset)
-
-                        if times and values:
-                            self.store(
-                                times, values, loc_name, dataset
-                            )  # Use original location name for storage
-                            logger.info(
-                                f"Successfully stored {len(times)} records for {loc_name} - {dataset}"
-                            )
-                            success_count += 1
-                        else:
-                            logger.warning(
-                                f"No data points processed for {loc_name} - {dataset}"
-                            )
-                            error_count += 1
-                    else:
-                        logger.warning(
-                            f"No raw data fetched for {loc_name} - {dataset}"
-                        )
-                        error_count += 1
-
-                except Exception as e:
-                    logger.error(f"Error processing {dataset} for {loc_name}: {e}")
-                    error_count += 1
-
-        logger.info(
-            f"NOAA data pull completed. Success: {success_count}, Errors: {error_count}"
-        )
-        return True
+    def _push(self):
+        """
+        Push processed series into SQL using updateDictionary.
+        """
+        for series in self.processed:
+            times = series.get("times", [])
+            values = series.get("values", [])
+            location = series.get("location")
+            dataset = series.get("dataset")
+            if times and values:
+                updateDictionary(times, values, location, dataset, "noaa_weather")
+                logger.info(f"Stored {len(times)} records for {location} - {dataset}")
