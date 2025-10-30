@@ -55,8 +55,8 @@ body {
 
 #map-legend {
   position: absolute;
-  bottom: 25px;
-  right: 50px;
+  bottom: 10%;
+  right: 3%;
   width: 100px;
   height: 150px;
   z-index: 1;
