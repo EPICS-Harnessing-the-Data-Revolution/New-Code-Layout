@@ -2,7 +2,7 @@
 """
 updates.py 
 Pulls all new data, stores in SQL
-"""
+
 from services.backend.datasources.manager import DataSourceManager
 from services.backend.sqlclasses import _get_db_connection as get_connection
 import matplotlib.pyplot as plt
@@ -89,10 +89,10 @@ def main():
 if __name__ == "__main__":
     main()          
 
-
-
-
 """
+
+
+
 from services.backend.datasources.manager import DataSourceManager
 from services.backend.sqlclasses import _get_db_connection as get_connection
 from services.backend.datasources.config import LOCATION_TO_TABLE, TABLE_SCHEMAS
@@ -161,5 +161,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-"""
+
 
