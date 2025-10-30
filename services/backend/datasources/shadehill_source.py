@@ -3,6 +3,8 @@ from services.backend.datasources.base import DataSource
 from services.backend.datasources.utils import DataParser
 from services.backend.datasources.utils import DateHelper
 from services.backend.datasources.config import SHADEHILL_DATASETS
+import sqlite3
+from services.backend.sqlclasses import SQL_CONVERSION
 
 class ShadehillDataSource(DataSource):
     """
@@ -134,8 +136,6 @@ class ShadehillDataSource(DataSource):
         Store all datasets for each timestamp in a single database operation.
         Uses a custom approach to avoid overwriting data.
         """
-        import sqlite3
-        from services.backend.database.sqlclaases import SQL_CONVERSION
         
         # Use direct database connection instead of _get_db_connection
         conn = None
