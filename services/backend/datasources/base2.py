@@ -3,6 +3,7 @@
 #Purpose: To serve as a base class for all sources to inherit from
 
 from abc import ABC, abstractmethod
+from datetime import datetime
 
 class DataSource(ABC):
     """
@@ -10,11 +11,13 @@ class DataSource(ABC):
     Provides a standard interface for fetching, processing, and storing data.
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, source, start_date=None, format = None):
+        self.source = source
+        self.cutoff = datetime.strptime(start_date, format)
+
 
     @abstractmethod
-    def _pull(self, start_date=None):
+    def _pull(self):
         """
         Pulls raw data from the data source and stores data as a member of the class.
         Must be implemented by subclasses.
@@ -49,7 +52,7 @@ class DataSource(ABC):
         Public method.
         updates.py should use this
         """
-        self._pull(location=None, start_date=None)
+        self._pull()
         self._process()
         self._push()
 
