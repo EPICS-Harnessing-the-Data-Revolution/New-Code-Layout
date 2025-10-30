@@ -5,9 +5,7 @@
 name: Build and deploy Python app to Azure Web App - standingrock-demo
 
 on:
-  pull_request:
-    types:
-      - opened
+  push:
     branches:
       - main
   workflow_dispatch:
@@ -30,6 +28,7 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
+          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
       
       - name: Install dependencies
         run: pip install -r requirements.txt
@@ -70,9 +69,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7F37FD779D564604B4337EC5239885B6 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_27B32CE8E7B84C38ADEC4D7EB791D24C }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5FD28C7849404FF5A4C07C9D2F35F607 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DEV }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_DEV }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DEV }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
@@ -80,4 +79,4 @@ jobs:
         with:
           app-name: 'standingrock-demo'
           slot-name: 'Production'
-          
+
