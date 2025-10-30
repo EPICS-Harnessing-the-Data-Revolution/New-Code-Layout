@@ -214,7 +214,8 @@ class NDGISWaterChem(DataSource):
         """
         if raw_data is None:
             return {}, {}
-
+        
+        
         processed_times = {}
         processed_values = {}
 
