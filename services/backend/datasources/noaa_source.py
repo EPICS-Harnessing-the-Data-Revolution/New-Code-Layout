@@ -45,11 +45,7 @@ class NOAADataSource(DataSource):
         # Using an environment variable 'NOAA_API_TOKEN' is recommended.
         self.api_token = os.getenv(
             "NOAA_API_TOKEN", "WkaDdDnFDuEUpiUEFiNMFcLcNKVsQgtp"
-<<<<<<< HEAD
-        )  
-=======
         )  # Replace YOUR_DEFAULT_TOKEN or set env var
->>>>>>> 27ab7ae6956e02199aec624a5acd70a4cd66b291
         if self.api_token == "YOUR_DEFAULT_TOKEN":
             logger.warning(
                 "NOAA_API_TOKEN environment variable not set. Using default placeholder."
