@@ -21,21 +21,20 @@ class DANR(DataSource):
     
     def _process(self):
         format_string = "%Y-%m-%dT%H:%M:%S"
+        count = 0
 
-        """for station in self.data:
-            for sample in station['parameters']:
-                
+        for station_index, station in enumerate(self.data):
+            for sample in station['parameters']:           
                 EpochTime = datetime.strptime(sample['sampleDate'], format_string)
                 if EpochTime<=self.cutoff:
-                    pass"""
+                    count +=1
 
-        self.data = [sample for sample in self.data[0]['parameters'] if datetime.strptime(sample['sampleDate'], format_string)>self.cutoff]
+        del self.data[station_index]['parameters'][:count]
+
         print(json.dumps(self.data, indent=4))
-
-        return super()._process()
     
     def _push(self):
-        return super()._push()
+        pass
     
 def main():
     test = DANR("2025-8-01 0:0:0", "%Y-%m-%d %H:%M:%S")
