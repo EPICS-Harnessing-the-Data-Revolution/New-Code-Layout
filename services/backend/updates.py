@@ -1,13 +1,7 @@
 """
-<<<<<<< HEAD
-updates.py 
-Pulls all new data, stores in SQL
-
-=======
 updates.py
 Pulls all new data via DataSourceManager and generates tables for each dataset/location.
 """
->>>>>>> 27ab7ae6956e02199aec624a5acd70a4cd66b291
 from services.backend.datasources.manager import DataSourceManager
 from services.backend.sqlclasses import _get_db_connection as get_connection
 import os
@@ -141,13 +135,9 @@ def main(num_days: int = 30):
 
 
 if __name__ == "__main__":
-<<<<<<< HEAD
-    main()          
-=======
     main(num_days=30)
 
 
->>>>>>> 27ab7ae6956e02199aec624a5acd70a4cd66b291
 
 """
 
@@ -222,4 +212,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-
+"""
