@@ -217,31 +217,47 @@ class NOAADataSource(DataSource):
         )
         return times, values
 
-    def pull_all(self, start_date=None, end_date=None):
+    def pull_all(self, start_date=None, end_date=None, num_days: int = None):
         """
         Pull all NOAA data for all supported locations and datasets.
 
         Args:
-            start_date: Dictionary with 'year', 'month', 'day' keys
-            end_date: Dictionary with 'year', 'month', 'day' keys
+            start_date: Dictionary with 'year', 'month', 'day' keys or a datetime.datetime
+            end_date: Dictionary with 'year', 'month', 'day' keys or a datetime.datetime
+            num_days: If provided and start_date/end_date are None, pull the last num_days up to today.
         """
-        if not start_date or not end_date:
-            logger.error("Start date and end date dictionaries are required.")
-            return False
+        # If caller requested a relative window, compute datetimes
+        if (not start_date or not end_date) and num_days:
+            from datetime import datetime, timedelta
 
-        # Convert date dictionaries to datetime objects
-        try:
-            start_datetime = datetime(
-                int(start_date["year"]),
-                int(start_date["month"]),
-                int(start_date["day"]),
-            )
+            end_datetime = datetime.utcnow()
+            start_datetime = end_datetime - timedelta(days=int(num_days))
+        else:
+            # Convert dict inputs to datetimes if necessary
+            try:
+                if isinstance(start_date, dict):
+                    start_datetime = datetime(
+                        int(start_date["year"]), int(start_date["month"]), int(start_date["day"])
+                    )
+                elif isinstance(start_date, datetime):
+                    start_datetime = start_date
+                else:
+                    start_datetime = None
 
-            end_datetime = datetime(
-                int(end_date["year"]), int(end_date["month"]), int(end_date["day"])
-            )
-        except (ValueError, KeyError) as e:
-            logger.error(f"Invalid date format: {e}")
+                if isinstance(end_date, dict):
+                    end_datetime = datetime(
+                        int(end_date["year"]), int(end_date["month"]), int(end_date["day"])
+                    )
+                elif isinstance(end_date, datetime):
+                    end_datetime = end_date
+                else:
+                    end_datetime = None
+            except Exception as e:
+                logger.error(f"Invalid date input to pull_all: {e}")
+                return False
+
+        if not start_datetime or not end_datetime:
+            logger.error("Start date and end date are required.")
             return False
 
         # Ensure dates are in the correct order
@@ -280,7 +296,7 @@ class NOAADataSource(DataSource):
                 logger.info(f"Pulling {dataset} data for {mapped_location}")
 
                 try:
-                    # Fetch data
+                    # Fetch data (fetch handles pagination)
                     raw_data = self.fetch(
                         mapped_location, dataset, start_datetime, end_datetime
                     )
