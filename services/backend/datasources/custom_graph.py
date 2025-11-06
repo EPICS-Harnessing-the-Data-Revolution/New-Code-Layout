@@ -1,3 +1,9 @@
+"""
+custom_graph.py
+Safely query Measurements.db and plot one selected variable over time.
+Automatically finds Measurements.db at the repository root.
+"""
+
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -6,26 +12,41 @@ import os
 import sys
 
 # --- CONFIG ---
-# Automatically search for Measurements.db in the services/ folder
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-SERVICES_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))  # one level up from backend
 
-def find_database(folder, db_name="Measurements.db"):
-    """Recursively search for the database file in folder."""
-    for root, dirs, files in os.walk(folder):
-        if db_name in files:
-            return os.path.join(root, db_name)
+def find_repo_root(start_dir, repo_name="New-Code-Layout"):
+    """Go up folders until we find the repo root."""
+    current = start_dir
+    while True:
+        if os.path.basename(current) == repo_name:
+            return current
+        parent = os.path.dirname(current)
+        if parent == current:  # reached root of filesystem
+            return None
+        current = parent
+
+def find_database(repo_root, db_name="Measurements.db"):
+    """Search for Measurements.db in the repo root."""
+    db_path = os.path.join(repo_root, db_name)
+    if os.path.exists(db_path):
+        return db_path
     return None
 
-DB_PATH = find_database(SERVICES_DIR)
-if not DB_PATH:
-    print(f"\n❌ ERROR: Could not find Measurements.db anywhere in {SERVICES_DIR}")
+# --- Locate repository root ---
+REPO_ROOT = find_repo_root(SCRIPT_DIR)
+if not REPO_ROOT:
+    print("ERROR: Could not determine repository root.")
     sys.exit(1)
 
-print(f"\n🔍 Found database at: {DB_PATH}")
+DB_PATH = find_database(REPO_ROOT)
+if not DB_PATH:
+    print(f"ERROR: Could not find Measurements.db at repo root: {REPO_ROOT}")
+    sys.exit(1)
+
+print(f"\nFound database at: {DB_PATH}")
 
 # -----------------------
-# Existing helper functions
+# Helper functions
 # -----------------------
 
 def list_tables(conn):
@@ -75,11 +96,11 @@ def main():
     # List tables
     tables = list_tables(conn)
     if not tables:
-        print("\n❌ ERROR: No tables found in this database!")
+        print("\nERROR: No tables found in this database!")
         conn.close()
         sys.exit(1)
 
-    print("\n✅ Available tables (locations):")
+    print("\nAvailable tables (locations):")
     for i, t in enumerate(tables, 1):
         print(f"{i}. {t}")
 
@@ -114,11 +135,11 @@ def main():
     conn.close()
 
     if column not in df.columns:
-        print(f"\n❌ Error: Column '{column}' not found in table '{table}'")
+        print(f"\nError: Column '{column}' not found in table '{table}'")
         return
 
     if df.empty:
-        print(f"\n⚠️ No data found for {table} between the specified dates.")
+        print(f"\nNo data found for {table} between the specified dates.")
         return
 
     plt.figure(figsize=(10, 5))
