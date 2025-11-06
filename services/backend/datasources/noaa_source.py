@@ -99,19 +99,16 @@ class NOAADataSource(DataSource):
                     "enddate": end_dt.strftime("%Y-%m-%d"),
                     "units": "standard",
                     "limit": 1000,
-                    "offset": 1,  # NOAA CDO offset is 1-based
+                    "offset": 0,
                     "includemetadata": "true",
                 }
 
                 all_results = []
-                page_counter = 0
-                max_pages = 2000
                 logger.info(
                     f"Fetching NOAA data for {mapped_location} ({datatype_id}) from {params['startdate']} to {params['enddate']}"
                 )
 
                 backoff_seconds = 1
-                consecutive_429 = 0
                 while True:
                     try:
                         response = requests.get(self.api_base_url, headers=headers, params=params)
@@ -120,11 +117,7 @@ class NOAADataSource(DataSource):
                         results = payload.get("results", [])
                         if not results:
                             break
-                        prev_len = len(all_results)
                         all_results.extend(results)
-                        if len(all_results) == prev_len:
-                            logger.warning("No new results added; breaking to avoid infinite loop")
-                            break
                         metadata = payload.get("metadata", {}).get("resultset", {})
                         count = metadata.get("count")
                         offset = metadata.get("offset")
@@ -141,18 +134,10 @@ class NOAADataSource(DataSource):
                             params["offset"] += params["limit"]
                         # light throttle between pages
                         time.sleep(0.25)
-                        page_counter += 1
-                        if page_counter >= max_pages:
-                            logger.warning("Reached max page cap; stopping pagination to avoid infinite loop")
-                            break
                     except requests.exceptions.HTTPError as e:
                         status = getattr(getattr(e, 'response', None), 'status_code', None)
                         retry_after = getattr(getattr(e, 'response', None), 'headers', {}).get('Retry-After') if getattr(e, 'response', None) else None
                         if status == 429:
-                            consecutive_429 += 1
-                            if consecutive_429 > 5:
-                                logger.error("Too many 429s in a row; skipping this dataset/location")
-                                break
                             sleep_for = int(retry_after) if retry_after and str(retry_after).isdigit() else backoff_seconds
                             logger.warning(f"Rate limited by NOAA (429). Sleeping {sleep_for}s and retrying...")
                             time.sleep(sleep_for)

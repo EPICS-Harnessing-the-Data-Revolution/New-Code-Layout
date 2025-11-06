@@ -1,134 +1,118 @@
 from json import loads
 
 import requests
+from datetime import datetime, date
 
-from services.backend.datasources.base import DataSource
+from services.backend.datasources.base2 import DataSource
 from services.backend.datasources.config import COCORAHS_STATIONS
+from services.backend.sqlclasses import updateDictionary
 
 class CoCoRaHSDataSource(DataSource):
     """
-    Data source for CoCoRaHS precipitation and snow data.
+    Data source for CoCoRaHS precipitation and snow data using base2 template.
     """
 
-    def __init__(self):
-        super().__init__("CoCoRaHS", "cocorahs")
+    def __init__(self, start_date=None, format=None):
+        super().__init__("CoCoRaHS", start_date, format)
         self.station_dict = COCORAHS_STATIONS
+        self.data = []
+        self.processed = []
 
-    def fetch(self, location=None, dataset=None, start_date=None, end_date=None):
-        if location not in self.station_dict:
-            print(f"Unknown CoCoRaHS location: {location}")
-            return None
-
-        station_info = self.station_dict[location]
-        station_id = station_info[0]
-        start_date_str = station_info[1]  # Use earliest date from dictionary
-
-        # Format end date if provided, otherwise use station's first date
-        end_date_str = end_date if isinstance(end_date, str) else start_date_str
-
-        # Create ACIS API URL
-        url = self.get_link(station_id, start_date_str, end_date_str)
-
-        try:
-            # Make request
-            response = requests.get(url)
-
-            if response.status_code != 200:
-                print(
-                    f"Error fetching CoCoRaHS data for {location}: HTTP {response.status_code}"
-                )
-                return None
-
-            # Parse JSON response
-            results_dict = loads(response.text)
-            return results_dict
-
-        except requests.exceptions.RequestException as e:
-            print(f"Error fetching CoCoRaHS data for {location}: {e}")
-            return None
-
-        except Exception as e:
-            print(f"Error parsing CoCoRaHS data for {location}: {e}")
-            return None
-
-    def process(self, raw_data, location, dataset):
-        if not raw_data or "data" not in raw_data:
-            return [], []
-
-        # Get the dict location (for database storage)
-        dict_location = (
-            self.station_dict[location][2]
-            if location in self.station_dict
-            else location
-        )
-
-        times = []
-        values = []
-
-        # Extract all data values
-        data_list = raw_data["data"]
-
-        # Process each data entry
-        for i in range(len(data_list)):
-            # Convert time string
-            date_str = data_list[i][0]
-            time_str = self.change_time_string_ACIS(date_str)
-            times.append(time_str)
-
-            # Get the appropriate value based on the dataset
-            if dataset == "Precipitation":
-                try:
-                    values.append(float(data_list[i][1]))
-                except:
-                    values.append(None)
-            elif dataset == "Snowfall":
-                try:
-                    values.append(float(data_list[i][2]))
-                except:
-                    values.append(None)
-            elif dataset == "Snow Depth":
-                try:
-                    values.append(float(data_list[i][3]))
-                except:
-                    values.append(None)
-            else:
-                values.append(None)
-
-        return times, values
-
-    def pull_all(self, start_date, end_date):
+    def _pull(self):
         """
-        Pull data for all locations and datasets.
-
-        Args:
-            start_date: Not used for CoCoRaHS
-            end_date: End date string in format YYYYMMDD
+        Pull raw CoCoRaHS data for all configured stations from each station's start
+        date through today. Stores raw payloads in self.data.
         """
-        datasets = ["Precipitation", "Snowfall", "Snow Depth"]
+        self.data = []
+        end_date_str = date.today().strftime("%Y%m%d")
 
-        if isinstance(end_date, dict):
-            end_date_str = f"{end_date['year']}{end_date['month']}{end_date['day']}"
-        else:
-            # Use current date if not provided
-            from datetime import datetime
-
-            now = datetime.now()
-            end_date_str = now.strftime("%Y%m%d")
-
-        for location in self.station_dict.keys():
-            print(f"Pulling CoCoRaHS data for {location}...")
-
+        for location, station_info in self.station_dict.items():
+            station_id = station_info[0]
+            start_date_str = station_info[1]
+            url = self.get_link(station_id, start_date_str, end_date_str)
             try:
-                raw_data = self.fetch(location, None, None, end_date_str)
-
-                if raw_data:
-                    for dataset in datasets:
-                        times, values = self.process(raw_data, location, dataset)
-                        if times and values:
-                            dict_location = self.station_dict[location][2]
-                            self.store(times, values, dict_location, dataset)
+                response = requests.get(url)
+                response.raise_for_status()
+                results_dict = loads(response.text)
             except Exception as e:
-                print(f"Error processing CoCoRaHS data for {location}: {e}")
+                results_dict = None
+
+            self.data.append({
+                'location': location,
+                'dict_location': station_info[2] if len(station_info) > 2 else location,
+                'raw': results_dict
+            })
+
+    def _process(self):
+        """
+        Process raw CoCoRaHS data in self.data into standardized series.
+        Stores series in self.processed.
+        """
+        self.processed = []
+        datasets = {
+            'Precipitation': 1,
+            'Snowfall': 2,
+            'Snow Depth': 3,
+        }
+
+        for entry in self.data:
+            raw = entry.get('raw') or {}
+            data_list = raw.get('data') or []
+            location = entry.get('location')
+            dict_location = entry.get('dict_location', location)
+
+            # Build time list once
+            times_all = []
+            for row in data_list:
+                if not row:
+                    continue
+                date_str = row[0]
+                # Convert to full datetime string and apply cutoff filter
+                ts = self.change_time_string_ACIS(date_str)
+                if isinstance(self.cutoff, datetime):
+                    try:
+                        if datetime.strptime(ts, "%Y-%m-%d %H:%M:%S") <= self.cutoff:
+                            times_all.append(None)
+                            continue
+                    except Exception:
+                        pass
+                times_all.append(ts)
+
+            for ds_name, idx in datasets.items():
+                values = []
+                times = []
+                for i, row in enumerate(data_list):
+                    if not row:
+                        continue
+                    val = row[idx] if len(row) > idx else None
+                    try:
+                        v = float(val) if val not in (None, "") else None
+                    except Exception:
+                        v = None
+                    # Keep aligned with time filter
+                    t = times_all[i] if i < len(times_all) else None
+                    if t is not None and v is not None:
+                        times.append(t)
+                        values.append(v)
+
+                self.processed.append({
+                    'location': dict_location,
+                    'dataset': ds_name,
+                    'times': times,
+                    'values': values,
+                })
+
+    def _push(self):
+        """
+        Push processed series into SQL using updateDictionary for 'cocorahs' table.
+        """
+        for series in self.processed:
+            times = series.get('times') or []
+            values = series.get('values') or []
+            location = series.get('location')
+            dataset = series.get('dataset')
+            if times and values:
+                updateDictionary(times, values, location, dataset, 'cocorahs')
 
     # HELPER FUNCTIONS
     def get_link(self, station_id, start_date, end_date):

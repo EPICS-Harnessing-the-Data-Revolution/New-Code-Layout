@@ -13,7 +13,10 @@ class DataSource(ABC):
 
     def __init__(self, source, start_date=None, format = None):
         self.source = source
-        self.cutoff = datetime.strptime(start_date, format)
+        if start_date is not None and format is not None:
+            self.cutoff = datetime.strptime(start_date, format)
+        else:
+            self.cutoff = None
 
 
     @abstractmethod
