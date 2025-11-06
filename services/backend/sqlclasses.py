@@ -115,20 +115,42 @@ def updateDictionary(
                 formatted_time = timestamp.strftime("%Y-%m-%d %H:%M:%S")
             elif isinstance(timestamp, str):
                 # Attempt to parse and reformat if it's a string, assuming ISO or similar format
+                formatted_time = None
                 try:
+                    # Try ISO format first (handles 'Z' for UTC)
                     dt_obj = datetime.fromisoformat(
                         timestamp.replace("Z", "+00:00")
-                    )  # Handle 'Z' for UTC
+                    )
                     formatted_time = dt_obj.strftime("%Y-%m-%d %H:%M:%S")
                 except ValueError:
                     try:
-                        formatted_time = dt_obj.strftime("%Y-%m-%d %H:%M")
-                    except ValueError:
-                        # If parsing fails, assume it's already in the desired format or log a warning
+                        # Try parsing common formats like "YYYY-MM-DD HH:MM" or "YYYY-MM-DD HH:MM:SS"
+                        # Handle format without seconds (NDMES format)
+                        if len(timestamp) == 16:  # "YYYY-MM-DD HH:MM"
+                            dt_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M")
+                            formatted_time = dt_obj.strftime("%Y-%m-%d %H:%M:%S")
+                        elif len(timestamp) == 19:  # "YYYY-MM-DD HH:MM:SS"
+                            dt_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
+                            formatted_time = dt_obj.strftime("%Y-%m-%d %H:%M:%S")
+                        else:
+                            # Try strptime with common formats
+                            for fmt in ["%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M"]:
+                                try:
+                                    dt_obj = datetime.strptime(timestamp, fmt)
+                                    formatted_time = dt_obj.strftime("%Y-%m-%d %H:%M:%S")
+                                    break
+                                except ValueError:
+                                    continue
+                    except (ValueError, NameError):
+                        # If all parsing fails, assume it's already in the desired format or log a warning
                         logger.warning(
                             f"Could not parse timestamp string '{timestamp}'. Assuming 'YYYY-MM-DD HH:MM:SS' format."
                         )
-                        formatted_time = timestamp  # Use as is, hoping it's correct
+                        # If it looks like it might be missing seconds, add them
+                        if len(timestamp) == 16 and timestamp.count(":") == 1:
+                            formatted_time = timestamp + ":00"
+                        else:
+                            formatted_time = timestamp  # Use as is, hoping it's correct
             else:
                 logger.warning(
                     f"Unsupported timestamp type '{type(timestamp)}'. Skipping record."
