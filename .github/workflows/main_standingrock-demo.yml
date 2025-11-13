@@ -5,11 +5,7 @@
 name: Build and deploy Python app to Azure Web App - standingrock-demo
 
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
+  push:
     branches:
       - main
   workflow_dispatch:
