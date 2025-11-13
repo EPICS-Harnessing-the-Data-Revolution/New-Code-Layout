@@ -11,6 +11,7 @@ from datetime import datetime
 import os
 import sys
 import pathlib
+import shutil
 
 # --- CONFIG ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -90,22 +91,19 @@ def query_data(conn, table, start_epoch, end_epoch):
 def export_interactive_html_plotly(df, datetime_col, value_col, out_path):
     """
     Create an interactive HTML plot using Plotly and save as a standalone file.
-    - df: pandas DataFrame with datetime_col parsed as datetimes
-    - datetime_col: name of the datetime column
-    - value_col: name of the value column to plot
-    - out_path: output HTML filepath
+    - df: pandas DataFrame with datetime_col and value_col present (or convertible)
     """
     try:
         import plotly.express as px
     except Exception as e:
         raise RuntimeError("plotly required: pip install plotly") from e
 
-    # ensure datetime is datetime dtype
-    df = df.copy()
-    df[datetime_col] = pd.to_datetime(df[datetime_col], errors="coerce")
-    df = df.dropna(subset=[datetime_col, value_col])
+    # prepare & clean data
+    dff = _prepare_df_for_plot(df, datetime_col, value_col)
+    if dff.empty:
+        raise RuntimeError("No valid data to plot after cleaning")
 
-    fig = px.line(df, x=datetime_col, y=value_col, title=f"{value_col} over time")
+    fig = px.line(dff, x=datetime_col, y=value_col, title=f"{value_col} over time")
     fig.update_layout(autosize=True, margin=dict(l=40, r=20, t=50, b=40))
     # write standalone html (include plotly.js from CDN)
     fig.write_html(out_path, full_html=True, include_plotlyjs="cdn")
@@ -133,6 +131,97 @@ def ensure_graphs_dir():
 def _safe_name(s: str) -> str:
     return "".join(c if c.isalnum() or c in ("-", "_") else "_" for c in s).strip("_")
 
+def _prepare_df_for_plot(df: pd.DataFrame, datetime_col: str, value_col: str) -> pd.DataFrame:
+    """
+    Normalize and clean dataframe for plotting:
+      - ensure datetime_col is parsed as timezone-aware UTC then made naive (UTC)
+      - drop rows with missing datetime or value
+      - sort by datetime ascending
+      - remove duplicate datetimes keeping the last value
+    """
+    if df is None or df.empty:
+        return pd.DataFrame()
+
+    df = df.copy()
+
+    # Parse datetimes robustly; accept epoch (ints) or strings
+    try:
+        # If dtype is integer-like treat as epoch seconds
+        if pd.api.types.is_integer_dtype(df[datetime_col]) or pd.api.types.is_float_dtype(df[datetime_col]):
+            df[datetime_col] = pd.to_datetime(df[datetime_col], unit='s', errors='coerce', utc=True)
+        else:
+            df[datetime_col] = pd.to_datetime(df[datetime_col], errors='coerce', utc=True)
+    except Exception:
+        df[datetime_col] = pd.to_datetime(df[datetime_col], errors='coerce', utc=True)
+
+    # Convert to UTC naive for consistency
+    try:
+        if df[datetime_col].dt.tz is not None:
+            df[datetime_col] = df[datetime_col].dt.tz_convert("UTC").dt.tz_localize(None)
+    except Exception:
+        # ignore timezone conversion errors
+        pass
+
+    # Drop rows missing datetime or value
+    df = df.dropna(subset=[datetime_col, value_col])
+
+    if df.empty:
+        return pd.DataFrame()
+
+    # Sort by datetime ascending and remove duplicate timestamps (keep last)
+    df = df.sort_values(by=datetime_col, ascending=True)
+    df = df.drop_duplicates(subset=[datetime_col], keep="last")
+    df = df.reset_index(drop=True)
+    return df
+
+def _parse_and_sort_preserve_duplicates(df: pd.DataFrame, datetime_col: str) -> pd.DataFrame:
+    """
+    Parse datetime column and sort ascending but preserve duplicate datetime rows.
+    Returns copy with parsed 'datetime' column (na rows removed).
+    """
+    if df is None or df.empty:
+        return pd.DataFrame()
+    d = df.copy()
+    try:
+        if pd.api.types.is_integer_dtype(d[datetime_col]) or pd.api.types.is_float_dtype(d[datetime_col]):
+            d[datetime_col] = pd.to_datetime(d[datetime_col], unit='s', errors='coerce', utc=True)
+        else:
+            d[datetime_col] = pd.to_datetime(d[datetime_col], errors='coerce', utc=True)
+    except Exception:
+        d[datetime_col] = pd.to_datetime(d[datetime_col], errors='coerce', utc=True)
+    try:
+        if d[datetime_col].dt.tz is not None:
+            d[datetime_col] = d[datetime_col].dt.tz_convert("UTC").dt.tz_localize(None)
+    except Exception:
+        pass
+    d = d.dropna(subset=[datetime_col])
+    if d.empty:
+        return pd.DataFrame()
+    d = d.sort_values(by=datetime_col, ascending=True).reset_index(drop=True)
+    return d
+
+def _ensure_single_point_per_x(df: pd.DataFrame, datetime_col: str, value_col: str) -> pd.DataFrame:
+    """
+    Ensure at most one row per x (datetime). If duplicates exist, keep the last
+    measured value for that datetime. Returns a cleaned, sorted dataframe.
+    """
+    if df is None or df.empty:
+        return pd.DataFrame()
+    d = df.copy()
+    # parse & sort (preserve timezone normalization)
+    d = _parse_and_sort_preserve_duplicates(d, datetime_col)
+    if d.empty:
+        return pd.DataFrame()
+    # If duplicates still exist, reduce them by taking the last value for each datetime.
+    if d[datetime_col].duplicated(keep=False).any():
+        # keep last occurrence per datetime (assumes later row is preferred)
+        d = d.groupby(datetime_col, as_index=False).agg({value_col: "last", **{c: "last" for c in d.columns if c not in (datetime_col, value_col)}})
+        # Some pandas versions may not accept dict with same keys — fallback:
+        # d = d.sort_values(by=datetime_col).drop_duplicates(subset=[datetime_col], keep="last").reset_index(drop=True)
+    # Final normalize: sort and reset index
+    d = d.sort_values(by=datetime_col, ascending=True).reset_index(drop=True)
+    return d
+
 def save_interactive(df, table, column):
     """
     Try to save an interactive HTML for the dataframe/column.
@@ -143,12 +232,15 @@ def save_interactive(df, table, column):
     fname = f"{_safe_name(table)}_{_safe_name(column)}.html"
     out_path = os.path.join(out_dir, fname)
 
+    # Prepare dataframe once for all backends
+    dff = _prepare_df_for_plot(df, "datetime", column)
+    if dff.empty:
+        print(f"No valid data to create interactive output for {table}/{column}")
+        return None
+
     # Try Plotly
     try:
         import plotly.express as px
-        dff = df.copy()
-        dff['datetime'] = pd.to_datetime(dff['datetime'], errors='coerce')
-        dff = dff.dropna(subset=['datetime', column])
         fig = px.line(dff, x='datetime', y=column, title=f"{column} - {table}")
         fig.update_layout(autosize=True, margin=dict(l=40, r=20, t=50, b=40))
         fig.write_html(out_path, full_html=True, include_plotlyjs="cdn")
@@ -161,7 +253,7 @@ def save_interactive(df, table, column):
     try:
         import mpld3
         fig, ax = plt.subplots(figsize=(10,5))
-        ax.plot(pd.to_datetime(df['datetime'], errors='coerce'), df[column], marker='o', linestyle='-', markersize=3)
+        ax.plot(dff['datetime'], dff[column], marker='o', linestyle='-', markersize=3)
         ax.set_title(f"{column} over time ({table})")
         ax.set_xlabel("Datetime")
         ax.set_ylabel(column)
@@ -178,7 +270,7 @@ def save_interactive(df, table, column):
     png_path = os.path.join(out_dir, png_name)
     try:
         fig, ax = plt.subplots(figsize=(10,5))
-        ax.plot(pd.to_datetime(df['datetime'], errors='coerce'), df[column], marker='o', linestyle='-', markersize=3)
+        ax.plot(dff['datetime'], dff[column], marker='o', linestyle='-', markersize=3)
         ax.set_title(f"{column} over time ({table})")
         ax.set_xlabel("Datetime")
         ax.set_ylabel(column)
@@ -242,11 +334,8 @@ def get_latest_datetime(conn, table: str, column: str):
 def main():
     """
     Generate interactive Plotly HTML for every table/column in the database.
-    For each (table, column) attempt:
-      1) produce a 30-day graph ending now
-      2) if step 1 has no data, find the most recent timestamp for that column and
-         produce a 30-day graph ending at that timestamp
-      3) if still no data, fall back to graphing all available rows for that column
+    For tables that include a 'location' column, produce one HTML file per (location, column).
+    Otherwise produce one file per (table, column).
     """
     conn = sqlite3.connect(DB_PATH)
 
@@ -258,6 +347,20 @@ def main():
     default_start = now - timedelta(days=30)
 
     out_dir = ensure_graphs_dir()
+
+    # Clear existing cached graphs before generation
+    try:
+        for fname in os.listdir(out_dir):
+            fpath = os.path.join(out_dir, fname)
+            try:
+                if os.path.isdir(fpath):
+                    shutil.rmtree(fpath)
+                else:
+                    os.remove(fpath)
+            except Exception as e:
+                print(f"Warning: unable to remove {fpath}: {e}")
+    except Exception as e:
+        print(f"Warning clearing graphs directory {out_dir}: {e}")
 
     tables = list_tables(conn)
     if not tables:
@@ -307,10 +410,13 @@ def main():
                 print(f"Query failed for {table}/{column} ({start_dt} -> {end_dt}): {e}")
                 df = pd.DataFrame()
 
-            # keep only relevant column and datetime
+            # keep only relevant columns (datetime, column, maybe location)
             if column in df.columns:
-                df = df.loc[:, ["datetime", column]]
+                cols_keep = ["datetime", column] + (["location"] if "location" in df.columns else [])
+                df = df.loc[:, [c for c in cols_keep if c in df.columns]]
                 df = df.dropna(subset=["datetime", column])
+                # Ensure chronological order and normalized datetimes before any further processing
+                df = _prepare_df_for_plot(df, "datetime", column)
             else:
                 df = pd.DataFrame()  # force fallback below
 
@@ -325,8 +431,11 @@ def main():
                     try:
                         df = query_data(conn, table, start_epoch, end_epoch)
                         if column in df.columns:
-                            df = df.loc[:, ["datetime", column]]
+                            cols_keep = ["datetime", column] + (["location"] if "location" in df.columns else [])
+                            df = df.loc[:, [c for c in cols_keep if c in df.columns]]
                             df = df.dropna(subset=["datetime", column])
+                            # Normalize and sort chronologically
+                            df = _prepare_df_for_plot(df, "datetime", column)
                         else:
                             df = pd.DataFrame()
                     except Exception as e:
@@ -336,13 +445,18 @@ def main():
             # 3) Final fallback: graph all available non-null rows for column
             if df.empty:
                 try:
-                    raw = pd.read_sql_query(f'SELECT datetime, "{column}" FROM "{table}" WHERE "{column}" IS NOT NULL ORDER BY datetime ASC', conn)
+                    raw = pd.read_sql_query(
+                        f'SELECT datetime, "{column}"{", location" if "location" in columns else ""} '
+                        f'FROM "{table}" WHERE "{column}" IS NOT NULL ORDER BY datetime ASC', conn
+                    )
                     if time_fmt == "epoch":
                         raw["datetime"] = pd.to_datetime(raw["datetime"], unit="s", errors="coerce")
                     else:
                         raw["datetime"] = pd.to_datetime(raw["datetime"], errors="coerce")
                     raw = raw.dropna(subset=["datetime", column])
                     df = raw
+                    # Normalize and sort chronologically
+                    df = _prepare_df_for_plot(df, "datetime", column)
                     # set start/end for filename based on data range
                     if not df.empty:
                         start_dt = pd.to_datetime(df["datetime"].iloc[0])
@@ -355,31 +469,107 @@ def main():
                 total_skipped += 1
                 continue
 
-            # build output filename including actual date range used
-            safe_table = _safe_name(table)
-            safe_col = _safe_name(column)
-            s_str = pd.to_datetime(df["datetime"].iloc[0]).strftime("%Y%m%d")
-            e_str = pd.to_datetime(df["datetime"].iloc[-1]).strftime("%Y%m%d")
-            fname = f"{safe_table}__{safe_col}__{s_str}_{e_str}_interactive.html"
-            out_path = os.path.join(out_dir, fname)
+            # If 'location' column exists, create one graph per location
+            if "location" in df.columns:
+                locations = df["location"].dropna().unique()
+                for loc in locations:
+                    df_loc = df[df["location"] == loc].copy()
+                    # Parse & sort but preserve duplicates for splitting
+                    df_loc = _parse_and_sort_preserve_duplicates(df_loc, "datetime")
+                    if df_loc.empty:
+                        continue
 
-            # export interactive html (Plotly preferred)
-            try:
-                export_interactive_html_plotly(df, "datetime", column, out_path)
-                print(f"WROTE: {out_path}")
-                total_saved += 1
-            except Exception as e:
-                print(f"Failed to export Plotly HTML for {table}/{column}: {e}")
-                try:
-                    fallback = save_interactive(df, table, column)
-                    if fallback:
-                        print(f"Fallback wrote: {fallback}")
-                        total_saved += 1
+                    # If duplicates exist on the x-axis, split into separate series by occurrence index
+                    if df_loc["datetime"].duplicated(keep=False).any():
+                        # assign sequence per duplicate datetime (0,1,2...)
+                        df_loc["_seq"] = df_loc.groupby("datetime").cumcount()
+                        seq_values = sorted(df_loc["_seq"].unique())
+                        for seq in seq_values:
+                            df_seq = df_loc[df_loc["_seq"] == seq].copy()
+                            # now clean/dedupe (should be unique per datetime within this seq)
+                            df_seq = _ensure_single_point_per_x(df_seq, "datetime", column)
+                            if df_seq.empty:
+                                continue
+                            safe_table = _safe_name(table)
+                            safe_col = _safe_name(column)
+                            safe_loc = _safe_name(str(loc))
+                            fname = f"{safe_table}__{safe_loc}__{safe_col}__series{seq}__{pd.to_datetime(df_seq['datetime'].iloc[0]).strftime('%Y%m%d')}_{pd.to_datetime(df_seq['datetime'].iloc[-1]).strftime('%Y%m%d')}_interactive.html"
+                            out_path = os.path.join(out_dir, fname)
+                            try:
+                                export_interactive_html_plotly(df_seq, "datetime", column, out_path)
+                                print(f"WROTE: {out_path}")
+                                total_saved += 1
+                            except Exception as e:
+                                print(f"Failed to export Plotly HTML for {table}/{loc}/{column} series {seq}: {e}")
+                                try:
+                                    fallback = save_interactive(df_seq, f"{table}_{loc}_series{seq}", column)
+                                    if fallback:
+                                        print(f"Fallback wrote: {fallback}")
+                                        total_saved += 1
+                                    else:
+                                        total_skipped += 1
+                                except Exception as e2:
+                                    print(f"Fallback also failed for {table}/{loc}/{column} series {seq}: {e2}")
+                                    total_skipped += 1
+                        # done with this location
                     else:
-                        total_skipped += 1
-                except Exception as e2:
-                    print(f"Fallback also failed for {table}/{column}: {e2}")
+                        # simple single-series export when no duplicate x values
+                        df_loc = _ensure_single_point_per_x(df_loc, "datetime", column)
+                        if df_loc.empty:
+                            continue
+                        safe_table = _safe_name(table)
+                        safe_col = _safe_name(column)
+                        safe_loc = _safe_name(str(loc))
+                        s_str = pd.to_datetime(df_loc["datetime"].iloc[0]).strftime("%Y%m%d")
+                        e_str = pd.to_datetime(df_loc["datetime"].iloc[-1]).strftime("%Y%m%d")
+                        fname = f"{safe_table}__{safe_loc}__{safe_col}__{s_str}_{e_str}_interactive.html"
+                        out_path = os.path.join(out_dir, fname)
+                        try:
+                            export_interactive_html_plotly(df_loc, "datetime", column, out_path)
+                            print(f"WROTE: {out_path}")
+                            total_saved += 1
+                        except Exception as e:
+                            print(f"Failed to export Plotly HTML for {table}/{loc}/{column}: {e}")
+                            try:
+                                fallback = save_interactive(df_loc, f"{table}_{loc}", column)
+                                if fallback:
+                                    print(f"Fallback wrote: {fallback}")
+                                    total_saved += 1
+                                else:
+                                    total_skipped += 1
+                            except Exception as e2:
+                                print(f"Fallback also failed for {table}/{loc}/{column}: {e2}")
+                                total_skipped += 1
+            else:
+                # No location column: single graph for the whole table/column
+                df = _ensure_single_point_per_x(df, "datetime", column)
+                if df.empty:
+                    print(f"No valid data after cleaning for {table}/{column}, skipping.")
                     total_skipped += 1
+                    continue
+                safe_table = _safe_name(table)
+                safe_col = _safe_name(column)
+                s_str = pd.to_datetime(df["datetime"].iloc[0]).strftime("%Y%m%d")
+                e_str = pd.to_datetime(df["datetime"].iloc[-1]).strftime("%Y%m%d")
+                fname = f"{safe_table}__{safe_col}__{s_str}_{e_str}_interactive.html"
+                out_path = os.path.join(out_dir, fname)
+
+                try:
+                    export_interactive_html_plotly(df, "datetime", column, out_path)
+                    print(f"WROTE: {out_path}")
+                    total_saved += 1
+                except Exception as e:
+                    print(f"Failed to export Plotly HTML for {table}/{column}: {e}")
+                    try:
+                        fallback = save_interactive(df, table, column)
+                        if fallback:
+                            print(f"Fallback wrote: {fallback}")
+                            total_saved += 1
+                        else:
+                            total_skipped += 1
+                    except Exception as e2:
+                        print(f"Fallback also failed for {table}/{column}: {e2}")
+                        total_skipped += 1
 
     conn.close()
     print(f"\nDone. Saved: {total_saved} interactive files. Skipped: {total_skipped}. Outputs in: {out_dir}")
