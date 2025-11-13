@@ -174,4 +174,4 @@ def get_last_date(conn, table: str, location: str, column: str):
         return None
 
 if __name__ == "__main__":
-    main(num_days=100)
+    main(num_days=30)
