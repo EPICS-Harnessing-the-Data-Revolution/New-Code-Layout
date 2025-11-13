@@ -1,0 +1,5 @@
+Steps for pushing code from local machine
+
+  1. git add .
+  2. git commit -m "Added demo.txt"
+  3. git push

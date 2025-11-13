@@ -1,4 +1,5 @@
 // Rewritten version of gauge_modals.js to implement looping structure
+// This file deals with generating the pins on the interactive map and generating graphs after they are clicked
 
 // Function to close all modals
 function closeModal() {
@@ -83,29 +84,46 @@ for (var i = 0; i < lat.length; i++) {
       var modalId = text[index].replace(/\s+/g, '');
       document.getElementById(modalId).style.display = 'block';
       var modal = document.getElementById(modalId);
-      
+
+      //Clears the previous list of child nodes(aka graphs) so that they will not be redisplayed
+      var closeButton = modal.querySelector('.close'); //copy the close button node
+      while(modal.querySelector('.modal-content').firstChild) //while there are child nodes
+      {
+        modal.querySelector('.modal-content').removeChild(modal.querySelector('.modal-content').firstChild); //remove the first child node from the list
+      }
+      modal.querySelector('.modal-content').appendChild(closeButton); //reinsert the close button node into the modal
+
       // Create and append iframes
       var iframeUrls = fetchedURLS[index];
       iframeUrls.forEach(function(url, iframeIndex) {
         var iframe = document.createElement('iframe');
+        iframe.className = "graph";
         iframe.src = url;
         // Calculate dimensions based on iframe index
+        iframe.style.width = '100%';
         if (iframeIndex % 2 === 0) {
           // For even-indexed iframes
-          iframe.style.width = '700px';
-          iframe.style.height = '500px';
+          iframe.style.height = '50vh';
         } else {
           // For odd-indexed iframes
-          iframe.style.width = '700px';
-          iframe.style.height = '100px';
+          iframe.style.height = '10vh';
         }
         modal.querySelector('.modal-content').appendChild(iframe);
       });
       // Add event listener to modal close button
-      var closeButton = modal.querySelector('.close');
+      closeButton = modal.querySelector('.close');
       closeButton.addEventListener('click', function() {
         modal.style.display = 'none';
       });
+
+      //scroll to the newly generated graphs by scrolling to the bottom of the map
+      mapHeight = document.getElementById("map").offsetHeight; 
+      scrollTo({
+        top: mapHeight,
+        left: 0,
+        behavior: "smooth" //smooth scrolling
+      });
+
     });
   })(i);
 }
