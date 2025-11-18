@@ -1,12 +1,12 @@
 #Old dependances
-'''
-django
-gunicorn
-numpy
-pandasplotly
-xlsxwriter
-whitenoise
-'''
+#'''
+#django
+#gunicorn
+#numpy
+#pandasplotly
+#xlsxwriter
+#whitenoise
+#'''
 
 #Latest dependances as of 10/16/2025
 #requirements.txt
