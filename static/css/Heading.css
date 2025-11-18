@@ -164,7 +164,11 @@ body, .dropdown-content, .dropdown-link {
   color: #000000;
 }
 
-/* Mobile responsiveness */
+.nav-link {
+    position: relative;
+  }
+
+  /* Mobile responsiveness */
 @media (max-width: 640px) {
   .dropdown-content {
     position: static;
@@ -183,6 +187,10 @@ body, .dropdown-content, .dropdown-link {
   
   .dropdown-link {
     padding: 12px 20px;
+  }
+
+  .nav-link {
+    position: relative;
   }
 }
 
