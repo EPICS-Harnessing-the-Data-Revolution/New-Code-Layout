@@ -24,7 +24,7 @@ six==1.17.0 #transitive dependency of pandas
 sqlparse==0.5.3 #transitive dependency of django
 tzdata #transitive dependency of pandas, (UNPINNED, change later if needed)
 urllib3==2.5.0 #transitive dependency of requests
-
+whitenoise
 #The following cannot be in a requirements file.
 #python==3.11
 #pip==25.2
