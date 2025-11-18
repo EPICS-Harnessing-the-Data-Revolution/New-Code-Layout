@@ -22,7 +22,7 @@ pytz==2025.2 #transitive dependency of pandas
 requests==2.32.5
 six==1.17.0 #transitive dependency of pandas
 sqlparse==0.5.3 #transitive dependency of django
-tzdata==1.17.0 #transitive dependency of pandas
+tzdata #transitive dependency of pandas, (UNPINNED, change later if needed)
 urllib3==2.5.0 #transitive dependency of requests
 
 #The following cannot be in a requirements file.
