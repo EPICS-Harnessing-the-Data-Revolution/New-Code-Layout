@@ -95,16 +95,7 @@ input[type="submit"]:disabled {
     <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
 </head>
 <body>
-    <div class="banner">
-        <div class="topnav">
-            <img class="icon1" src='/static/images/Standing Rock Crest Logo.png'>
-            <a href="/">Home</a>
-            <a href="/about">About Us</a>
-            <a href="/contactus">Contact Us</a>
-            <a href="/favorites">Favorites</a>
-            <a href="/login">Sign Up/In</a>
-          </div>
-    </div>
+    {% include "HTML/navbar.html" %}
 
     <form>
         <h1>Contact Us</h1>

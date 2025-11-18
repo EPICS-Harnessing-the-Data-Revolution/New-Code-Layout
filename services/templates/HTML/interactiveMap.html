@@ -14,20 +14,31 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
+    {% include "HTML/navbar.html" %}
 
 </head>
 <body>
-
-  <div class="banner">
-    <div class="topnav">
-      <img class="icon1" src='/static/images/Standing Rock Crest Logo.png'>
-      <a href="/">Home</a>
-      <a href="/about">About Us</a>
-      <a href="/contactus">Contact Us</a>
-      <a href="/favorites">Favorites</a>
-      <a href="/login">Sign Up/In</a>
-    </div>
-</div>
+<style>
+  #map { top: 20%; left: 10%; width: 80%; height: 70%}
+  .modal {
+  position: relative;
+  top: 100vh; /* Position modal 100% from the top */
+  left: 20%; /* Align modal with the left side of the screen */
+  z-index: auto;
+  display: none;
+  width: 60%; /* Set modal width to 60% of the page */
+  overflow-y: visible; /* Enable vertical scrolling if content exceeds modal height */
+  padding: 20px;
+  max-height: 400%; /* Set maximum height for modal */
+  background-color: #fefefe;
+  border: 1px solid #888;
+  }
+  .modal-content {
+  width: 100%;
+  max-width: 95%; /* Set maximum width for content within modal */
+  margin: 0 auto; /* Center content horizontally */
+  }
+</style>
     <div id="map"></div>
 
     <!-- Legend -->

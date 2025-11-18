@@ -1,2 +1,4 @@
 *pycache*
 env
+*.pyc
+db.sqlite3

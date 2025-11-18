@@ -14,12 +14,10 @@ body {
 .modal {
   position: fixed;
   top: 15vh; /* Position modal 15% from the top */
-  left: 0; /* Align modal with the left side of the screen */
+  left: 500px; /* Align modal with the left side of the screen */
   z-index: 9999;
   display: none;
   width: 40%; /* Set modal width to 40% of the page */
-  max-width: 800px; /* Optional: You can set a maximum width for the modal */
-  max-height: calc(100vh - 15vh); /* Calculate maximum height based on screen height and position from top */
   overflow-y: auto; /* Enable vertical scrolling if content exceeds modal height */
   padding: 20px;
   background-color: #fefefe;
@@ -57,8 +55,8 @@ body {
 
 #map-legend {
   position: absolute;
-  bottom: 25px;
-  right: 50px;
+  bottom: 10%;
+  right: 3%;
   width: 100px;
   height: 150px;
   z-index: 1;

@@ -45,8 +45,8 @@ urlpatterns = [
     path('signout', signout, name='signout'),
     path('favorites/', favorites, name='favorites'),
     path('login/', login, name='login'),
-    path('contactus/', contactus, name='contactus')
-
+    path('contactus/', contactus, name='contactus'),
+    path("accounts/", include("django.contrib.auth.urls"))
 ]
 
 urlpatterns += staticfiles_urlpatterns()
