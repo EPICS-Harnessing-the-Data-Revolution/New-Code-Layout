@@ -15,7 +15,7 @@ urllib3==2.5.0 #transitive dependency of requests
 whitenoise
 matplotlib
 plotly
-sqlite3 #might not need this, check later, including cause of errors in running locally
+#sqlite3 #might not need this, check later, including cause of errors in running locally
 #The following cannot be in a requirements file.
 #python==3.11
 #pip==25.2
