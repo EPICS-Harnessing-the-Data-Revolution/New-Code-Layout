@@ -1,15 +1,3 @@
-#Old dependances
-#'''
-#django
-#gunicorn
-#numpy
-#pandasplotly
-#xlsxwriter
-#whitenoise
-#'''
-
-#Latest dependances as of 10/16/2025
-#requirements.txt
 asgiref==3.10.0 #transitive dependency of django
 certifi==2025.10.5 #transitive dependency of requests
 charset_normalizer==3.4.4 #transitive dependency of requests
@@ -25,6 +13,9 @@ sqlparse==0.5.3 #transitive dependency of django
 tzdata #transitive dependency of pandas, (UNPINNED, change later if needed)
 urllib3==2.5.0 #transitive dependency of requests
 whitenoise
+matplotlib
+plotly
+sqlite3 #might not need this, check later, including cause of errors in running locally
 #The following cannot be in a requirements file.
 #python==3.11
 #pip==25.2

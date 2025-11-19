@@ -30,47 +30,98 @@ var text = ['Hazen', 'Stanton', 'Washburn',
             'Fort Yates', 'Mott', 'Carson', 'Linton', 'Lemmon', 'McIntosh', 'Mclaughlin', 'Mound City', 'Timber Lake'];
 
 
-const fetchedURLS = [
-  HazenURLS, StantonURLS, WashburnURLS, PriceURLS, MandanURLS, BismarckURLS, JudsonURLS, BreienURLS,
-  CashURLS, WakpalaURLS, WhitehorseURLS, SchmidtURLS, LittleEagleURLS, OaheURLS, BigBendURLS,
-  FortRandallURLS, GavinsPointURLS, GarrisonURLS, FortPeckURLS, FortYatesURLS, MottURLS, CarsonURLS, LintonURLS
-  // 'Lemmon', 'McIntosh', 'Mclaughlin', 'Mound City', 'Timber Lake' have no arrays defined yet
-];
+// Build fetchedURLS from server-provided graphMap when available.
+// Fallback: if named <Place>URLS variables exist, use them; otherwise empty array.
+var fetchedURLS = (function(){
+  try {
+    var map = window.graphMap || {};
+    return text.map(function(name){
+      if (map && map[name] && Array.isArray(map[name]) && map[name].length) return map[name];
+      // try fallback variable like HazenURLS (if template still defines them)
+      var varName = name.replace(/\s+/g, '') + 'URLS';
+      if (typeof window[varName] !== 'undefined') return window[varName];
+      return [];
+    });
+  } catch (e) {
+    console.warn('Error building fetchedURLS from graphMap', e);
+    return text.map(function(){ return []; });
+  }
+})();
 
 // Group URLs by inferred type and chart/table
 
+// Resolve a raw entry to an absolute/static URL when possible.
+function resolveUrl(raw) {
+  if (!raw) return raw;
+  const s = String(raw);
+  if (/^(https?:)?\/\//i.test(s)) return s;
+  if (s.startsWith('/')) return s;
+  const base = (window && window.baseGraphUrl) ? window.baseGraphUrl : '';
+  if (/graphs\//i.test(s)) {
+    if (base && !s.startsWith(base)) {
+      const p = s.split(/graphs\//i).pop();
+      return base + p;
+    }
+    return s;
+  }
+  return base + s;
+}
+
 function groupUrlsByType(urls) {
   const grouped = {};
-  if (!Array.isArray(urls)) return grouped; //return empty array if no data found
+  if (!Array.isArray(urls)) return grouped;
 
   const decode = (s) => String(s || '').replace(/%20/g, ' ');
 
+  // Resolve a raw entry to an absolute/static URL when possible.
+  function resolveUrl(raw) {
+    if (!raw) return raw;
+    const s = String(raw);
+    // Already absolute or protocol-relative
+    if (/^(https?:)?\/\//i.test(s)) return s;
+    // Leading slash (site-relative) — return as-is
+    if (s.startsWith('/')) return s;
+    // If the app provided a baseGraphUrl, prefer that for bare filenames
+    const base = (window && window.baseGraphUrl) ? window.baseGraphUrl : '';
+    // If it already contains "graphs/" but is not absolute, attempt to make it rooted under base
+    if (/graphs\//i.test(s)) {
+      // if base already included, concatenate accordingly
+      if (base && !s.startsWith(base)) {
+        // take filename after 'graphs/' and append to base
+        const p = s.split(/graphs\//i).pop();
+        return base + p;
+      }
+      return s;
+    }
+    // Bare filename -> prefix with base
+    return base + s;
+  }
+
   urls.forEach(raw => {
     const path = decode(raw);
-    const m = path.match(/graphs\/(.+?)\.html/i);
+
+    // Try to extract the title from different possible layouts
+    let m = path.match(/graphs\/(.+?)\.html/i);
+    if (!m) {
+      const m2 = path.match(/([^\/]+)\.html$/i);
+      if (m2) m = [null, m2[1]];
+    }
     if (!m) return;
 
-    const title = m[1]; // "Elevation at Hazen" OR "Hazen Elevation Table"
+    const title = m[1];
     const isTable = /table/i.test(title);
 
     let type = '';
-
-    // Pattern A: "<Type> at <Place>" - extract first part
     if (title.includes(' at ')) {
       const parts = title.split(' at ');
       type = parts[0].trim();
-    }
-    // Pattern B: "<Place> <Type> Table" - extract middle part
-    else if (isTable) {
-      // Remove " Table" from end and extract type after place name
+    } else if (isTable) {
       const withoutTable = title.replace(/\s+Table$/i, '').trim();
       const places = ['Hazen', 'Stanton', 'Washburn', 'Price', 'Mandan', 'Bismarck', 'Judson', 
                       'Breien', 'Cash', 'Wakpala', 'Whitehorse', 'Schmidt', 'Little Eagle', 
                       'Oahe', 'Big Bend', 'Fort Randall', 'Gavins Point', 'Garrison', 'Fort Peck',
                       'Fort Yates', 'Mott', 'Carson', 'Linton', 'Lemmon', 'McIntosh', 
                       'Mclaughlin', 'Mound City', 'Timber Lake'];
-      
-      // Try to find and remove place name from beginning
       let foundPlace = false;
       for (const place of places) {
         if (withoutTable.startsWith(place + ' ')) {
@@ -79,30 +130,63 @@ function groupUrlsByType(urls) {
           break;
         }
       }
-      
-      if (!foundPlace) {
-        type = withoutTable;
-      }
-    }
-    // Fallback: use the whole title (with Table removed if present)
-    else {
+      if (!foundPlace) type = withoutTable;
+    } else {
       type = title.replace(/\s+Table$/i, '').trim();
     }
 
-    // Normalize common typos / formatting
     type = type.replace(/\s+/g, ' ').replace(/Baromatric/i, 'Barometric').trim();
-    
-    // If type is empty or too short (like single word fragments), use full title
-    if (!type || type.length < 3) {
-      type = title.replace(/\s+Table$/i, '').trim();
-    }
+    if (!type || type.length < 3) type = title.replace(/\s+Table$/i, '').trim();
 
     grouped[type] = grouped[type] || { Chart: null, Table: null };
+    // store the raw entry (resolve later when assigning frame.src)
     if (isTable) grouped[type].Table = raw;
     else grouped[type].Chart = raw;
   });
 
   return grouped;
+}
+
+// Turn a raw graph/title string into a human-friendly tab label
+function prettifyTitle(raw) {
+  if (!raw) return '';
+  let s = String(raw || '');
+  // Decode common encodings
+  s = s.replace(/%20/g, ' ');
+
+  // Remove trailing '-interactive' or '_interactive' or 'interactive' tokens
+  s = s.replace(/[_\-]?interactive$/i, '');
+  s = s.replace(/[_\-]?interactive/i, '');
+
+  // Strip common file-date suffixes like _20240805_20240904 or _2024-08-05_2024-09-04
+  s = s.replace(/_?\d{6,8}(_|-)\d{6,8}$/g, '');
+  s = s.replace(/_?\d{4}-\d{2}-\d{2}(_|-)\d{4}-\d{2}-\d{2}$/g, '');
+
+  // Handle double-underscore gauge-style names: gauge__Place__metric__dates
+  const parts = s.split('__');
+  if (parts.length >= 3 && /^gauge$/i.test(parts[0])) {
+    const place = parts[1].replace(/[_\-]+/g, ' ').trim();
+    const metric = parts[2].replace(/[_\-]+/g, ' ').trim();
+    return (metric ? capitalizeWords(metric) + ' — ' : '') + capitalizeWords(place) + ' (Gauge)';
+  }
+
+  // If there are double-underscores but not a gauge prefix, join them with em-dash
+  if (s.indexOf('__') !== -1) {
+    return parts.map(p => capitalizeWords(p.replace(/[_\-]+/g, ' ').trim())).join(' — ');
+  }
+
+  // Replace remaining underscores or hyphens with spaces
+  s = s.replace(/[_\-]+/g, ' ').trim();
+
+  // Remove redundant words
+  s = s.replace(/\btable\b/i, '').trim();
+
+  // Capitalize words
+  return capitalizeWords(s);
+}
+
+function capitalizeWords(str) {
+  return String(str || '').toLowerCase().split(/\s+/).filter(Boolean).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 }
 
 /** Build the tab UI inside a given modal element */
@@ -118,7 +202,9 @@ function renderTabsIntoModal(modalEl, urls) {
 
   // Check for no URLs
   const grouped = groupUrlsByType(urls);
-  const types = Object.keys(grouped).sort();
+  const typeKeys = Object.keys(grouped).sort();
+  // map keys to objects with human-friendly labels
+  const types = typeKeys.map(k => ({ key: k, label: prettifyTitle(k) }));
   if (!types.length) {
     const p = document.createElement('p');
     p.textContent = 'No graphs available for this location.';
@@ -147,14 +233,17 @@ function renderTabsIntoModal(modalEl, urls) {
   panels.appendChild(frame);
 
   // State
-  let activeType = types[0];
+  let activeType = types[0].key;
   let activeSub = 'Chart';
 
   // Build type buttons
-  types.forEach((t, idx) => {
+  types.forEach((entry, idx) => {
+    const t = entry.key;
+    const label = entry.label || t;
     const b = document.createElement('button');
     b.type = 'button';
-    b.textContent = t;
+    b.textContent = label;
+    b.title = t; // keep original key as tooltip for more detail
     if (idx === 0) b.classList.add('active');
     b.addEventListener('click', () => {
       [...typeRow.querySelectorAll('button')].forEach(x => x.classList.remove('active'));
@@ -201,8 +290,9 @@ function renderTabsIntoModal(modalEl, urls) {
     if (activeSub === 'Chart' && hasChart) chartBtn.classList.add('active');
     if (activeSub === 'Table' && hasTable) tableBtn.classList.add('active');
 
-    // Set src
-    frame.src = (activeSub === 'Table') ? (entry.Table || '') : (entry.Chart || '');
+    // Set src (resolve filenames or relative paths using baseGraphUrl)
+    const rawUrl = (activeSub === 'Table') ? (entry.Table || '') : (entry.Chart || '');
+    frame.src = rawUrl ? resolveUrl(rawUrl) : '';
 
     // If only one sub available, hide sub row
     if ((hasChart && !hasTable) || (!hasChart && hasTable)) {
