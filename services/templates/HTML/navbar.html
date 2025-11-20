@@ -6,7 +6,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Navigation Bar</title>
-    <link rel="stylesheet" href="styles.css" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/global.css' %}" />
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap"
       rel="stylesheet"
@@ -15,12 +16,14 @@
   <body>
     <header class="navbar">
       <div class="logo-container">
-        <img
+        <a href="/">
+          <img
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/33a3523fd6976908bc3437ef17e24417ccd1f945"
           alt="Logo"
         
           class="logo-header"
         />
+        </a>
       </div>
       <nav class="nav-menu">
         <a href="/" class="nav-link">Home</a>
@@ -33,13 +36,14 @@
             <a href="/favorites" class="dropdown-link">Favorites</a>
           </div>
         </div>
+        <!-- LOgin disabled for MVP 
         <span class="divider"></span>
         {% if user.is_authenticated %}
           <a href="/signout" class="sign-in-button">Sign Out</a>
         {% else %}
           <a href="/register" class="nav-link">Sign Up</a>
           <a href="/login" class="sign-in-button">Sign In</a>
-        {% endif %}
+        {% endif %} -->
       </nav>
     </header>
   </body>

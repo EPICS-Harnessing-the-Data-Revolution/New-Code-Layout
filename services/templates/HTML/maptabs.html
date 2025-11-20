@@ -1,655 +1,1211 @@
 <!DOCTYPE html>
-<html style="height: 100%;">
+<html lang="en" style="height: 100%;">
 <head>
   <title>Interactive Map</title>
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/maptabs.css' %}">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
+
+  <style>
+    :root {
+      --bg-page: #f5f7fc;
+      --bg-card: #ffffff;
+      --primary: #4c5fd5;
+      --primary-soft: rgba(76,95,213,0.12);
+      --primary-hover: #3c4cc3;
+      --border-subtle: #e2e6f3;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --radius-xl: 18px;
+      --radius-lg: 14px;
+      --shadow-soft: 0 10px 30px rgba(15,23,42,0.08);
+      --transition-fast: 0.22s ease;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: var(--font-sans);
+      color: var(--text-main);
+      background: var(--bg-page);
+    }
+
+    .page-wrapper {
+      max-width: 1200px;
+      margin: 32px auto 64px;
+      padding: 0 24px;
+    }
+
+    .page-heading {
+  margin: 24px auto 18px;
+  max-width: 720px;
+  text-align: center;
+}
+
+    .page-heading h1 {
+  font-size: 1.9rem;
+  margin: 0 0 6px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #111827;
+}
+
+    .page-heading p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  white-space: normal; /* override any global nowrap */
+}
+
+
+    /* Tabs */
+
+    .tab-container main {
+      margin-top: 24px;
+    }
+
+    .tab-container main > input[type="radio"] {
+      display: none;
+    }
+
+    .tab-container main > label {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 15px;
+      margin-right: 6px;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-radius: 999px;
+      transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+      user-select: none;
+    }
+
+    .tab-container main > label:hover {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    #tab1:checked + label,
+    #tab2:checked + label,
+    #tab3:checked + label,
+    #tab4:checked + label,
+    #tab5:checked + label,
+    #tab6:checked + label,
+    #tab7:checked + label,
+    #tab8:checked + label,
+    #tab9:checked + label,
+    #tab10:checked + label,
+    #tab11:checked + label,
+    #tab12:checked + label,
+    #tab13:checked + label {
+      color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 6px 14px rgba(148,163,253,0.25);
+      transform: translateY(-1px);
+    }
+
+    .tab-container section {
+      display: none;
+      margin-top: 14px;
+    }
+
+    #tab1:checked ~ #content1,
+    #tab2:checked ~ #content2,
+    #tab3:checked ~ #content3,
+    #tab4:checked ~ #content4,
+    #tab5:checked ~ #content5,
+    #tab6:checked ~ #content6,
+    #tab7:checked ~ #content7,
+    #tab8:checked ~ #content8,
+    #tab9:checked ~ #content9,
+    #tab10:checked ~ #content10,
+    #tab11:checked ~ #content11,
+    #tab12:checked ~ #content12,
+    #tab13:checked ~ #content13 {
+      display: block;
+    }
+
+    /* Form card */
+
+    .location-form {
+      background: var(--bg-card);
+      padding: 18px 20px 18px;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-subtle);
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 2fr) minmax(0, 2fr);
+      gap: 12px 18px;
+      align-items: end;
+    }
+
+    .location-form h3 {
+      grid-column: 1 / -1;
+      margin: 0 0 2px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .field-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .location-form select,
+    .location-form input[type="date"] {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 0.9rem;
+      border-radius: 10px;
+      border: 1px solid #d0d7ee;
+      background: #f9fafb;
+      color: var(--text-main);
+      outline: none;
+      transition: border var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    }
+
+    .location-form select:focus,
+    .location-form input[type="date"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-soft);
+      background: #ffffff;
+    }
+
+    .date-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      align-items: center;
+      grid-column: 3 / 4;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(76,95,213,0.35);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 6px 18px rgba(76,95,213,0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid rgba(76,95,213,0.25);
+    }
+
+    .btn-ghost:hover {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+    }
+
+    /* Messages & graph */
+
+    .date-error,
+    .nodata-error,
+    .server-error {
+      font-size: 0.82rem;
+      margin-top: 4px;
+      color: #b91c1c;
+    }
+
+    .graph-slot {
+      margin-top: 18px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .graph-frame {
+      display: block;
+      width: 100%;
+      min-height: 700px;
+      border: 0;
+      border-radius: inherit;
+    }
+
+    .graph-loading {
+      padding: 18px 18px 20px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 899px) {
+      .location-form {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .button-row {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+        margin-top: 4px;
+      }
+
+      .date-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
 </head>
 
 <body>
   {% include "HTML/navbar.html" %}
-<style>
-  .graph-slot { margin-top: 16px; }
-  .graph-frame {
-    display: block;
-    width: 100%;
-    min-height: 700px;   /* initial height */
-    border: 0;
-    border-radius: 8px;
-  }
-  @media (min-width: 1200px) {
-    .graph-frame { min-height: 820px; }
-  }
-</style>
 
+  <div class="page-wrapper">
+    <div class="page-heading">
+      <h1>Missouri River Gauge Dashboard</h1>
+      <p>Select a location, metric, and date range to generate interactive gauge visualizations.</p>
+    </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const normDate = v => { const d = new Date(v); d.setHours(0,0,0,0); return d; };
-  const isoDate = d => {
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,'0');
-    const day = String(d.getDate()).padStart(2,'0');
-    return `${y}-${m}-${day}`;
-  };
+    <div class="tab-container">
+      <main>
+        <!-- Tabs -->
+        <input id="tab1" type="radio" name="tabs" checked>
+        <label for="tab1">Hazen</label>
 
-  // --- Tunables ------------------------------------------------------------
-  const ENABLE_PROBE = true;
-  const TREAT_ALL_500_AS_NO_DATA = true;
-  const NO_DATA_PATTERNS = [/IndexError/i, /list index out of range/i, /moving_avg/i, /sqlclasses\.py/i];
-  // -------------------------------------------------------------------------
+        <input id="tab2" type="radio" name="tabs">
+        <label for="tab2">Stanton</label>
 
-  function ensureGraphSlot(form) {
-    let slot = form.parentElement.querySelector('.graph-slot');
-    if (!slot) {
-      slot = document.createElement('div');
-      slot.className = 'graph-slot';
-      form.insertAdjacentElement('afterend', slot);
-    }
-    return slot;
-  }
+        <input id="tab3" type="radio" name="tabs">
+        <label for="tab3">Washburn</label>
 
-  function renderHtmlIntoSlot(slot, html) {
-    slot.innerHTML = '';
-    const srcdoc = html.includes('<base')
-      ? html
-      : html.replace('<head>', `<head><base href="${window.location.origin}/">`);
+        <input id="tab4" type="radio" name="tabs">
+        <label for="tab4">Price</label>
 
-    const iframe = document.createElement('iframe');
-    iframe.className = 'graph-frame';
-    iframe.title = 'Graph';
-    iframe.srcdoc = srcdoc;
-    slot.appendChild(iframe);
+        <input id="tab5" type="radio" name="tabs">
+        <label for="tab5">Bismarck</label>
 
-    function resize() {
-      try {
-        const doc = iframe.contentDocument || iframe.contentWindow.document;
-        const h = Math.max(
-          doc.body.scrollHeight, doc.documentElement.scrollHeight,
-          doc.body.offsetHeight, doc.documentElement.offsetHeight
-        );
-        iframe.style.height = Math.max(760, h) + 'px';
-      } catch (_) {}
-    }
+        <input id="tab6" type="radio" name="tabs">
+        <label for="tab6">Schmidt</label>
 
-    iframe.addEventListener('load', () => {
-      const doc = iframe.contentDocument || iframe.contentWindow.document;
+        <input id="tab7" type="radio" name="tabs">
+        <label for="tab7">Judson</label>
 
-      let graphEl = doc.querySelector('.js-plotly-plot, .plotly-graph-div, #graph, #graph-container');
+        <input id="tab8" type="radio" name="tabs">
+        <label for="tab8">Mandan</label>
 
-      let statsEl = null;
-      if (graphEl) {
-        statsEl =
-          graphEl.parentElement?.querySelector('table') ||
-          (graphEl.nextElementSibling && graphEl.nextElementSibling.tagName === 'TABLE'
-            ? graphEl.nextElementSibling
-            : null);
+        <input id="tab9" type="radio" name="tabs">
+        <label for="tab9">Breien</label>
+
+        <input id="tab10" type="radio" name="tabs">
+        <label for="tab10">Wakpala</label>
+
+        <input id="tab11" type="radio" name="tabs">
+        <label for="tab11">Little Eagle</label>
+
+        <input id="tab12" type="radio" name="tabs">
+        <label for="tab12">Cash</label>
+
+        <input id="tab13" type="radio" name="tabs">
+        <label for="tab13">Whitehorse</label>
+
+        <!-- Hazen -->
+        <section id="content1">
+          <form class="location-form" action="/customgaugegraph/" method="POST">
+            {% csrf_token %}
+            <h3>Hazen, ND</h3>
+
+            <div>
+              <div class="field-label">Data Type</div>
+              <select required name="data2see">
+                <option value="" disabled selected>Choose Data Point</option>
+                <option value="Gauge Height">Gauge Height</option>
+                <option value="Elevation">Elevation</option>
+                <option value="Discharge">Discharge</option>
+                <option value="Water Temperature">Water Temperature</option>
+              </select>
+            </div>
+
+            <div class="date-row">
+              <div>
+                <div class="field-label">Start Date</div>
+                <input type="date" name="start-date" required>
+              </div>
+              <div>
+                <div class="field-label">End Date</div>
+                <input type="date" name="end-date" required>
+              </div>
+            </div>
+
+            <input type="hidden" name="location" value="Hazen ND">
+
+            <div class="button-row">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-ghost">Current Data</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Stanton -->
+        <section id="content2">
+          <form class="location-form" action="/customgaugegraph/" method="POST">
+            {% csrf_token %}
+            <h3>Stanton, ND</h3>
+
+            <div>
+              <div class="field-label">Data Type</div>
+              <select required name="data2see">
+                <option value="" disabled selected>Choose Data Point</option>
+                <option value="Gauge Height">Gauge Height</option>
+                <option value="Elevation">Elevation</option>
+                <option value="Discharge">Discharge</option>
+                <option value="Water Temperature">Water Temperature</option>
+              </select>
+            </div>
+
+            <div class="date-row">
+              <div>
+                <div class="field-label">Start Date</div>
+                <input type="date" name="start-date" required>
+              </div>
+              <div>
+                <div class="field-label">End Date</div>
+                <input type="date" name="end-date" required>
+              </div>
+            </div>
+
+            <input type="hidden" name="location" value="Stanton ND">
+
+            <div class="button-row">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-ghost">Current Data</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Washburn -->
+        <section id="content3">
+          <form class="location-form" action="/customgaugegraph/" method="POST">
+            {% csrf_token %}
+            <h3>Washburn, ND</h3>
+
+            <div>
+              <div class="field-label">Data Type</div>
+              <select required name="data2see">
+                <option value="" disabled selected>Choose Data Point</option>
+                <option value="Gauge Height">Gauge Height</option>
+                <option value="Elevation">Elevation</option>
+                <option value="Discharge">Discharge</option>
+                <option value="Water Temperature">Water Temperature</option>
+              </select>
+            </div>
+
+            <div class="date-row">
+              <div>
+                <div class="field-label">Start Date</div>
+                <input type="date" name="start-date" required>
+              </div>
+              <div>
+                <div class="field-label">End Date</div>
+                <input type="date" name="end-date" required>
+              </div>
+            </div>
+
+            <input type="hidden" name="location" value="Washburn ND">
+
+            <div class="button-row">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-ghost">Current Data</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Price -->
+        <section id="content4">
+          <form class="location-form" action="/customgaugegraph/" method="POST">
+            {% csrf_token %}
+            <h3>Price, ND</h3>
+
+            <div>
+              <div class="field-label">Data Type</div>
+              <select required name="data2see">
+                <option value="" disabled selected>Choose Data Point</option>
+                <option value="Gauge Height">Gauge Height</option>
+                <option value="Elevation">Elevation</option>
+                <option value="Discharge">Discharge</option>
+                <option value="Water Temperature">Water Temperature</option>
+              </select>
+            </div>
+
+            <div class="date-row">
+              <div>
+                <div class="field-label">Start Date</div>
+                <input type="date" name="start-date" required>
+              </div>
+              <div>
+                <div class="field-label">End Date</div>
+                <input type="date" name="end-date" required>
+              </div>
+            </div>
+
+            <input type="hidden" name="location" value="Price ND">
+
+            <div class="button-row">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-ghost">Current Data</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Bismarck -->
+        <section id="content5">
+          <form class="location-form" action="/customgaugegraph/" method="POST">
+            {% csrf_token %}
+            <h3>Bismarck, ND</h3>
+
+            <div>
+              <div class="field-label">Data Type</div>
+              <select required name="data2see">
+                <option value="" disabled selected>Choose Data Point</option>
+                <option value="Gauge Height">Gauge Height</option>
+                <option value="Elevation">Elevation</option>
+                <option value="Discharge">Discharge</option>
+                <option value="Water Temperature">Water Temperature</option>
+              </select>
+            </div>
+
+            <div class="date-row">
+              <div>
+                <div class="field-label">Start Date</div>
+                <input type="date" name="start-date" required>
+              </div>
+              <div>
+                <div class="field-label">End Date</div>
+                <input type="date" name="end-date" required>
+              </div>
+            </div>
+
+            <input type="hidden" name="location" value="Bismarck ND">
+
+            <div class="button-row">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-ghost">Current Data</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Schmidt -->
+        <section id="content6">
+          <form class="location-form" action="/customgaugegraph/" method="POST">
+            {% csrf_token %}
+            <h3>Schmidt, ND</h3>
+
+            <div>
+              <div class="field-label">Data Type</div>
+              <select required name="data2see">
+                <option value="" disabled selected>Choose Data Point</option>
+                <option value="Gauge Height">Gauge Height</option>
+                <option value="Elevation">Elevation</option>
+                <option value="Discharge">Discharge</option>
+                <option value="Water Temperature">Water Temperature</option>
+              </select>
+            </div>
+
+            <div class="date-row">
+              <div>
+                <div class="field-label">Start Date</div>
+                <input type="date" name="start-date" required>
+              </div>
+              <div>
+                <div class="field-label">End Date</div>
+                <input type="date" name="end-date" required>
+              </div>
+            </div>
+
+            <input type="hidden" name="location" value="Schmidt ND">
+
+            <div class="button-row">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-ghost">Current Data</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Judson -->
+        <section id="content7">
+          <form class="location-form" action="/customgaugegraph/" method="POST">
+            {% csrf_token %}
+            <h3>Judson, ND</h3>
+
+            <div>
+              <div class="field-label">Data Type</div>
+              <select required name="data2see">
+                <option value="" disabled selected>Choose Data Point</option>
+                <option value="Gauge Height">Gauge Height</option>
+                <option value="Elevation">Elevation</option>
+                <option value="Discharge">Discharge</option>
+                <option value="Water Temperature">Water Temperature</option>
+              </select>
+            </div>
+
+            <div class="date-row">
+              <div>
+                <div class="field-label">Start Date</div>
+                <input type="date" name="start-date" required>
+              </div>
+              <div>
+                <div class="field-label">End Date</div>
+                <input type="date" name="end-date" required>
+              </div>
+            </div>
+
+            <input type="hidden" name="location" value="Judson ND">
+
+            <div class="button-row">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-ghost">Current Data</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Mandan -->
+        <section id="content8">
+          <form class="location-form" action="/customgaugegraph/" method="POST">
+            {% csrf_token %}
+            <h3>Mandan, ND</h3>
+
+            <div>
+              <div class="field-label">Data Type</div>
+              <select required name="data2see">
+                <option value="" disabled selected>Choose Data Point</option>
+                <option value="Gauge Height">Gauge Height</option>
+                <option value="Elevation">Elevation</option>
+                <option value="Discharge">Discharge</option>
+                <option value="Water Temperature">Water Temperature</option>
+              </select>
+            </div>
+
+            <div class="date-row">
+              <div>
+                <div class="field-label">Start Date</div>
+                <input type="date" name="start-date" required>
+              </div>
+              <div>
+                <div class="field-label">End Date</div>
+                <input type="date" name="end-date" required>
+              </div>
+            </div>
+
+            <input type="hidden" name="location" value="Mandan ND">
+
+            <div class="button-row">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-ghost">Current Data</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Breien -->
+        <section id="content9">
+          <form class="location-form" action="/customgaugegraph/" method="POST">
+            {% csrf_token %}
+            <h3>Breien, ND</h3>
+
+            <div>
+              <div class="field-label">Data Type</div>
+              <select required name="data2see">
+                <option value="" disabled selected>Choose Data Point</option>
+                <option value="Gauge Height">Gauge Height</option>
+                <option value="Elevation">Elevation</option>
+                <option value="Discharge">Discharge</option>
+                <option value="Water Temperature">Water Temperature</option>
+              </select>
+            </div>
+
+            <div class="date-row">
+              <div>
+                <div class="field-label">Start Date</div>
+                <input type="date" name="start-date" required>
+              </div>
+              <div>
+                <div class="field-label">End Date</div>
+                <input type="date" name="end-date" required>
+              </div>
+            </div>
+
+            <input type="hidden" name="location" value="Breien ND">
+
+            <div class="button-row">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-ghost">Current Data</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Wakpala -->
+        <section id="content10">
+          <form class="location-form" action="/customgaugegraph/" method="POST">
+            {% csrf_token %}
+            <h3>Wakpala, SD</h3>
+
+            <div>
+              <div class="field-label">Data Type</div>
+              <select required name="data2see">
+                <option value="" disabled selected>Choose Data Point</option>
+                <option value="Gauge Height">Gauge Height</option>
+                <option value="Elevation">Elevation</option>
+                <option value="Discharge">Discharge</option>
+                <option value="Water Temperature">Water Temperature</option>
+              </select>
+            </div>
+
+            <div class="date-row">
+              <div>
+                <div class="field-label">Start Date</div>
+                <input type="date" name="start-date" required>
+              </div>
+              <div>
+                <div class="field-label">End Date</div>
+                <input type="date" name="end-date" required>
+              </div>
+            </div>
+
+            <input type="hidden" name="location" value="Wakpala SD">
+
+            <div class="button-row">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-ghost">Current Data</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Little Eagle -->
+        <section id="content11">
+          <form class="location-form" action="/customgaugegraph/" method="POST">
+            {% csrf_token %}
+            <h3>Little Eagle, SD</h3>
+
+            <div>
+              <div class="field-label">Data Type</div>
+              <select required name="data2see">
+                <option value="" disabled selected>Choose Data Point</option>
+                <option value="Gauge Height">Gauge Height</option>
+                <option value="Elevation">Elevation</option>
+                <option value="Discharge">Discharge</option>
+                <option value="Water Temperature">Water Temperature</option>
+              </select>
+            </div>
+
+            <div class="date-row">
+              <div>
+                <div class="field-label">Start Date</div>
+                <input type="date" name="start-date" required>
+              </div>
+              <div>
+                <div class="field-label">End Date</div>
+                <input type="date" name="end-date" required>
+              </div>
+            </div>
+
+            <input type="hidden" name="location" value="Little Eagle SD">
+
+            <div class="button-row">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-ghost">Current Data</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Cash -->
+        <section id="content12">
+          <form class="location-form" action="/customgaugegraph/" method="POST">
+            {% csrf_token %}
+            <h3>Cash, SD</h3>
+
+            <div>
+              <div class="field-label">Data Type</div>
+              <select required name="data2see">
+                <option value="" disabled selected>Choose Data Point</option>
+                <option value="Gauge Height">Gauge Height</option>
+                <option value="Elevation">Elevation</option>
+                <option value="Discharge">Discharge</option>
+                <option value="Water Temperature">Water Temperature</option>
+              </select>
+            </div>
+
+            <div class="date-row">
+              <div>
+                <div class="field-label">Start Date</div>
+                <input type="date" name="start-date" required>
+              </div>
+              <div>
+                <div class="field-label">End Date</div>
+                <input type="date" name="end-date" required>
+              </div>
+            </div>
+
+            <input type="hidden" name="location" value="Cash SD">
+
+            <div class="button-row">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-ghost">Current Data</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Whitehorse -->
+        <section id="content13">
+          <form class="location-form" action="/customgaugegraph/" method="POST">
+            {% csrf_token %}
+            <h3>Whitehorse, SD</h3>
+
+            <div>
+              <div class="field-label">Data Type</div>
+              <select required name="data2see">
+                <option value="" disabled selected>Choose Data Point</option>
+                <option value="Gauge Height">Gauge Height</option>
+                <option value="Elevation">Elevation</option>
+                <option value="Discharge">Discharge</option>
+                <option value="Water Temperature">Water Temperature</option>
+              </select>
+            </div>
+
+            <div class="date-row">
+              <div>
+                <div class="field-label">Start Date</div>
+                <input type="date" name="start-date" required>
+              </div>
+              <div>
+                <div class="field-label">End Date</div>
+                <input type="date" name="end-date" required>
+              </div>
+            </div>
+
+            <input type="hidden" name="location" value="Whitehorse SD">
+
+            <div class="button-row">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-ghost">Current Data</button>
+            </div>
+          </form>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const today = new Date(); today.setHours(0,0,0,0);
+
+      const normDate = v => {
+        const d = new Date(v);
+        d.setHours(0,0,0,0);
+        return d;
+      };
+
+      const isoDate = d => {
+        const y = d.getFullYear();
+        const m = String(d.getMonth()+1).padStart(2,'0');
+        const day = String(d.getDate()).padStart(2,'0');
+        return `${y}-${m}-${day}`;
+      };
+
+      // Config
+      const ENABLE_PROBE = true;
+      const TREAT_ALL_500_AS_NO_DATA = true;
+      const NO_DATA_PATTERNS = [/IndexError/i, /list index out of range/i, /moving_avg/i, /sqlclasses\.py/i];
+
+      function ensureGraphSlot(form) {
+        let slot = form.parentElement.querySelector('.graph-slot');
+        if (!slot) {
+          slot = document.createElement('div');
+          slot.className = 'graph-slot';
+          form.insertAdjacentElement('afterend', slot);
+        }
+        return slot;
       }
-      if (!statsEl) statsEl = doc.querySelector('table');
 
-      if (graphEl) {
-        const wrapper = doc.createElement('div');
-        wrapper.style.maxWidth = '1200px';
-        wrapper.style.margin = '0 auto';
-        wrapper.style.padding = '8px 0 24px';
-        wrapper.appendChild(graphEl);
-        if (statsEl) wrapper.appendChild(statsEl);
-        doc.body.innerHTML = '';
-        doc.body.appendChild(wrapper);
+function renderHtmlIntoSlot(slot, html) {
+  slot.innerHTML = '';
+  const srcdoc = html.includes('<base')
+    ? html
+    : html.replace('<head>', `<head><base href="${window.location.origin}/">`);
 
-        const style = doc.createElement('style');
-        style.textContent = `
-          html, body { height: 100%; margin: 0; }
-          .plot-container.plotly { width: 100% !important; height: 100% !important; }
-          .main-svg { width: 100% !important; }
-          table { width: 100%; border-collapse: collapse; }
-          table td, table th { padding: .5rem .75rem; }
-        `;
-        doc.head.appendChild(style);
-      } else {
-        const style = doc.createElement('style');
-        style.textContent = `header, nav, .navbar, .Heading, .site-header, .site-footer, footer { display:none !important; }`;
-        doc.head.appendChild(style);
-      }
+  const iframe = document.createElement('iframe');
+  iframe.className = 'graph-frame';
+  iframe.title = 'Graph';
+  iframe.srcdoc = srcdoc;
+  slot.appendChild(iframe);
 
-      resize();
-      setTimeout(resize, 350);
-      setTimeout(resize, 1200);
-      window.addEventListener('resize', resize);
-    });
-
-    slot.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-
-  async function probeHasData(form) {
-    if (!ENABLE_PROBE) return { state: 'skip' };
-
-    const action = form.getAttribute('action') || window.location.pathname;
-    const fd = new FormData(form);
-    fd.append('check_only', '1');
-
+  function resize() {
     try {
-      const resp = await fetch(action, {
-        method: 'POST',
-        body: new URLSearchParams(fd),
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        redirect: 'manual'
-      });
-
-      if (resp.status === 200) return { state: 'hasData', html: await resp.text() };
-
-      if (resp.status >= 500) {
-        if (TREAT_ALL_500_AS_NO_DATA) return { state: 'empty' };
-        const text = await resp.text().catch(() => '');
-        const looksNoData = NO_DATA_PATTERNS.some(rx => rx.test(text));
-        return looksNoData ? { state: 'empty' } : { state: 'serverError', status: resp.status, html: text };
-      }
-
-      return { state: 'unknown', status: resp.status, html: await resp.text().catch(() => '') };
-    } catch (err) {
-      return { state: 'networkError', error: err };
-    }
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      const h = Math.max(
+        doc.body.scrollHeight, doc.documentElement.scrollHeight,
+        doc.body.offsetHeight, doc.documentElement.offsetHeight
+      );
+      iframe.style.height = Math.max(500, h + 16) + 'px';
+    } catch (_) {}
   }
 
-  function attachHandlers(form) {
-    const startInput = form.querySelector('input[name="start-date"]');
-    const endInput   = form.querySelector('input[name="end-date"]');
-    const datasetSel = form.querySelector('select[name="data2see"]');
-    const locationEl = form.querySelector('input[name="location"]');
+  iframe.addEventListener('load', () => {
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
 
-    const ensureMsg = (cls) => {
-      let el = form.querySelector('.' + cls);
-      if (!el) {
-        el = document.createElement('p');
-        el.className = cls;
-        el.style.cssText = 'color:#B00020;margin-top:6px;font-weight:500;display:none;';
-        endInput.insertAdjacentElement('afterend', el);
-      }
-      return el;
-    };
+    // Find plot + optional stats table
+    let graphEl = doc.querySelector('.js-plotly-plot, .plotly-graph-div, #graph, #graph-container');
+    let statsEl = null;
 
-    const dateError   = ensureMsg('date-error');
-    const nodataError = ensureMsg('nodata-error');
-    const serverError = ensureMsg('server-error');
-
-    const clearMsgs = () => {
-      [dateError, nodataError, serverError].forEach(el => { el.textContent=''; el.style.display='none'; });
-    };
-
-    function validateDates() {
-      clearMsgs();
-      if (!startInput.value || !endInput.value) return false;
-      const s = normDate(startInput.value);
-      const e = normDate(endInput.value);
-      if (s > today) { dateError.textContent = '⚠️ Start date cannot be in the future.'; dateError.style.display='block'; return false; }
-      if (e > today) { dateError.textContent = '⚠️ End date cannot be in the future.';   dateError.style.display='block'; return false; }
-      if (s > e)     { dateError.textContent = '⚠️ Start date must be earlier than end date.'; dateError.style.display='block'; return false; }
-      return true;
+    if (graphEl) {
+      statsEl =
+        graphEl.parentElement?.querySelector('table') ||
+        (graphEl.nextElementSibling && graphEl.nextElementSibling.tagName === 'TABLE'
+          ? graphEl.nextElementSibling
+          : null);
     }
+    if (!statsEl) statsEl = doc.querySelector('table');
 
-    // --- NEW: "Current Data" button handler (last month → today) ------------
-    const currentBtn =
-      Array.from(form.querySelectorAll('button[type="button"], button:not([type])'))
-        .find(b => /current\s*data/i.test(b.textContent || ''));
+    if (graphEl) {
+      // Wrap nicely
+      const wrapper = doc.createElement('div');
+      wrapper.className = 'plot-wrapper';
+      wrapper.appendChild(graphEl);
+      if (statsEl) wrapper.appendChild(statsEl);
 
-    if (currentBtn) {
-      currentBtn.addEventListener('click', () => {
-        // End = today
-        const end = new Date(); end.setHours(0,0,0,0);
-        // Start = one calendar month before today (handles month length correctly)
-        const start = new Date(end);
-        start.setMonth(start.getMonth() - 1);
+      doc.body.innerHTML = '';
+      doc.body.appendChild(wrapper);
 
-        // Fill inputs in ISO yyyy-mm-dd
-        endInput.value = isoDate(end);
-        startInput.value = isoDate(start);
-
-        // If user hasn’t chosen a metric yet, pick the first non-disabled option
-        if (!datasetSel.value) {
-          const firstReal = Array.from(datasetSel.options).find(opt => !opt.disabled && opt.value);
-          if (firstReal) datasetSel.value = firstReal.value;
+      // Inline styles inside iframe just for the plot
+      const style = doc.createElement('style');
+      style.textContent = `
+        html, body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          background: transparent;
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
 
-        // Fire normal submit path (your probe + iframe render will run)
-        form.requestSubmit();
-      });
+        .plot-wrapper {
+          box-sizing: border-box;
+          width: 100%;
+          max-width: 1100px;
+          margin: 16px auto;
+          padding: 16px 18px 18px;
+          border-radius: 18px;
+          background: #ffffff;
+          border: 1px solid #e2e6f3;
+          box-shadow: 0 10px 26px rgba(15,23,42,0.09);
+        }
+
+        .plot-container.plotly {
+          width: 100% !important;
+          height: 100% !important;
+        }
+
+        .main-svg {
+          width: 100% !important;
+        }
+
+        /* Title */
+        .gtitle {
+          font-size: 18px !important;
+          font-weight: 600 !important;
+          fill: #111827 !important;
+        }
+
+        /* Axes + labels */
+        .xtick text,
+        .ytick text,
+        .legendtext {
+          fill: #4b5563 !important;
+          font-size: 11px !important;
+        }
+
+        .xtitle, .ytitle {
+          font-size: 11px !important;
+          fill: #6b7280 !important;
+        }
+
+        /* Modebar (toolbar) */
+        .modebar {
+          top: 8px !important;
+          right: 8px !important;
+        }
+        .modebar-btn {
+          opacity: 0.55;
+        }
+        .modebar-btn:hover {
+          opacity: 1;
+        }
+        .logo {
+          display: none !important; /* hide Plotly logo if present */
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 10px;
+          font-size: 0.8rem;
+          color: #4b5563;
+        }
+        table td,
+        table th {
+          padding: .4rem .6rem;
+          border-bottom: 1px solid #e5e7eb;
+        }
+        table th {
+          font-weight: 600;
+          background: #f9fafb;
+        }
+      `;
+      doc.head.appendChild(style);
+    } else {
+      // Non-plot fallback cleanup
+      const style = doc.createElement('style');
+      style.textContent = `
+        header, nav, .navbar, .Heading, .site-header, .site-footer, footer {
+          display:none !important;
+        }
+        body {
+          margin: 0;
+          padding: 12px 14px;
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+      `;
+      doc.head.appendChild(style);
     }
-    // ------------------------------------------------------------------------
 
-    form.addEventListener('submit', async (e) => {
-      if (!form.checkValidity()) return;
-      if (!validateDates()) { e.preventDefault(); return; }
+    resize();
+    setTimeout(resize, 350);
+    setTimeout(resize, 1200);
+    window.addEventListener('resize', resize);
+  });
 
-      e.preventDefault();
-      const slot = ensureGraphSlot(form);
-      slot.innerHTML = '<div class="graph-loading">Loading…</div>';
+  slot.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
 
-      const res = await probeHasData(form);
-      clearMsgs();
 
-      if (res.state === 'empty') {
-        const loc = (locationEl?.value || '').replace(/\s+(ND|SD)$/i, '');
-        slot.innerHTML = '';
-        nodataError.textContent = `ℹ️ No data for "${datasetSel.value}" at ${loc} in that date range.`;
-        nodataError.style.display = 'block';
-        return;
+      async function probeHasData(form) {
+        if (!ENABLE_PROBE) return { state: 'skip' };
+
+        const action = form.getAttribute('action') || window.location.pathname;
+        const fd = new FormData(form);
+        fd.append('check_only', '1');
+
+        try {
+          const resp = await fetch(action, {
+            method: 'POST',
+            body: new URLSearchParams(fd),
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            redirect: 'manual'
+          });
+
+          if (resp.status === 200) return { state: 'hasData', html: await resp.text() };
+
+          if (resp.status >= 500) {
+            if (TREAT_ALL_500_AS_NO_DATA) return { state: 'empty' };
+            const text = await resp.text().catch(() => '');
+            const looksNoData = NO_DATA_PATTERNS.some(rx => rx.test(text));
+            return looksNoData ? { state: 'empty' } : { state: 'serverError', status: resp.status, html: text };
+          }
+
+          return { state: 'unknown', status: resp.status, html: await resp.text().catch(() => '') };
+        } catch (err) {
+          return { state: 'networkError', error: err };
+        }
       }
 
-      if (res.state === 'serverError') {
-        slot.innerHTML = '';
-        serverError.textContent = `⚠️ Server error while generating the graph (${res.status}).`;
-        serverError.style.display = 'block';
-        return;
-      }
+      function attachHandlers(form) {
+        const startInput = form.querySelector('input[name="start-date"]');
+        const endInput   = form.querySelector('input[name="end-date"]');
+        const datasetSel = form.querySelector('select[name="data2see"]');
+        const locationEl = form.querySelector('input[name="location"]');
 
-      if (res.state === 'networkError') {
-        slot.innerHTML = '';
-        serverError.textContent = '⚠️ Network error while requesting the graph.';
-        serverError.style.display = 'block';
-        return;
-      }
+        const ensureMsg = (cls) => {
+          let el = form.querySelector('.' + cls);
+          if (!el) {
+            el = document.createElement('p');
+            el.className = cls;
+            el.style.cssText = 'margin-top:6px;font-weight:500;display:none;';
+            endInput.insertAdjacentElement('afterend', el);
+          }
+          return el;
+        };
 
-      if (res.state === 'hasData' && res.html) {
-        renderHtmlIntoSlot(slot, res.html);
-        return;
-      }
+        const dateError   = ensureMsg('date-error');
+        const nodataError = ensureMsg('nodata-error');
+        const serverError = ensureMsg('server-error');
 
-      const action = form.getAttribute('action') || window.location.pathname;
-      const fd = new FormData(form);
+        const clearMsgs = () => {
+          [dateError, nodataError, serverError].forEach(el => {
+            el.textContent = '';
+            el.style.display = 'none';
+          });
+        };
 
-      try {
-        const resp = await fetch(action, {
-          method: 'POST',
-          body: new URLSearchParams(fd),
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          redirect: 'manual'
+        function validateDates() {
+          clearMsgs();
+          if (!startInput.value || !endInput.value) return false;
+
+          const s = normDate(startInput.value);
+          const e = normDate(endInput.value);
+
+          if (s > today) {
+            dateError.textContent = '⚠️ Start date cannot be in the future.';
+            dateError.style.display = 'block';
+            return false;
+          }
+          if (e > today) {
+            dateError.textContent = '⚠️ End date cannot be in the future.';
+            dateError.style.display = 'block';
+            return false;
+          }
+          if (s > e) {
+            dateError.textContent = '⚠️ Start date must be earlier than end date.';
+            dateError.style.display = 'block';
+            return false;
+          }
+          return true;
+        }
+
+        // "Current Data" button → last month through today
+        const currentBtn =
+          Array.from(form.querySelectorAll('button[type="button"], button:not([type])'))
+            .find(b => /current\s*data/i.test(b.textContent || ''));
+
+        if (currentBtn) {
+          currentBtn.addEventListener('click', () => {
+            const end = new Date(); end.setHours(0,0,0,0);
+            const start = new Date(end);
+            start.setMonth(start.getMonth() - 1);
+
+            endInput.value = isoDate(end);
+            startInput.value = isoDate(start);
+
+            if (!datasetSel.value) {
+              const firstReal = Array.from(datasetSel.options)
+                .find(opt => !opt.disabled && opt.value);
+              if (firstReal) datasetSel.value = firstReal.value;
+            }
+
+            form.requestSubmit();
+          });
+        }
+
+        form.addEventListener('submit', async (e) => {
+          if (!form.checkValidity()) return;
+          if (!validateDates()) { e.preventDefault(); return; }
+
+          e.preventDefault();
+          const slot = ensureGraphSlot(form);
+          slot.innerHTML = '<div class="graph-loading">Loading graph…</div>';
+
+          const res = await probeHasData(form);
+          clearMsgs();
+
+          if (res.state === 'empty') {
+            const loc = (locationEl?.value || '').replace(/\s+(ND|SD)$/i, '');
+            slot.innerHTML = '';
+            nodataError.textContent =
+              `ℹ️ No data for "${datasetSel.value}" at ${loc} in that date range.`;
+            nodataError.style.display = 'block';
+            return;
+          }
+
+          if (res.state === 'serverError') {
+            slot.innerHTML = '';
+            serverError.textContent =
+              `⚠️ Server error while generating the graph (${res.status}).`;
+            serverError.style.display = 'block';
+            return;
+          }
+
+          if (res.state === 'networkError') {
+            slot.innerHTML = '';
+            serverError.textContent =
+              '⚠️ Network error while requesting the graph.';
+            serverError.style.display = 'block';
+            return;
+          }
+
+          if (res.state === 'hasData' && res.html) {
+            renderHtmlIntoSlot(slot, res.html);
+            return;
+          }
+
+          // Fallback: normal fetch and render
+          const action = form.getAttribute('action') || window.location.pathname;
+          const fd = new FormData(form);
+
+          try {
+            const resp = await fetch(action, {
+              method: 'POST',
+              body: new URLSearchParams(fd),
+              credentials: 'same-origin',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'X-Requested-With': 'XMLHttpRequest'
+              },
+              redirect: 'manual'
+            });
+
+            const html = await resp.text();
+            if (resp.status === 200) {
+              renderHtmlIntoSlot(slot, html);
+            } else if (resp.status >= 500 && TREAT_ALL_500_AS_NO_DATA) {
+              slot.innerHTML = '';
+              nodataError.textContent = 'ℹ️ No data for the selected range.';
+              nodataError.style.display = 'block';
+            } else {
+              slot.innerHTML = '';
+              serverError.textContent =
+                `⚠️ Could not render graph (${resp.status}).`;
+              serverError.style.display = 'block';
+            }
+          } catch (err) {
+            slot.innerHTML = '';
+            serverError.textContent =
+              '⚠️ Network error while requesting the graph.';
+            serverError.style.display = 'block';
+          }
         });
-
-        const html = await resp.text();
-        if (resp.status === 200) {
-          renderHtmlIntoSlot(slot, html);
-        } else if (resp.status >= 500 && TREAT_ALL_500_AS_NO_DATA) {
-          slot.innerHTML = '';
-          nodataError.textContent = 'ℹ️ No data for the selected range.';
-          nodataError.style.display = 'block';
-        } else {
-          slot.innerHTML = '';
-          serverError.textContent = `⚠️ Could not render graph (${resp.status}).`;
-          serverError.style.display = 'block';
-        }
-      } catch (err) {
-        slot.innerHTML = '';
-        serverError.textContent = '⚠️ Network error while requesting the graph.';
-        serverError.style.display = 'block';
       }
+
+      document
+        .querySelectorAll('section form[action="/customgaugegraph/"]')
+        .forEach(attachHandlers);
     });
-  }
-
-  document.querySelectorAll('section form[action="/customgaugegraph/"]').forEach(attachHandlers);
-});
-</script>
-
-
-
-
-
-
-<div class="tab-container">
-<main>
-
-  <!-- Tabs (one per location) -->
-  <input id="tab1" type="radio" name="tabs" checked>
-  <label for="tab1">Hazen</label>
-
-  <input id="tab2" type="radio" name="tabs">
-  <label for="tab2">Stanton</label>
-
-  <input id="tab3" type="radio" name="tabs">
-  <label for="tab3">Washburn</label>
-
-  <input id="tab4" type="radio" name="tabs">
-  <label for="tab4">Price</label>
-
-  <input id="tab5" type="radio" name="tabs">
-  <label for="tab5">Bismarck</label>
-
-  <input id="tab6" type="radio" name="tabs">
-  <label for="tab6">Schmidt</label>
-
-  <input id="tab7" type="radio" name="tabs">
-  <label for="tab7">Judson</label>
-
-  <input id="tab8" type="radio" name="tabs">
-  <label for="tab8">Mandan</label>
-
-  <input id="tab9" type="radio" name="tabs">
-  <label for="tab9">Breien</label>
-
-  <input id="tab10" type="radio" name="tabs">
-  <label for="tab10">Wakpala</label>
-
-  <input id="tab11" type="radio" name="tabs">
-  <label for="tab11">Little Eagle</label>
-
-  <input id="tab12" type="radio" name="tabs">
-  <label for="tab12">Cash</label>
-
-  <input id="tab13" type="radio" name="tabs">
-  <label for="tab13">Whitehorse</label>
-
-
-  <!-- Hazen -->
-  <section id="content1">
-    <form action="/customgaugegraph/" method="POST">
-      {% csrf_token %}
-      <h3>Hazen, ND</h3>
-      <select required name="data2see">
-        <option value="" disabled selected>Choose Data Point</option>
-        <option value="Gauge Height">Gauge Height</option>
-        <option value="Elevation">Elevation</option>
-        <option value="Discharge">Discharge</option>
-        <option value="Water Temperature">Water Temperature</option>
-      </select>
-      <br><br>
-      <h6>Enter Start and End Dates</h6>
-      <input type="date" name="start-date" required>
-      <input type="date" name="end-date" required>
-      <input type="hidden" name="location" value="Hazen ND">
-      <br><br>
-      <button type="submit">Submit</button>
-      <button type="button">Current Data</button>
-    </form>
-  </section>
-
-  <!-- Stanton -->
-  <section id="content2">
-    <form action="/customgaugegraph/" method="POST">
-      {% csrf_token %}
-      <h3>Stanton, ND</h3>
-      <select required name="data2see">
-        <option value="" disabled selected>Choose Data Point</option>
-        <option value="Gauge Height">Gauge Height</option>
-        <option value="Elevation">Elevation</option>
-        <option value="Discharge">Discharge</option>
-        <option value="Water Temperature">Water Temperature</option>
-      </select>
-      <br><br>
-      <h6>Enter Start and End Dates</h6>
-      <input type="date" name="start-date" required>
-      <input type="date" name="end-date" required>
-      <input type="hidden" name="location" value="Stanton ND">
-      <br><br>
-      <button type="submit">Submit</button>
-      <button type="button">Current Data</button>
-    </form>
-  </section>
-
-  <!-- Washburn -->
-  <section id="content3">
-    <form action="/customgaugegraph/" method="POST">
-      {% csrf_token %}
-      <h3>Washburn, ND</h3>
-      <select required name="data2see">
-        <option value="" disabled selected>Choose Data Point</option>
-        <option value="Gauge Height">Gauge Height</option>
-        <option value="Elevation">Elevation</option>
-        <option value="Discharge">Discharge</option>
-        <option value="Water Temperature">Water Temperature</option>
-      </select>
-      <br><br>
-      <h6>Enter Start and End Dates</h6>
-      <input type="date" name="start-date" required>
-      <input type="date" name="end-date" required>
-      <input type="hidden" name="location" value="Washburn ND">
-      <br><br>
-      <button type="submit">Submit</button>
-      <button type="button">Current Data</button>
-    </form>
-  </section>
-
-  <!-- Price -->
-  <section id="content4">
-    <form action="/customgaugegraph/" method="POST">
-      {% csrf_token %}
-      <h3>Price, ND</h3>
-      <select required name="data2see">
-        <option value="" disabled selected>Choose Data Point</option>
-        <option value="Gauge Height">Gauge Height</option>
-        <option value="Elevation">Elevation</option>
-        <option value="Discharge">Discharge</option>
-        <option value="Water Temperature">Water Temperature</option>
-      </select>
-      <br><br>
-      <h6>Enter Start and End Dates</h6>
-      <input type="date" name="start-date" required>
-      <input type="date" name="end-date" required>
-      <input type="hidden" name="location" value="Price ND">
-      <br><br>
-      <button type="submit">Submit</button>
-      <button type="button">Current Data</button>
-    </form>
-  </section>
-
-  <!-- Bismarck -->
-  <section id="content5">
-    <form action="/customgaugegraph/" method="POST">
-      {% csrf_token %}
-      <h3>Bismarck, ND</h3>
-      <select required name="data2see">
-        <option value="" disabled selected>Choose Data Point</option>
-        <option value="Gauge Height">Gauge Height</option>
-        <option value="Elevation">Elevation</option>
-        <option value="Discharge">Discharge</option>
-        <option value="Water Temperature">Water Temperature</option>
-      </select>
-      <br><br>
-      <h6>Enter Start and End Dates</h6>
-      <input type="date" name="start-date" required>
-      <input type="date" name="end-date" required>
-      <input type="hidden" name="location" value="Bismarck ND">
-      <br><br>
-      <button type="submit">Submit</button>
-      <button type="button">Current Data</button>
-    </form>
-  </section>
-
-  <!-- Schmidt -->
-  <section id="content6">
-    <form action="/customgaugegraph/" method="POST">
-      {% csrf_token %}
-      <h3>Schmidt, ND</h3>
-      <select required name="data2see">
-        <option value="" disabled selected>Choose Data Point</option>
-        <option value="Gauge Height">Gauge Height</option>
-        <option value="Elevation">Elevation</option>
-        <option value="Discharge">Discharge</option>
-        <option value="Water Temperature">Water Temperature</option>
-      </select>
-      <br><br>
-      <h6>Enter Start and End Dates</h6>
-      <input type="date" name="start-date" required>
-      <input type="date" name="end-date" required>
-      <input type="hidden" name="location" value="Schmidt ND">
-      <br><br>
-      <button type="submit">Submit</button>
-      <button type="button">Current Data</button>
-    </form>
-  </section>
-
-  <!-- Judson -->
-  <section id="content7">
-    <form action="/customgaugegraph/" method="POST">
-      {% csrf_token %}
-      <h3>Judson, ND</h3>
-      <select required name="data2see">
-        <option value="" disabled selected>Choose Data Point</option>
-        <option value="Gauge Height">Gauge Height</option>
-        <option value="Elevation">Elevation</option>
-        <option value="Discharge">Discharge</option>
-        <option value="Water Temperature">Water Temperature</option>
-      </select>
-      <br><br>
-      <h6>Enter Start and End Dates</h6>
-      <input type="date" name="start-date" required>
-      <input type="date" name="end-date" required>
-      <input type="hidden" name="location" value="Judson ND">
-      <br><br>
-      <button type="submit">Submit</button>
-      <button type="button">Current Data</button>
-    </form>
-  </section>
-
-  <!-- Mandan -->
-  <section id="content8">
-    <form action="/customgaugegraph/" method="POST">
-      {% csrf_token %}
-      <h3>Mandan, ND</h3>
-      <select required name="data2see">
-        <option value="" disabled selected>Choose Data Point</option>
-        <option value="Gauge Height">Gauge Height</option>
-        <option value="Elevation">Elevation</option>
-        <option value="Discharge">Discharge</option>
-        <option value="Water Temperature">Water Temperature</option>
-      </select>
-      <br><br>
-      <h6>Enter Start and End Dates</h6>
-      <input type="date" name="start-date" required>
-      <input type="date" name="end-date" required>
-      <input type="hidden" name="location" value="Mandan ND">
-      <br><br>
-      <button type="submit">Submit</button>
-      <button type="button">Current Data</button>
-    </form>
-  </section>
-
-  <!-- Breien -->
-  <section id="content9">
-    <form action="/customgaugegraph/" method="POST">
-      {% csrf_token %}
-      <h3>Breien, ND</h3>
-      <select required name="data2see">
-        <option value="" disabled selected>Choose Data Point</option>
-        <option value="Gauge Height">Gauge Height</option>
-        <option value="Elevation">Elevation</option>
-        <option value="Discharge">Discharge</option>
-        <option value="Water Temperature">Water Temperature</option>
-      </select>
-      <br><br>
-      <h6>Enter Start and End Dates</h6>
-      <input type="date" name="start-date" required>
-      <input type="date" name="end-date" required>
-      <input type="hidden" name="location" value="Breien ND">
-      <br><br>
-      <button type="submit">Submit</button>
-      <button type="button">Current Data</button>
-    </form>
-  </section>
-
-  <!-- Wakpala -->
-  <section id="content10">
-    <form action="/customgaugegraph/" method="POST">
-      {% csrf_token %}
-      <h3>Wakpala, SD</h3>
-      <select required name="data2see">
-        <option value="" disabled selected>Choose Data Point</option>
-        <option value="Gauge Height">Gauge Height</option>
-        <option value="Elevation">Elevation</option>
-        <option value="Discharge">Discharge</option>
-        <option value="Water Temperature">Water Temperature</option>
-      </select>
-      <br><br>
-      <h6>Enter Start and End Dates</h6>
-      <input type="date" name="start-date" required>
-      <input type="date" name="end-date" required>
-      <input type="hidden" name="location" value="Wakpala SD">
-      <br><br>
-      <button type="submit">Submit</button>
-      <button type="button">Current Data</button>
-    </form>
-  </section>
-
-  <!-- Little Eagle -->
-  <section id="content11">
-    <form action="/customgaugegraph/" method="POST">
-      {% csrf_token %}
-      <h3>Little Eagle, SD</h3>
-      <select required name="data2see">
-        <option value="" disabled selected>Choose Data Point</option>
-        <option value="Gauge Height">Gauge Height</option>
-        <option value="Elevation">Elevation</option>
-        <option value="Discharge">Discharge</option>
-        <option value="Water Temperature">Water Temperature</option>
-      </select>
-      <br><br>
-      <h6>Enter Start and End Dates</h6>
-      <input type="date" name="start-date" required>
-      <input type="date" name="end-date" required>
-      <input type="hidden" name="location" value="Little Eagle SD">
-      <br><br>
-      <button type="submit">Submit</button>
-      <button type="button">Current Data</button>
-    </form>
-  </section>
-
-  <!-- Cash -->
-  <section id="content12">
-    <form action="/customgaugegraph/" method="POST">
-      {% csrf_token %}
-      <h3>Cash, SD</h3>
-      <select required name="data2see">
-        <option value="" disabled selected>Choose Data Point</option>
-        <option value="Gauge Height">Gauge Height</option>
-        <option value="Elevation">Elevation</option>
-        <option value="Discharge">Discharge</option>
-        <option value="Water Temperature">Water Temperature</option>
-      </select>
-      <br><br>
-      <h6>Enter Start and End Dates</h6>
-      <input type="date" name="start-date" required>
-      <input type="date" name="end-date" required>
-      <input type="hidden" name="location" value="Cash SD">
-      <br><br>
-      <button type="submit">Submit</button>
-      <button type="button">Current Data</button>
-    </form>
-  </section>
-
-  <!-- Whitehorse -->
-  <section id="content13">
-    <form action="/customgaugegraph/" method="POST">
-      {% csrf_token %}
-      <h3>Whitehorse, SD</h3>
-      <select required name="data2see">
-        <option value="" disabled selected>Choose Data Point</option>
-        <option value="Gauge Height">Gauge Height</option>
-        <option value="Elevation">Elevation</option>
-        <option value="Discharge">Discharge</option>
-        <option value="Water Temperature">Water Temperature</option>
-      </select>
-      <br><br>
-      <h6>Enter Start and End Dates</h6>
-      <input type="date" name="start-date" required>
-      <input type="date" name="end-date" required>
-      <input type="hidden" name="location" value="Whitehorse SD">
-      <br><br>
-      <button type="submit">Submit</button>
-      <button type="button">Current Data</button>
-    </form>
-  </section>
-
-</main>
-</div>
+  </script>
 </body>
 </html>
-
