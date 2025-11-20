@@ -43,12 +43,12 @@ urlpatterns = [
     path('register/', register),
     path('contactus/', contactus, name='contactus'),
 
-    #Login disabled for MVP
-    """path('signup', signup, name='signup'),
-    path('signin', signin, name='signin'),
-    path('signout', signout, name='signout'),
-    path('favorites/', favorites, name='favorites'),
-    path('login/', login, name='login'),"""
+    # Login routes disabled for MVP — keep as comments so they can be re-enabled later
+    # path('signup', signup, name='signup'),
+    # path('signin', signin, name='signin'),
+    # path('signout', signout, name='signout'),
+    # path('favorites/', favorites, name='favorites'),
+    # path('login/', login, name='login'),
     #path("accounts/", include("django.contrib.auth.urls"))
 ]
 
