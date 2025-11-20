@@ -41,13 +41,15 @@ urlpatterns = [
     path('forecast/', forecast),
     path('about/', about),
     path('register/', register),
-    path('signup', signup, name='signup'),
+    path('contactus/', contactus, name='contactus'),
+
+    #Login disabled for MVP
+    """path('signup', signup, name='signup'),
     path('signin', signin, name='signin'),
     path('signout', signout, name='signout'),
     path('favorites/', favorites, name='favorites'),
-    path('login/', login, name='login'),
-    path('contactus/', contactus, name='contactus'),
-    path("accounts/", include("django.contrib.auth.urls"))
+    path('login/', login, name='login'),"""
+    #path("accounts/", include("django.contrib.auth.urls"))
 ]
 
 urlpatterns += staticfiles_urlpatterns()
