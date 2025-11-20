@@ -133,83 +133,45 @@ def main(num_days: int = 30):
     conn.close()
     print("All updates and table generation complete.")
 
+def get_last_date(conn, table: str, location: str, column: str):
+    """
+    Return the most recent datetime for a given (table, location, column) as a datetime.datetime,
+    or None if no value exists. Handles several common timestamp string formats safely.
+    """
+    curr = conn.cursor()
+    try:
+        curr.execute(
+            f"SELECT MAX(datetime) FROM {table} WHERE location=? AND {column} IS NOT NULL",
+            (location,),
+        )
+        row = curr.fetchone()
+        if not row or not row[0]:
+            return None
+
+        ts = row[0]
+        # parse timestamp robustly
+        from datetime import datetime
+
+        # Try ISO first (handles 'YYYY-MM-DD' and 'YYYY-MM-DD HH:MM:SS' and trailing Z)
+        try:
+            return datetime.fromisoformat(ts.replace("Z", "+00:00"))
+        except Exception:
+            pass
+
+        # Try common formats
+        for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%d"):
+            try:
+                return datetime.strptime(ts, fmt)
+            except Exception:
+                continue
+
+        # If parsing fails, return None (caller should handle)
+        return None
+
+    except Exception as e:
+        # Keep this simple and visible in logs/output
+        print(f"get_last_date error querying {table}.{column} for {location}: {e}")
+        return None
 
 if __name__ == "__main__":
     main(num_days=30)
-
-
-
-"""
-
-
-
-from services.backend.datasources.manager import DataSourceManager
-from services.backend.sqlclasses import _get_db_connection as get_connection
-from services.backend.datasources.config import LOCATION_TO_TABLE, TABLE_SCHEMAS
-from datetime import datetime, timedelta
-import csv
-import os
-
-LOG_FILE = "update_audit_log.csv"
-
-def get_last_date(conn, table, location, column):
-    curr = conn.cursor()
-    curr.execute(f"SELECT MAX(datetime) FROM {table} WHERE location=? AND {column} IS NOT NULL", (location,))
-    row = curr.fetchone()
-    if row and row[0]:
-        return datetime.fromisoformat(row[0])
-    return None
-
-def log_update(source, location, dataset, start_date, end_date, record_count):
-    file_exists = os.path.exists(LOG_FILE)
-    with open(LOG_FILE, "a", newline="") as csvfile:
-        writer = csv.writer(csvfile)
-        if not file_exists:
-            writer.writerow(["timestamp", "source", "location", "dataset", "start_date", "end_date", "records"])
-        writer.writerow([datetime.now().isoformat(), source, location, dataset, start_date.isoformat(), end_date.isoformat(), record_count])
-
-def main():
-    manager = DataSourceManager()
-    conn, _ = get_connection()
-    
-    sources = manager.sources.keys()
-    locations_map = manager.location_sets
-    today = datetime.today()
-    
-    for source in sources:
-        data_source = manager.get_source(source)
-        for location in locations_map.get(source, []):
-            table = LOCATION_TO_TABLE.get(location)
-            if not table:
-                continue
-            if table not in TABLE_SCHEMAS:
-                continue
-            
-            if hasattr(data_source, "datasets"):
-                dataset_names = list(data_source.datasets.values())
-            elif hasattr(data_source, "dataset_map"):
-                dataset_names = list(data_source.dataset_map.keys())
-            else:
-                dataset_names = []
-            
-            for dataset in dataset_names:
-                sql_field = data_source.datasets.get(dataset) if hasattr(data_source, "datasets") else dataset
-                last_date = get_last_date(conn, table, location, sql_field)
-                start_date = last_date + timedelta(days=1) if last_date else today - timedelta(days=30)
-                
-                start_dict = {"year": start_date.strftime("%Y"), "month": start_date.strftime("%m"), "day": start_date.strftime("%d")}
-                end_dict = {"year": today.strftime("%Y"), "month": today.strftime("%m"), "day": today.strftime("%d")}
-                
-                # Pull data and store in SQL
-                times, values = data_source.pull_all(start_dict, end_dict)
-                
-                # Log the update
-                record_count = len(times) if times else 0
-                log_update(source, location, dataset, start_date, today, record_count)
-    
-    conn.close()
-
-if __name__ == "__main__":
-    main()
-
-"""

@@ -1,5 +1,5 @@
 import requests
-from base2 import DataSource
+from backend.datasources.base2 import DataSource
 import json
 from datetime import datetime
 import pandas as pd
