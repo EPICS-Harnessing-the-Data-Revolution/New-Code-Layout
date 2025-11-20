@@ -1,4 +1,54 @@
+# Python
 *pycache*
-env
 *.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+*.egg
+*.egg-info
+dist/
+build/
+env/
+venv/
+ENV/
+.Python
+
+# Database
 db.sqlite3
+*.db
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+config/info.py
+secrets.json
+*.key
+*.pem
+.secret
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+data_pull.log
+
+# Django
+staticfiles/
+media/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
