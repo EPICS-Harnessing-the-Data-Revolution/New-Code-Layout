@@ -114,43 +114,29 @@ def updateDictionary(
             if isinstance(timestamp, datetime):
                 formatted_time = timestamp.strftime("%Y-%m-%d %H:%M:%S")
             elif isinstance(timestamp, str):
-                # Attempt to parse and reformat if it's a string, assuming ISO or similar format
-                formatted_time = None
+                # Attempt to parse and reformat if it's a string, trying ISO first then common formats
+                parsed = False
+                # try ISO format (handles trailing 'Z' -> UTC)
                 try:
-                    # Try ISO format first (handles 'Z' for UTC)
-                    dt_obj = datetime.fromisoformat(
-                        timestamp.replace("Z", "+00:00")
-                    )
+                    dt_obj = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
                     formatted_time = dt_obj.strftime("%Y-%m-%d %H:%M:%S")
+                    parsed = True
                 except ValueError:
-                    try:
-                        # Try parsing common formats like "YYYY-MM-DD HH:MM" or "YYYY-MM-DD HH:MM:SS"
-                        # Handle format without seconds (NDMES format)
-                        if len(timestamp) == 16:  # "YYYY-MM-DD HH:MM"
-                            dt_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M")
+                    # try a few common datetime string formats
+                    for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%d"):
+                        try:
+                            dt_obj = datetime.strptime(timestamp, fmt)
+                            # normalize to full datetime string with seconds
                             formatted_time = dt_obj.strftime("%Y-%m-%d %H:%M:%S")
-                        elif len(timestamp) == 19:  # "YYYY-MM-DD HH:MM:SS"
-                            dt_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
-                            formatted_time = dt_obj.strftime("%Y-%m-%d %H:%M:%S")
-                        else:
-                            # Try strptime with common formats
-                            for fmt in ["%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M"]:
-                                try:
-                                    dt_obj = datetime.strptime(timestamp, fmt)
-                                    formatted_time = dt_obj.strftime("%Y-%m-%d %H:%M:%S")
-                                    break
-                                except ValueError:
-                                    continue
-                    except (ValueError, NameError):
-                        # If all parsing fails, assume it's already in the desired format or log a warning
-                        logger.warning(
-                            f"Could not parse timestamp string '{timestamp}'. Assuming 'YYYY-MM-DD HH:MM:SS' format."
-                        )
-                        # If it looks like it might be missing seconds, add them
-                        if len(timestamp) == 16 and timestamp.count(":") == 1:
-                            formatted_time = timestamp + ":00"
-                        else:
-                            formatted_time = timestamp  # Use as is, hoping it's correct
+                            parsed = True
+                            break
+                        except ValueError:
+                            continue
+                if not parsed:
+                    logger.warning(
+                        f"Could not parse timestamp string '{timestamp}'. Assuming 'YYYY-MM-DD HH:MM:SS' format."
+                    )
+                    formatted_time = timestamp  # Use as is
             else:
                 logger.warning(
                     f"Unsupported timestamp type '{type(timestamp)}'. Skipping record."
