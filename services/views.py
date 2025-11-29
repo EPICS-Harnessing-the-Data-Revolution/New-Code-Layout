@@ -190,7 +190,78 @@ def maptabs(request):
     if conn:
         conn.close()
 
-    return render(request, 'HTML/maptabs.html', {'location_options_json': json.dumps(location_options)})
+    # Also scan static/graphs for available generated HTML graphs so the page
+    # can display latest-available dates per metric without needing a separate
+    # static JSON file.
+    from django.templatetags.static import static
+
+    graphs_dir = os.path.join(settings.BASE_DIR, 'static', 'graphs')
+    graph_index = {}
+    try:
+        files = os.listdir(graphs_dir)
+    except Exception:
+        files = []
+
+    # helper: normalize
+    def norm(s):
+        return ''.join((s or '').lower().split())
+
+    # parse filenames for metric and end-date token
+    for fn in files:
+        if not fn.lower().endswith('.html'):
+            continue
+        stem = fn[:-5]
+        # try double-underscore pattern: source__Location__metric__date...
+        if '__' in stem:
+            parts = stem.split('__')
+            if len(parts) >= 3:
+                location = parts[1].replace('_', ' ').strip()
+                metric = parts[2].replace('_', ' ').strip()
+            else:
+                continue
+        else:
+            # try ' at ' human readable: '<metric> at <Location>'
+            atm = re.split(r"\s+at\s+", stem, flags=re.IGNORECASE)
+            if len(atm) >= 2:
+                location = atm[-1].replace('_', ' ').strip()
+                metric = ' at '.join(atm[:-1]).replace('_', ' ').strip()
+            else:
+                # fallback: skip if we cannot determine location
+                continue
+
+        # match location against our known locations list (template uses Title-case names)
+        for loc in location_options.keys():
+            if norm(loc) == norm(location) or norm(loc) in norm(location):
+                # find date token (try patterns like 20240814_20240904 or single 20240814)
+                latest = None
+                m = re.search(r"(\d{6,8})_(\d{6,8})_interactive", fn)
+                if m:
+                    end = m.group(2)
+                    if len(end) == 8:
+                        latest = f"{end[0:4]}-{end[4:6]}-{end[6:8]}"
+                else:
+                    m2 = re.search(r"(\d{8})_interactive", fn)
+                    if m2:
+                        d = m2.group(1)
+                        latest = f"{d[0:4]}-{d[4:6]}-{d[6:8]}"
+
+                entry = graph_index.setdefault(loc, {})
+                metrics = entry.setdefault('metrics', {})
+                lst = metrics.setdefault(metric.title(), [])
+                lst.append(fn)
+                # store/upgrade latest
+                if latest:
+                    cur = entry.setdefault('latest', {})
+                    prev = cur.get(metric.title())
+                    if not prev or latest > prev:
+                        cur[metric.title()] = latest
+                break
+
+    # expose graph_index JSON to template for immediate client-side use
+    return render(request, 'HTML/maptabs.html', {
+        'location_options_json': json.dumps(location_options),
+        'graph_index_json': json.dumps(graph_index)
+    })
 
 
 def _normalize_posted_location(loc: str) -> str:

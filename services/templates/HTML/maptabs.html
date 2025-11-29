@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="{% static 'css/maptabs.css' %}">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
-
+  
   <style>
     :root {
       --bg-page: #f5f7fc;
@@ -821,7 +821,10 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    // Server-injected graph index (scanned each request by maptabs view)
+    window.graphIndex = {{ graph_index_json|default:'{}'|safe }};
+
+    document.addEventListener('DOMContentLoaded', async () => {
       const today = new Date(); today.setHours(0,0,0,0);
 
       const normDate = v => {
@@ -1201,6 +1204,98 @@ function renderHtmlIntoSlot(slot, html) {
           }
         });
       }
+
+      // Use server-injected graph index and update forms
+      function updateFormsFromIndex() {
+        try {
+          const index = window.graphIndex || {};
+
+          document.querySelectorAll('section form[action="/customgaugegraph/"]').forEach(form => {
+            const locInput = form.querySelector('input[name="location"]');
+            const select = form.querySelector('select[name="data2see"]');
+            if (!locInput || !select) return;
+
+            // Normalize location key used in index (strip trailing ND/SD)
+            const locKey = (locInput.value || '').replace(/\s+(ND|SD)$/i, '').trim();
+            const info = index[locKey];
+            if (!info || !info.metrics) {
+              // show small notice if there are no graphs for this location
+              let el = form.querySelector('.nodata-indicator');
+              if (!el) {
+                el = document.createElement('p');
+                el.className = 'nodata-indicator';
+                el.style.cssText = 'margin-top:6px;color:#b91c1c;font-weight:600;';
+                select.insertAdjacentElement('afterend', el);
+              }
+              el.textContent = 'No historical graphs available for this location.';
+              return;
+            }
+
+            const metrics = Object.keys(info.metrics || {});
+            const existingValues = Array.from(select.options).map(o => o.value);
+
+            // Add any missing metric options
+            metrics.forEach(m => {
+              const found = existingValues.find(ev => ev.toLowerCase() === m.toLowerCase());
+              if (!found) {
+                const opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = m;
+                select.appendChild(opt);
+              }
+            });
+
+            // Attach last-updated metadata to options by scanning filenames
+            const metricFiles = info.metrics || {};
+            Object.entries(metricFiles).forEach(([metric, files]) => {
+              let maxDate = null;
+              files.forEach(fn => {
+                // look for patterns like YYYYMMDD_YYYYMMDD_interactive
+                const m = fn.match(/(\d{6,8})_(\d{6,8})_interactive/i);
+                if (m) {
+                  const end = m[2];
+                  if (end.length === 8) {
+                    const dstr = `${end.slice(0,4)}-${end.slice(4,6)}-${end.slice(6,8)}`;
+                    if (!maxDate || dstr > maxDate) maxDate = dstr;
+                  }
+                } else {
+                  // try single date token
+                  const m2 = fn.match(/(\d{8})_interactive/);
+                  if (m2) {
+                    const d = m2[1];
+                    const dstr = `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}`;
+                    if (!maxDate || dstr > maxDate) maxDate = dstr;
+                  }
+                }
+              });
+
+              const opt = Array.from(select.options)
+                .find(o => o.value.toLowerCase() === metric.toLowerCase());
+              if (opt && maxDate) opt.dataset.lastUpdated = maxDate;
+            });
+
+            // show a small note about last-updated for the selected metric
+            let note = form.querySelector('.graph-last-updated');
+            if (!note) {
+              note = document.createElement('p');
+              note.className = 'graph-last-updated';
+              note.style.cssText = 'margin-top:6px;font-size:0.9rem;color:#374151;';
+              select.insertAdjacentElement('afterend', note);
+            }
+            function updateNote() {
+              const sel = select.value;
+              const opt = Array.from(select.options).find(o => o.value.toLowerCase() === sel.toLowerCase());
+              note.textContent = opt && opt.dataset.lastUpdated ? `Last graph update: ${opt.dataset.lastUpdated}` : '';
+            }
+            select.addEventListener('change', updateNote);
+            updateNote();
+          });
+        } catch (err) {
+          console.warn('Could not process graph index', err);
+        }
+      }
+
+      updateFormsFromIndex();
 
       document
         .querySelectorAll('section form[action="/customgaugegraph/"]')
