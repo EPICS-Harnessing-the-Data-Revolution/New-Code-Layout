@@ -77,6 +77,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'standingrock-demo'
+          app-name: 'standingrock-dashboard'
           slot-name: 'Production'
 
