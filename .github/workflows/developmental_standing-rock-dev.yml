@@ -78,7 +78,9 @@ jobs:
         with:
           app-name: 'standing-rock-dev'
           slot-name: 'Production'
+          package: .
 
           
+
 
 

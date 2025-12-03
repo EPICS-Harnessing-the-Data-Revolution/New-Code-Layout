@@ -27,25 +27,70 @@ def find_repo_root(start_dir, repo_name="New-Code-Layout"):
             return None
         current = parent
 
-def find_database(repo_root, db_name="Measurements.db"):
-    """Search for Measurements.db in the repo root."""
-    db_path = os.path.join(repo_root, db_name)
-    if os.path.exists(db_path):
-        return db_path
-    return None
+def find_database_candidate_paths():
+    """
+    Return a list of candidate paths where Measurements.db might live.
+    We try (in order):
+
+    1. MEASUREMENTS_DB_PATH env var (if set)
+    2. Django settings.BASE_DIR / Measurements.db (if Django is loaded)
+    3. Repo root detected by walking up from SCRIPT_DIR
+    4. SCRIPT_DIR's parent / Measurements.db
+    """
+    candidates = []
+
+    # 1) Explicit env override
+    env_db = os.environ.get("MEASUREMENTS_DB_PATH")
+    if env_db:
+        candidates.append(env_db)
+
+    # 2) Django BASE_DIR if available
+    try:
+        from django.conf import settings
+        base_dir = getattr(settings, "BASE_DIR", None)
+        if base_dir is not None:
+            candidates.append(os.path.join(str(base_dir), "Measurements.db"))
+    except Exception:
+        # Not running inside Django or settings not configured yet
+        pass
+
+    # 3) Repo root (if we can find it by name)
+    repo_root = find_repo_root(SCRIPT_DIR)
+    if repo_root:
+        candidates.append(os.path.join(repo_root, "Measurements.db"))
+
+    # 4) Parent of SCRIPT_DIR
+    parent_dir = os.path.dirname(SCRIPT_DIR)
+    candidates.append(os.path.join(parent_dir, "Measurements.db"))
+
+    return candidates
+
 
 # --- Locate repository root ---
-REPO_ROOT = find_repo_root(SCRIPT_DIR)
-if not REPO_ROOT:
-    print("ERROR: Could not determine repository root.")
-    sys.exit(1)
+repo_root = find_repo_root(SCRIPT_DIR)
+if repo_root:
+    REPO_ROOT = repo_root
+else:
+    try:
+        from django.conf import settings
+        REPO_ROOT = getattr(settings, "BASE_DIR", SCRIPT_DIR)
+    except Exception:
+        REPO_ROOT = SCRIPT_DIR
+    print(f"[custom_graph] WARNING: repo root not found, using BASE_DIR/fallback: {REPO_ROOT}")
 
-DB_PATH = find_database(REPO_ROOT)
-if not DB_PATH:
-    print(f"ERROR: Could not find Measurements.db at repo root: {REPO_ROOT}")
-    sys.exit(1)
 
-print(f"\nFound database at: {DB_PATH}")
+
+DB_PATH = None
+for candidate in find_database_candidate_paths():
+    if candidate and os.path.exists(candidate):
+        DB_PATH = candidate
+        break
+
+if DB_PATH:
+    print(f"[custom_graph] Using database at: {DB_PATH}")
+else:
+    print("[custom_graph] WARNING: Measurements.db not found at import time. "
+          "Functions that require DB_PATH will fail until it is set.")
 
 # -----------------------
 # Helper functions
@@ -337,6 +382,11 @@ def main():
     For tables that include a 'location' column, produce one HTML file per (location, column).
     Otherwise produce one file per (table, column).
     """
+    if not DB_PATH:
+        print("[custom_graph] ERROR: DB_PATH is not set. "
+              "Set MEASUREMENTS_DB_PATH or ensure Measurements.db exists under BASE_DIR/repo root.")
+        return
+
     conn = sqlite3.connect(DB_PATH)
 
     # default 30-day window relative to now
