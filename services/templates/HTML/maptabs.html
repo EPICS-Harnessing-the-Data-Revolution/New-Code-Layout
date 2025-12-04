@@ -5,8 +5,7 @@
   {% load static %}
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
+  
   <style>
     :root{
       --bg-page:#f6f8fc;
@@ -210,514 +209,86 @@
       <input id="tab12" type="radio" name="tabs"><label for="tab12">Cash</label>
       <input id="tab13" type="radio" name="tabs"><label for="tab13">Whitehorse</label>
     </div>
+    
+    <!-- Reusable custom-location card -->
+    <div style="margin:12px 0;">
+      <form id="custom-location-form" class="location-form" method="POST" action="#">
+        {% csrf_token %}
+        <h3>Custom Location</h3>
 
-      <!-- Sections are wrapped in a sibling container so the ~ selector can target inside it -->
-      <div class="sections">
-        {% comment %} ---------- ONE SECTION TEMPLATE (repeat for all stations) ---------- {% endcomment %}
+        <div>
+          <div class="field-label">Location</div>
+          <select id="custom-location-select" required>
+            <option value="" disabled selected>Select location</option>
+            {% for entry in location_entries %}
+              <option value="{{ entry.location }}" data-endpoint="{{ entry.endpoint }}" data-inputname="{{ entry.input_name|default:'location' }}">{{ entry.location }}</option>
+            {% endfor %}
+          </select>
+        </div>
 
-        <!-- Hazen -->
-        <section id="content1">
-          <div class="card">
-            <h3 class="station-title">Hazen, ND</h3>
-            <form class="form-grid" action="/customgaugegraph/" method="POST">
-              {% csrf_token %}
+        <div>
+          <div class="field-label">Data Type</div>
+          <select name="data2see" required>
+            <option value="" disabled selected>Choose Data Point</option>
+          </select>
+        </div>
 
-              <div class="field">
-                <label class="label">Data Type</label>
-                <select name="data2see" class="control" required>
-                  <option value="" disabled selected>Choose Data Point</option>
-                  <option>Gauge Height</option><option>Elevation</option><option>Discharge</option><option>Water Temperature</option>
-                </select>
-              </div>
-
-              <div class="field"><label class="label">Start Date</label><input type="date" name="start-date" class="control" max="" required></div>
-              <div class="field"><label class="label">End Date</label>  <input type="date" name="end-date"   class="control" max="" required></div>
-
-              <div class="quick-row">
-                <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
-                <button type="button" class="chip" data-range="7d">Last 7 days</button>
-                <button type="button" class="chip" data-range="30d">Last 30 days</button>
-                <button type="button" class="chip" data-range="ytd">YTD</button>
-                <button type="button" class="chip" data-range="1y">Last 1 year</button>
-                <button type="button" class="chip" data-range="clear">Clear</button>
-              </div>
-
-              <input type="hidden" name="location" value="Hazen ND">
-
-              <div class="messages" aria-live="polite">
-                <div class="alert error date-error"></div>
-                <div class="alert info nodata-error"></div>
-                <div class="alert error server-error"></div>
-              </div>
-
-              <div class="actions">
-                <button class="btn btn-primary" type="submit">Submit</button>
-                <button class="btn btn-ghost" type="button" data-current>Current Data</button>
-              </div>
-            </form>
+        <div class="date-row">
+          <div>
+            <div class="field-label">Start Date</div>
+            <input type="date" name="start-date" required value="{{ default_start }}">
           </div>
-          <div class="graph-card"><div class="graph-loading">Choose a range and press <b>Submit</b>.</div></div>
-        </section>
-
-        <!-- Stanton -->
-        <section id="content2">
-          <div class="card">
-            <h3 class="station-title">Stanton, ND</h3>
-            <form class="form-grid" action="/customgaugegraph/" method="POST">
-              {% csrf_token %}
-              <div class="field"><label class="label">Data Type</label>
-                <select name="data2see" class="control" required>
-                  <option value="" disabled selected>Choose Data Point</option>
-                  <option>Gauge Height</option><option>Elevation</option><option>Discharge</option><option>Water Temperature</option>
-                </select>
-              </div>
-              <div class="field"><label class="label">Start Date</label><input type="date" name="start-date" class="control" max="" required></div>
-              <div class="field"><label class="label">End Date</label>  <input type="date" name="end-date"   class="control" max="" required></div>
-
-              <div class="quick-row">
-                <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
-                <button type="button" class="chip" data-range="7d">Last 7 days</button>
-                <button type="button" class="chip" data-range="30d">Last 30 days</button>
-                <button type="button" class="chip" data-range="ytd">YTD</button>
-                <button type="button" class="chip" data-range="1y">Last 1 year</button>
-                <button type="button" class="chip" data-range="clear">Clear</button>
-              </div>
-
-              <input type="hidden" name="location" value="Stanton ND">
-              <div class="messages" aria-live="polite">
-                <div class="alert error date-error"></div>
-                <div class="alert info nodata-error"></div>
-                <div class="alert error server-error"></div>
-              </div>
-
-              <div class="actions">
-                <button class="btn btn-primary" type="submit">Submit</button>
-                <button class="btn btn-ghost" type="button" data-current>Current Data</button>
-              </div>
-            </form>
+          <div>
+            <div class="field-label">End Date</div>
+            <input type="date" name="end-date" required value="{{ default_end }}">
           </div>
-          <div class="graph-card"><div class="graph-loading">Ready.</div></div>
-        </section>
+        </div>
 
-        <!-- Washburn -->
-        <section id="content3">
-          <div class="card">
-            <h3 class="station-title">Washburn, ND</h3>
-            <form class="form-grid" action="/customgaugegraph/" method="POST">
-              {% csrf_token %}
-              <div class="field"><label class="label">Data Type</label>
-                <select name="data2see" class="control" required>
-                  <option value="" disabled selected>Choose Data Point</option>
-                  <option>Gauge Height</option><option>Elevation</option><option>Discharge</option><option>Water Temperature</option>
-                </select>
-              </div>
-              <div class="field"><label class="label">Start Date</label><input type="date" name="start-date" class="control" max="" required></div>
-              <div class="field"><label class="label">End Date</label>  <input type="date" name="end-date"   class="control" max="" required></div>
+        <input type="hidden" name="location" value="">
 
-              <div class="quick-row">
-                <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
-                <button type="button" class="chip" data-range="7d">Last 7 days</button>
-                <button type="button" class="chip" data-range="30d">Last 30 days</button>
-                <button type="button" class="chip" data-range="ytd">YTD</button>
-                <button type="button" class="chip" data-range="1y">Last 1 year</button>
-                <button type="button" class="chip" data-range="clear">Clear</button>
-              </div>
-
-              <input type="hidden" name="location" value="Washburn ND">
-              <div class="messages" aria-live="polite">
-                <div class="alert error date-error"></div>
-                <div class="alert info nodata-error"></div>
-                <div class="alert error server-error"></div>
-              </div>
-
-              <div class="actions">
-                <button class="btn btn-primary" type="submit">Submit</button>
-                <button class="btn btn-ghost" type="button" data-current>Current Data</button>
-              </div>
-            </form>
-          </div>
-          <div class="graph-card"><div class="graph-loading">Ready.</div></div>
-        </section>
-
-        <!-- Price -->
-        <section id="content4">
-          <div class="card">
-            <h3 class="station-title">Price, ND</h3>
-            <form class="form-grid" action="/customgaugegraph/" method="POST">
-              {% csrf_token %}
-              <div class="field"><label class="label">Data Type</label>
-                <select name="data2see" class="control" required>
-                  <option value="" disabled selected>Choose Data Point</option>
-                  <option>Gauge Height</option><option>Elevation</option><option>Discharge</option><option>Water Temperature</option>
-                </select>
-              </div>
-              <div class="field"><label class="label">Start Date</label><input type="date" name="start-date" class="control" max="" required></div>
-              <div class="field"><label class="label">End Date</label>  <input type="date" name="end-date"   class="control" max="" required></div>
-
-              <div class="quick-row">
-                <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
-                <button type="button" class="chip" data-range="7d">Last 7 days</button>
-                <button type="button" class="chip" data-range="30d">Last 30 days</button>
-                <button type="button" class="chip" data-range="ytd">YTD</button>
-                <button type="button" class="chip" data-range="1y">Last 1 year</button>
-                <button type="button" class="chip" data-range="clear">Clear</button>
-              </div>
-
-              <input type="hidden" name="location" value="Price ND">
-              <div class="messages" aria-live="polite">
-                <div class="alert error date-error"></div>
-                <div class="alert info nodata-error"></div>
-                <div class="alert error server-error"></div>
-              </div>
-
-              <div class="actions"><button class="btn btn-primary" type="submit">Submit</button><button class="btn btn-ghost" type="button" data-current>Current Data</button></div>
-            </form>
-          </div>
-          <div class="graph-card"><div class="graph-loading">Ready.</div></div>
-        </section>
-
-        <!-- Bismarck -->
-        <section id="content5">
-          <div class="card">
-            <h3 class="station-title">Bismarck, ND</h3>
-            <form class="form-grid" action="/customgaugegraph/" method="POST">
-              {% csrf_token %}
-              <div class="field"><label class="label">Data Type</label>
-                <select name="data2see" class="control" required>
-                  <option value="" disabled selected>Choose Data Point</option>
-                  <option>Gauge Height</option><option>Elevation</option><option>Discharge</option><option>Water Temperature</option>
-                </select>
-              </div>
-              <div class="field"><label class="label">Start Date</label><input type="date" name="start-date" class="control" max="" required></div>
-              <div class="field"><label class="label">End Date</label>  <input type="date" name="end-date"   class="control" max="" required></div>
-
-              <div class="quick-row">
-                <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
-                <button type="button" class="chip" data-range="7d">Last 7 days</button>
-                <button type="button" class="chip" data-range="30d">Last 30 days</button>
-                <button type="button" class="chip" data-range="ytd">YTD</button>
-                <button type="button" class="chip" data-range="1y">Last 1 year</button>
-                <button type="button" class="chip" data-range="clear">Clear</button>
-              </div>
-
-              <input type="hidden" name="location" value="Bismarck ND">
-              <div class="messages" aria-live="polite">
-                <div class="alert error date-error"></div>
-                <div class="alert info nodata-error"></div>
-                <div class="alert error server-error"></div>
-              </div>
-
-              <div class="actions"><button class="btn btn-primary" type="submit">Submit</button><button class="btn btn-ghost" type="button" data-current>Current Data</button></div>
-            </form>
-          </div>
-          <div class="graph-card"><div class="graph-loading">Ready.</div></div>
-        </section>
-
-        <!-- Schmidt -->
-        <section id="content6">
-          <div class="card">
-            <h3 class="station-title">Schmidt, ND</h3>
-            <form class="form-grid" action="/customgaugegraph/" method="POST">
-              {% csrf_token %}
-              <div class="field"><label class="label">Data Type</label>
-                <select name="data2see" class="control" required>
-                  <option value="" disabled selected>Choose Data Point</option>
-                  <option>Gauge Height</option><option>Elevation</option><option>Discharge</option><option>Water Temperature</option>
-                </select>
-              </div>
-              <div class="field"><label class="label">Start Date</label><input type="date" name="start-date" class="control" max="" required></div>
-              <div class="field"><label class="label">End Date</label>  <input type="date" name="end-date"   class="control" max="" required></div>
-
-              <div class="quick-row">
-                <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
-                <button type="button" class="chip" data-range="7d">Last 7 days</button>
-                <button type="button" class="chip" data-range="30d">Last 30 days</button>
-                <button type="button" class="chip" data-range="ytd">YTD</button>
-                <button type="button" class="chip" data-range="1y">Last 1 year</button>
-                <button type="button" class="chip" data-range="clear">Clear</button>
-              </div>
-
-              <input type="hidden" name="location" value="Schmidt ND">
-              <div class="messages" aria-live="polite">
-                <div class="alert error date-error"></div>
-                <div class="alert info nodata-error"></div>
-                <div class="alert error server-error"></div>
-              </div>
-
-              <div class="actions"><button class="btn btn-primary" type="submit">Submit</button><button class="btn btn-ghost" type="button" data-current>Current Data</button></div>
-            </form>
-          </div>
-          <div class="graph-card"><div class="graph-loading">Ready.</div></div>
-        </section>
-
-        <!-- Judson -->
-        <section id="content7">
-          <div class="card">
-            <h3 class="station-title">Judson, ND</h3>
-            <form class="form-grid" action="/customgaugegraph/" method="POST">
-              {% csrf_token %}
-              <div class="field"><label class="label">Data Type</label>
-                <select name="data2see" class="control" required>
-                  <option value="" disabled selected>Choose Data Point</option>
-                  <option>Gauge Height</option><option>Elevation</option><option>Discharge</option><option>Water Temperature</option>
-                </select>
-              </div>
-              <div class="field"><label class="label">Start Date</label><input type="date" name="start-date" class="control" max="" required></div>
-              <div class="field"><label class="label">End Date</label>  <input type="date" name="end-date"   class="control" max="" required></div>
-
-              <div class="quick-row">
-                <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
-                <button type="button" class="chip" data-range="7d">Last 7 days</button>
-                <button type="button" class="chip" data-range="30d">Last 30 days</button>
-                <button type="button" class="chip" data-range="ytd">YTD</button>
-                <button type="button" class="chip" data-range="1y">Last 1 year</button>
-                <button type="button" class="chip" data-range="clear">Clear</button>
-              </div>
-
-              <input type="hidden" name="location" value="Judson ND">
-              <div class="messages" aria-live="polite">
-                <div class="alert error date-error"></div>
-                <div class="alert info nodata-error"></div>
-                <div class="alert error server-error"></div>
-              </div>
-
-              <div class="actions"><button class="btn btn-primary" type="submit">Submit</button><button class="btn btn-ghost" type="button" data-current>Current Data</button></div>
-            </form>
-          </div>
-          <div class="graph-card"><div class="graph-loading">Ready.</div></div>
-        </section>
-
-        <!-- Mandan -->
-        <section id="content8">
-          <div class="card">
-            <h3 class="station-title">Mandan, ND</h3>
-            <form class="form-grid" action="/customgaugegraph/" method="POST">
-              {% csrf_token %}
-              <div class="field"><label class="label">Data Type</label>
-                <select name="data2see" class="control" required>
-                  <option value="" disabled selected>Choose Data Point</option>
-                  <option>Gauge Height</option><option>Elevation</option><option>Discharge</option><option>Water Temperature</option>
-                </select>
-              </div>
-              <div class="field"><label class="label">Start Date</label><input type="date" name="start-date" class="control" max="" required></div>
-              <div class="field"><label class="label">End Date</label>  <input type="date" name="end-date"   class="control" max="" required></div>
-
-              <div class="quick-row">
-                <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
-                <button type="button" class="chip" data-range="7d">Last 7 days</button>
-                <button type="button" class="chip" data-range="30d">Last 30 days</button>
-                <button type="button" class="chip" data-range="ytd">YTD</button>
-                <button type="button" class="chip" data-range="1y">Last 1 year</button>
-                <button type="button" class="chip" data-range="clear">Clear</button>
-              </div>
-
-              <input type="hidden" name="location" value="Mandan ND">
-              <div class="messages" aria-live="polite">
-                <div class="alert error date-error"></div>
-                <div class="alert info nodata-error"></div>
-                <div class="alert error server-error"></div>
-              </div>
-
-              <div class="actions"><button class="btn btn-primary" type="submit">Submit</button><button class="btn btn-ghost" type="button" data-current>Current Data</button></div>
-            </form>
-          </div>
-          <div class="graph-card"><div class="graph-loading">Ready.</div></div>
-        </section>
-
-        <!-- Breien -->
-        <section id="content9">
-          <div class="card">
-            <h3 class="station-title">Breien, ND</h3>
-            <form class="form-grid" action="/customgaugegraph/" method="POST">
-              {% csrf_token %}
-              <div class="field"><label class="label">Data Type</label>
-                <select name="data2see" class="control" required>
-                  <option value="" disabled selected>Choose Data Point</option>
-                  <option>Gauge Height</option><option>Elevation</option><option>Discharge</option><option>Water Temperature</option>
-                </select>
-              </div>
-              <div class="field"><label class="label">Start Date</label><input type="date" name="start-date" class="control" max="" required></div>
-              <div class="field"><label class="label">End Date</label>  <input type="date" name="end-date"   class="control" max="" required></div>
-
-              <div class="quick-row">
-                <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
-                <button type="button" class="chip" data-range="7d">Last 7 days</button>
-                <button type="button" class="chip" data-range="30d">Last 30 days</button>
-                <button type="button" class="chip" data-range="ytd">YTD</button>
-                <button type="button" class="chip" data-range="1y">Last 1 year</button>
-                <button type="button" class="chip" data-range="clear">Clear</button>
-              </div>
-
-              <input type="hidden" name="location" value="Breien ND">
-              <div class="messages" aria-live="polite">
-                <div class="alert error date-error"></div>
-                <div class="alert info nodata-error"></div>
-                <div class="alert error server-error"></div>
-              </div>
-
-              <div class="actions"><button class="btn btn-primary" type="submit">Submit</button><button class="btn btn-ghost" type="button" data-current>Current Data</button></div>
-            </form>
-          </div>
-          <div class="graph-card"><div class="graph-loading">Ready.</div></div>
-        </section>
-
-        <!-- Wakpala -->
-        <section id="content10">
-          <div class="card">
-            <h3 class="station-title">Wakpala, SD</h3>
-            <form class="form-grid" action="/customgaugegraph/" method="POST">
-              {% csrf_token %}
-              <div class="field"><label class="label">Data Type</label>
-                <select name="data2see" class="control" required>
-                  <option value="" disabled selected>Choose Data Point</option>
-                  <option>Gauge Height</option><option>Elevation</option><option>Discharge</option><option>Water Temperature</option>
-                </select>
-              </div>
-              <div class="field"><label class="label">Start Date</label><input type="date" name="start-date" class="control" max="" required></div>
-              <div class="field"><label class="label">End Date</label>  <input type="date" name="end-date"   class="control" max="" required></div>
-
-              <div class="quick-row">
-                <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
-                <button type="button" class="chip" data-range="7d">Last 7 days</button>
-                <button type="button" class="chip" data-range="30d">Last 30 days</button>
-                <button type="button" class="chip" data-range="ytd">YTD</button>
-                <button type="button" class="chip" data-range="1y">Last 1 year</button>
-                <button type="button" class="chip" data-range="clear">Clear</button>
-              </div>
-
-              <input type="hidden" name="location" value="Wakpala SD">
-              <div class="messages" aria-live="polite">
-                <div class="alert error date-error"></div>
-                <div class="alert info nodata-error"></div>
-                <div class="alert error server-error"></div>
-              </div>
-
-              <div class="actions"><button class="btn btn-primary" type="submit">Submit</button><button class="btn btn-ghost" type="button" data-current>Current Data</button></div>
-            </form>
-          </div>
-          <div class="graph-card"><div class="graph-loading">Ready.</div></div>
-        </section>
-
-        <!-- Little Eagle -->
-        <section id="content11">
-          <div class="card">
-            <h3 class="station-title">Little Eagle, SD</h3>
-            <form class="form-grid" action="/customgaugegraph/" method="POST">
-              {% csrf_token %}
-              <div class="field"><label class="label">Data Type</label>
-                <select name="data2see" class="control" required>
-                  <option value="" disabled selected>Choose Data Point</option>
-                  <option>Gauge Height</option><option>Elevation</option><option>Discharge</option><option>Water Temperature</option>
-                </select>
-              </div>
-              <div class="field"><label class="label">Start Date</label><input type="date" name="start-date" class="control" max="" required></div>
-              <div class="field"><label class="label">End Date</label>  <input type="date" name="end-date"   class="control" max="" required></div>
-
-              <div class="quick-row">
-                <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
-                <button type="button" class="chip" data-range="7d">Last 7 days</button>
-                <button type="button" class="chip" data-range="30d">Last 30 days</button>
-                <button type="button" class="chip" data-range="ytd">YTD</button>
-                <button type="button" class="chip" data-range="1y">Last 1 year</button>
-                <button type="button" class="chip" data-range="clear">Clear</button>
-              </div>
-
-              <input type="hidden" name="location" value="Little Eagle SD">
-              <div class="messages" aria-live="polite">
-                <div class="alert error date-error"></div>
-                <div class="alert info nodata-error"></div>
-                <div class="alert error server-error"></div>
-              </div>
-
-              <div class="actions"><button class="btn btn-primary" type="submit">Submit</button><button class="btn btn-ghost" type="button" data-current>Current Data</button></div>
-            </form>
-          </div>
-          <div class="graph-card"><div class="graph-loading">Ready.</div></div>
-        </section>
-
-        <!-- Cash -->
-        <section id="content12">
-          <div class="card">
-            <h3 class="station-title">Cash, SD</h3>
-            <form class="form-grid" action="/customgaugegraph/" method="POST">
-              {% csrf_token %}
-              <div class="field"><label class="label">Data Type</label>
-                <select name="data2see" class="control" required>
-                  <option value="" disabled selected>Choose Data Point</option>
-                  <option>Gauge Height</option><option>Elevation</option><option>Discharge</option><option>Water Temperature</option>
-                </select>
-              </div>
-              <div class="field"><label class="label">Start Date</label><input type="date" name="start-date" class="control" max="" required></div>
-              <div class="field"><label class="label">End Date</label>  <input type="date" name="end-date"   class="control" max="" required></div>
-
-              <div class="quick-row">
-                <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
-                <button type="button" class="chip" data-range="7d">Last 7 days</button>
-                <button type="button" class="chip" data-range="30d">Last 30 days</button>
-                <button type="button" class="chip" data-range="ytd">YTD</button>
-                <button type="button" class="chip" data-range="1y">Last 1 year</button>
-                <button type="button" class="chip" data-range="clear">Clear</button>
-              </div>
-
-              <input type="hidden" name="location" value="Cash SD">
-              <div class="messages" aria-live="polite">
-                <div class="alert error date-error"></div>
-                <div class="alert info nodata-error"></div>
-                <div class="alert error server-error"></div>
-              </div>
-
-              <div class="actions"><button class="btn btn-primary" type="submit">Submit</button><button class="btn btn-ghost" type="button" data-current>Current Data</button></div>
-            </form>
-          </div>
-          <div class="graph-card"><div class="graph-loading">Ready.</div></div>
-        </section>
-
-        <!-- Whitehorse -->
-        <section id="content13">
-          <div class="card">
-            <h3 class="station-title">Whitehorse, SD</h3>
-            <form class="form-grid" action="/customgaugegraph/" method="POST">
-              {% csrf_token %}
-              <div class="field"><label class="label">Data Type</label>
-                <select name="data2see" class="control" required>
-                  <option value="" disabled selected>Choose Data Point</option>
-                  <option>Gauge Height</option><option>Elevation</option><option>Discharge</option><option>Water Temperature</option>
-                </select>
-              </div>
-              <div class="field"><label class="label">Start Date</label><input type="date" name="start-date" class="control" max="" required></div>
-              <div class="field"><label class="label">End Date</label>  <input type="date" name="end-date"   class="control" max="" required></div>
-
-              <div class="quick-row">
-                <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
-                <button type="button" class="chip" data-range="7d">Last 7 days</button>
-                <button type="button" class="chip" data-range="30d">Last 30 days</button>
-                <button type="button" class="chip" data-range="ytd">YTD</button>
-                <button type="button" class="chip" data-range="1y">Last 1 year</button>
-                <button type="button" class="chip" data-range="clear">Clear</button>
-              </div>
-
-              <input type="hidden" name="location" value="Whitehorse SD">
-              <div class="messages" aria-live="polite">
-                <div class="alert error date-error"></div>
-                <div class="alert info nodata-error"></div>
-                <div class="alert error server-error"></div>
-              </div>
-
-              <div class="actions"><button class="btn btn-primary" type="submit">Submit</button><button class="btn btn-ghost" type="button" data-current>Current Data</button></div>
-            </form>
-          </div>
-          <div class="graph-card"><div class="graph-loading">Ready.</div></div>
-        </section>
-
-      </div> <!-- /.sections -->
-    </div> <!-- /.tabs -->
-  </main>
+        <div class="button-row">
+          <button type="submit" class="btn btn-primary">Generate</button>
+          <button type="button" class="btn btn-ghost">Current Data</button>
+        </div>
+      </form>
+    </div>
+    
+  </div>
 
   <script>
-    // ---------- helpers ----------
-    const today = new Date(); today.setHours(0,0,0,0);
-    const toISO = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    const norm  = v => { const d=new Date(v); d.setHours(0,0,0,0); return d; };
+    // Server-injected graph index (scanned each request by maptabs view)
+    window.graphIndex = {{ graph_index_json|default:'{}'|safe }};
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const today = new Date(); today.setHours(0,0,0,0);
+
+      const normDate = v => {
+        const d = new Date(v);
+        d.setHours(0,0,0,0);
+        return d;
+      };
+
+      const isoDate = d => {
+        const y = d.getFullYear();
+        const m = String(d.getMonth()+1).padStart(2,'0');
+        const day = String(d.getDate()).padStart(2,'0');
+        return `${y}-${m}-${day}`;
+      };
+
+      // Config
+      const ENABLE_PROBE = true;
+      const TREAT_ALL_500_AS_NO_DATA = true;
+      const NO_DATA_PATTERNS = [/IndexError/i, /list index out of range/i, /moving_avg/i, /sqlclasses\.py/i];
+
+      function ensureGraphSlot(form) {
+        let slot = form.parentElement.querySelector('.graph-slot');
+        if (!slot) {
+          slot = document.createElement('div');
+          slot.className = 'graph-slot';
+          form.insertAdjacentElement('afterend', slot);
+        }
+        return slot;
+      }
 
     // Normalize all graph placeholders across sections
 document.querySelectorAll('.graph-card .graph-loading')
@@ -863,7 +434,242 @@ document.querySelectorAll('.graph-card .graph-loading')
       });
     }
 
-    document.querySelectorAll('form[action="/customgaugegraph/"]').forEach(attach);
+        form.addEventListener('submit', async (e) => {
+          if (!form.checkValidity()) { form.reportValidity(); return; }
+          if (!validateDates()) { e.preventDefault(); return; }
+
+          e.preventDefault();
+          const slot = ensureGraphSlot(form);
+          slot.innerHTML = '<div class="graph-loading">Loading graph…</div>';
+
+          const res = await probeHasData(form);
+          clearMsgs();
+
+          if (res.state === 'empty') {
+            const loc = (locationEl?.value || '').replace(/\s+(ND|SD)$/i, '');
+            slot.innerHTML = '';
+            nodataError.textContent =
+              `ℹ️ No data for "${datasetSel.value}" at ${loc} in that date range.`;
+            nodataError.style.display = 'block';
+            return;
+          }
+
+          if (res.state === 'serverError') {
+            slot.innerHTML = '';
+            serverError.textContent =
+              `⚠️ Server error while generating the graph (${res.status}).`;
+            serverError.style.display = 'block';
+            return;
+          }
+
+          if (res.state === 'networkError') {
+            slot.innerHTML = '';
+            serverError.textContent =
+              '⚠️ Network error while requesting the graph.';
+            serverError.style.display = 'block';
+            return;
+          }
+
+          if (res.state === 'hasData' && res.html) {
+            renderHtmlIntoSlot(slot, res.html);
+            return;
+          }
+
+          // Fallback: normal fetch and render
+          const action = form.getAttribute('action') || window.location.pathname;
+          const fd = new FormData(form);
+
+          try {
+            const resp = await fetch(action, {
+              method: 'POST',
+              body: new URLSearchParams(fd),
+              credentials: 'same-origin',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'X-Requested-With': 'XMLHttpRequest'
+              },
+              redirect: 'manual'
+            });
+
+            const html = await resp.text();
+            if (resp.status === 200) {
+              renderHtmlIntoSlot(slot, html);
+            } else if (resp.status >= 500 && TREAT_ALL_500_AS_NO_DATA) {
+              slot.innerHTML = '';
+              nodataError.textContent = 'ℹ️ No data for the selected range.';
+              nodataError.style.display = 'block';
+            } else {
+              slot.innerHTML = '';
+              serverError.textContent =
+                `⚠️ Could not render graph (${resp.status}).`;
+              serverError.style.display = 'block';
+            }
+          } catch (err) {
+            slot.innerHTML = '';
+            serverError.textContent =
+              '⚠️ Network error while requesting the graph.';
+            serverError.style.display = 'block';
+          }
+        });
+      }
+
+      // Use server-injected graph index and update forms
+      function updateFormsFromIndex() {
+        try {
+          const index = window.graphIndex || {};
+
+          document.querySelectorAll('section form[action="/customgaugegraph/"]').forEach(form => {
+            const locInput = form.querySelector('input[name="location"]');
+            const select = form.querySelector('select[name="data2see"]');
+            if (!locInput || !select) return;
+
+            // Normalize location key used in index (strip trailing ND/SD)
+            const locKey = (locInput.value || '').replace(/\s+(ND|SD)$/i, '').trim();
+            const info = index[locKey];
+            if (!info || !info.metrics) {
+              // show small notice if there are no graphs for this location
+              let el = form.querySelector('.nodata-indicator');
+              if (!el) {
+                el = document.createElement('p');
+                el.className = 'nodata-indicator';
+                el.style.cssText = 'margin-top:6px;color:#b91c1c;font-weight:600;';
+                select.insertAdjacentElement('afterend', el);
+              }
+              el.textContent = 'No historical graphs available for this location.';
+              return;
+            }
+
+            const metrics = Object.keys(info.metrics || {});
+            const existingValues = Array.from(select.options).map(o => o.value);
+
+            // Add any missing metric options
+            metrics.forEach(m => {
+              const found = existingValues.find(ev => ev.toLowerCase() === m.toLowerCase());
+              if (!found) {
+                const opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = m;
+                select.appendChild(opt);
+              }
+            });
+
+            // Attach last-updated metadata to options by scanning filenames
+            const metricFiles = info.metrics || {};
+            Object.entries(metricFiles).forEach(([metric, files]) => {
+              let maxDate = null;
+              files.forEach(fn => {
+                // look for patterns like YYYYMMDD_YYYYMMDD_interactive
+                const m = fn.match(/(\d{6,8})_(\d{6,8})_interactive/i);
+                if (m) {
+                  const end = m[2];
+                  if (end.length === 8) {
+                    const dstr = `${end.slice(0,4)}-${end.slice(4,6)}-${end.slice(6,8)}`;
+                    if (!maxDate || dstr > maxDate) maxDate = dstr;
+                  }
+                } else {
+                  // try single date token
+                  const m2 = fn.match(/(\d{8})_interactive/);
+                  if (m2) {
+                    const d = m2[1];
+                    const dstr = `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}`;
+                    if (!maxDate || dstr > maxDate) maxDate = dstr;
+                  }
+                }
+              });
+
+              const opt = Array.from(select.options)
+                .find(o => o.value.toLowerCase() === metric.toLowerCase());
+              if (opt && maxDate) opt.dataset.lastUpdated = maxDate;
+            });
+
+            // show a small note about last-updated for the selected metric
+            let note = form.querySelector('.graph-last-updated');
+            if (!note) {
+              note = document.createElement('p');
+              note.className = 'graph-last-updated';
+              note.style.cssText = 'margin-top:6px;font-size:0.9rem;color:#374151;';
+              select.insertAdjacentElement('afterend', note);
+            }
+            function updateNote() {
+              const sel = select.value;
+              const opt = Array.from(select.options).find(o => o.value.toLowerCase() === sel.toLowerCase());
+              note.textContent = opt && opt.dataset.lastUpdated ? `Last graph update: ${opt.dataset.lastUpdated}` : '';
+            }
+            select.addEventListener('change', updateNote);
+            updateNote();
+          });
+        } catch (err) {
+          console.warn('Could not process graph index', err);
+        }
+      }
+
+      updateFormsFromIndex();
+
+      document
+        .querySelectorAll('section form[action="/customgaugegraph/"]')
+        .forEach(attachHandlers);
+
+      // Wire the reusable custom-location form to pick endpoint and input name
+      (function wireCustomForm() {
+        const customForm = document.getElementById('custom-location-form');
+        if (!customForm) return;
+
+        const locSelect = document.getElementById('custom-location-select');
+        const hiddenLoc = customForm.querySelector('input[type="hidden"][name="location"]');
+        const dataSel = customForm.querySelector('select[name="data2see"]');
+        const currentBtn = Array.from(customForm.querySelectorAll('button'))
+          .find(b => /current\s*data/i.test(b.textContent || ''));
+
+        function populateMetricsForLoc(locKey) {
+          // clear existing options
+          dataSel.innerHTML = '<option value="" disabled selected>Choose Data Point</option>';
+          try {
+            const index = window.graphIndex || {};
+            const info = index[locKey] || null;
+            if (info && info.metrics) {
+              Object.keys(info.metrics).forEach(m => {
+                const opt = document.createElement('option'); opt.value = m; opt.textContent = m; dataSel.appendChild(opt);
+              });
+              return;
+            }
+          } catch (e) {}
+
+          // fallback defaults
+          ['Gauge Height','Elevation','Discharge','Water Temperature'].forEach(m => {
+            const opt = document.createElement('option'); opt.value = m; opt.textContent = m; dataSel.appendChild(opt);
+          });
+        }
+
+        locSelect.addEventListener('change', () => {
+          const opt = locSelect.selectedOptions[0];
+          if (!opt) return;
+          const endpoint = opt.dataset.endpoint || '/customgaugegraph/';
+          const inputName = opt.dataset.inputname || 'location';
+          customForm.setAttribute('action', endpoint);
+          hiddenLoc.name = inputName;
+          hiddenLoc.value = opt.value;
+          const locKey = (opt.value || '').replace(/\s+(ND|SD)$/i, '').trim();
+          populateMetricsForLoc(locKey);
+        });
+
+        if (currentBtn) {
+          currentBtn.addEventListener('click', () => {
+            const end = new Date(); end.setHours(0,0,0,0);
+            const start = new Date(end);
+            start.setMonth(start.getMonth() - 1);
+            customForm.querySelector('input[name="start-date"]').value = isoDate(start);
+            customForm.querySelector('input[name="end-date"]').value = isoDate(end);
+            // ensure we have a dataset selected
+            const first = Array.from(dataSel.options).find(o => !o.disabled && o.value);
+            if (first) dataSel.value = first.value;
+            customForm.requestSubmit();
+          });
+        }
+
+        // Attach existing probe+render handlers to custom form
+        try { attachHandlers(customForm); } catch (e) { /* ignore */ }
+      })();
+    });
   </script>
 </body>
 </html>
