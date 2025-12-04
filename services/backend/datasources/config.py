@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 #DANR
 station_ids = {
@@ -433,7 +434,13 @@ TABLE_SCHEMAS = {
     """,
 }
 
-DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "Measurements.db")
+# DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "Measurements.db")
+
+# Old behavior preserved for dev: Measurements.db next to project root
+BASE_DIR = Path(__file__).resolve().parents[3]
+DEFAULT_DB_PATH = BASE_DIR / "Measurements.db"
+
+DB_PATH = os.environ.get("MEASUREMENTS_DB_PATH", str(DEFAULT_DB_PATH))
 
 LOCATION_TO_TABLE = {}
 
