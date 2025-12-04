@@ -336,23 +336,6 @@
       </form>
     </div>
     
-    <div style="margin:14px 0;">
-      <h3 style="margin:0 0 8px;font-size:1.05rem;font-weight:600;color:#111827;">Quick Locations</h3>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
-        {% for entry in location_entries %}
-          <form method="POST" action="{{ entry.endpoint }}" style="display:inline-block;">
-            {% csrf_token %}
-            <input type="hidden" name="{{ entry.input_name|default:'location' }}" value="{{ entry.location }}">
-            {% if entry.metrics %}
-              <input type="hidden" name="data2see" value="{{ entry.metrics.0 }}">
-            {% endif %}
-            <input type="hidden" name="start-date" value="{{ default_start }}">
-            <input type="hidden" name="end-date" value="{{ default_end }}">
-            <button type="submit" class="btn btn-ghost">{{ entry.location }}</button>
-          </form>
-        {% endfor %}
-      </div>
-    </div>
   </div>
 
   <script>
@@ -662,7 +645,7 @@ function renderHtmlIntoSlot(slot, html) {
         }
 
         form.addEventListener('submit', async (e) => {
-          if (!form.checkValidity()) return;
+          if (!form.checkValidity()) { form.reportValidity(); return; }
           if (!validateDates()) { e.preventDefault(); return; }
 
           e.preventDefault();
