@@ -292,531 +292,66 @@
       <h1>Missouri River Gauge Dashboard</h1>
       <p>Select a location, metric, and date range to generate interactive gauge visualizations.</p>
     </div>
+    
+    <!-- Reusable custom-location card -->
+    <div style="margin:12px 0;">
+      <form id="custom-location-form" class="location-form" method="POST" action="#">
+        {% csrf_token %}
+        <h3>Custom Location</h3>
 
-    <div class="tab-container">
-      <main>
-        <!-- Tabs -->
-        <input id="tab1" type="radio" name="tabs" checked>
-        <label for="tab1">Hazen</label>
+        <div>
+          <div class="field-label">Location</div>
+          <select id="custom-location-select" required>
+            <option value="" disabled selected>Select location</option>
+            {% for entry in location_entries %}
+              <option value="{{ entry.location }}" data-endpoint="{{ entry.endpoint }}" data-inputname="{{ entry.input_name|default:'location' }}">{{ entry.location }}</option>
+            {% endfor %}
+          </select>
+        </div>
 
-        <input id="tab2" type="radio" name="tabs">
-        <label for="tab2">Stanton</label>
+        <div>
+          <div class="field-label">Data Type</div>
+          <select name="data2see" required>
+            <option value="" disabled selected>Choose Data Point</option>
+          </select>
+        </div>
 
-        <input id="tab3" type="radio" name="tabs">
-        <label for="tab3">Washburn</label>
+        <div class="date-row">
+          <div>
+            <div class="field-label">Start Date</div>
+            <input type="date" name="start-date" required value="{{ default_start }}">
+          </div>
+          <div>
+            <div class="field-label">End Date</div>
+            <input type="date" name="end-date" required value="{{ default_end }}">
+          </div>
+        </div>
 
-        <input id="tab4" type="radio" name="tabs">
-        <label for="tab4">Price</label>
+        <input type="hidden" name="location" value="">
 
-        <input id="tab5" type="radio" name="tabs">
-        <label for="tab5">Bismarck</label>
-
-        <input id="tab6" type="radio" name="tabs">
-        <label for="tab6">Schmidt</label>
-
-        <input id="tab7" type="radio" name="tabs">
-        <label for="tab7">Judson</label>
-
-        <input id="tab8" type="radio" name="tabs">
-        <label for="tab8">Mandan</label>
-
-        <input id="tab9" type="radio" name="tabs">
-        <label for="tab9">Breien</label>
-
-        <input id="tab10" type="radio" name="tabs">
-        <label for="tab10">Wakpala</label>
-
-        <input id="tab11" type="radio" name="tabs">
-        <label for="tab11">Little Eagle</label>
-
-        <input id="tab12" type="radio" name="tabs">
-        <label for="tab12">Cash</label>
-
-        <input id="tab13" type="radio" name="tabs">
-        <label for="tab13">Whitehorse</label>
-
-        <!-- Hazen -->
-        <section id="content1">
-          <form class="location-form" action="/customgaugegraph/" method="POST">
+        <div class="button-row">
+          <button type="submit" class="btn btn-primary">Generate</button>
+          <button type="button" class="btn btn-ghost">Current Data</button>
+        </div>
+      </form>
+    </div>
+    
+    <div style="margin:14px 0;">
+      <h3 style="margin:0 0 8px;font-size:1.05rem;font-weight:600;color:#111827;">Quick Locations</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+        {% for entry in location_entries %}
+          <form method="POST" action="{{ entry.endpoint }}" style="display:inline-block;">
             {% csrf_token %}
-            <h3>Hazen, ND</h3>
-
-            <div>
-              <div class="field-label">Data Type</div>
-              <select required name="data2see">
-                <option value="" disabled selected>Choose Data Point</option>
-                <option value="Gauge Height">Gauge Height</option>
-                <option value="Elevation">Elevation</option>
-                <option value="Discharge">Discharge</option>
-                <option value="Water Temperature">Water Temperature</option>
-              </select>
-            </div>
-
-            <div class="date-row">
-              <div>
-                <div class="field-label">Start Date</div>
-                <input type="date" name="start-date" required>
-              </div>
-              <div>
-                <div class="field-label">End Date</div>
-                <input type="date" name="end-date" required>
-              </div>
-            </div>
-
-            <input type="hidden" name="location" value="Hazen ND">
-
-            <div class="button-row">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-ghost">Current Data</button>
-            </div>
+            <input type="hidden" name="{{ entry.input_name|default:'location' }}" value="{{ entry.location }}">
+            {% if entry.metrics %}
+              <input type="hidden" name="data2see" value="{{ entry.metrics.0 }}">
+            {% endif %}
+            <input type="hidden" name="start-date" value="{{ default_start }}">
+            <input type="hidden" name="end-date" value="{{ default_end }}">
+            <button type="submit" class="btn btn-ghost">{{ entry.location }}</button>
           </form>
-        </section>
-
-        <!-- Stanton -->
-        <section id="content2">
-          <form class="location-form" action="/customgaugegraph/" method="POST">
-            {% csrf_token %}
-            <h3>Stanton, ND</h3>
-
-            <div>
-              <div class="field-label">Data Type</div>
-              <select required name="data2see">
-                <option value="" disabled selected>Choose Data Point</option>
-                <option value="Gauge Height">Gauge Height</option>
-                <option value="Elevation">Elevation</option>
-                <option value="Discharge">Discharge</option>
-                <option value="Water Temperature">Water Temperature</option>
-              </select>
-            </div>
-
-            <div class="date-row">
-              <div>
-                <div class="field-label">Start Date</div>
-                <input type="date" name="start-date" required>
-              </div>
-              <div>
-                <div class="field-label">End Date</div>
-                <input type="date" name="end-date" required>
-              </div>
-            </div>
-
-            <input type="hidden" name="location" value="Stanton ND">
-
-            <div class="button-row">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-ghost">Current Data</button>
-            </div>
-          </form>
-        </section>
-
-        <!-- Washburn -->
-        <section id="content3">
-          <form class="location-form" action="/customgaugegraph/" method="POST">
-            {% csrf_token %}
-            <h3>Washburn, ND</h3>
-
-            <div>
-              <div class="field-label">Data Type</div>
-              <select required name="data2see">
-                <option value="" disabled selected>Choose Data Point</option>
-                <option value="Gauge Height">Gauge Height</option>
-                <option value="Elevation">Elevation</option>
-                <option value="Discharge">Discharge</option>
-                <option value="Water Temperature">Water Temperature</option>
-              </select>
-            </div>
-
-            <div class="date-row">
-              <div>
-                <div class="field-label">Start Date</div>
-                <input type="date" name="start-date" required>
-              </div>
-              <div>
-                <div class="field-label">End Date</div>
-                <input type="date" name="end-date" required>
-              </div>
-            </div>
-
-            <input type="hidden" name="location" value="Washburn ND">
-
-            <div class="button-row">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-ghost">Current Data</button>
-            </div>
-          </form>
-        </section>
-
-        <!-- Price -->
-        <section id="content4">
-          <form class="location-form" action="/customgaugegraph/" method="POST">
-            {% csrf_token %}
-            <h3>Price, ND</h3>
-
-            <div>
-              <div class="field-label">Data Type</div>
-              <select required name="data2see">
-                <option value="" disabled selected>Choose Data Point</option>
-                <option value="Gauge Height">Gauge Height</option>
-                <option value="Elevation">Elevation</option>
-                <option value="Discharge">Discharge</option>
-                <option value="Water Temperature">Water Temperature</option>
-              </select>
-            </div>
-
-            <div class="date-row">
-              <div>
-                <div class="field-label">Start Date</div>
-                <input type="date" name="start-date" required>
-              </div>
-              <div>
-                <div class="field-label">End Date</div>
-                <input type="date" name="end-date" required>
-              </div>
-            </div>
-
-            <input type="hidden" name="location" value="Price ND">
-
-            <div class="button-row">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-ghost">Current Data</button>
-            </div>
-          </form>
-        </section>
-
-        <!-- Bismarck -->
-        <section id="content5">
-          <form class="location-form" action="/customgaugegraph/" method="POST">
-            {% csrf_token %}
-            <h3>Bismarck, ND</h3>
-
-            <div>
-              <div class="field-label">Data Type</div>
-              <select required name="data2see">
-                <option value="" disabled selected>Choose Data Point</option>
-                <option value="Gauge Height">Gauge Height</option>
-                <option value="Elevation">Elevation</option>
-                <option value="Discharge">Discharge</option>
-                <option value="Water Temperature">Water Temperature</option>
-              </select>
-            </div>
-
-            <div class="date-row">
-              <div>
-                <div class="field-label">Start Date</div>
-                <input type="date" name="start-date" required>
-              </div>
-              <div>
-                <div class="field-label">End Date</div>
-                <input type="date" name="end-date" required>
-              </div>
-            </div>
-
-            <input type="hidden" name="location" value="Bismarck ND">
-
-            <div class="button-row">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-ghost">Current Data</button>
-            </div>
-          </form>
-        </section>
-
-        <!-- Schmidt -->
-        <section id="content6">
-          <form class="location-form" action="/customgaugegraph/" method="POST">
-            {% csrf_token %}
-            <h3>Schmidt, ND</h3>
-
-            <div>
-              <div class="field-label">Data Type</div>
-              <select required name="data2see">
-                <option value="" disabled selected>Choose Data Point</option>
-                <option value="Gauge Height">Gauge Height</option>
-                <option value="Elevation">Elevation</option>
-                <option value="Discharge">Discharge</option>
-                <option value="Water Temperature">Water Temperature</option>
-              </select>
-            </div>
-
-            <div class="date-row">
-              <div>
-                <div class="field-label">Start Date</div>
-                <input type="date" name="start-date" required>
-              </div>
-              <div>
-                <div class="field-label">End Date</div>
-                <input type="date" name="end-date" required>
-              </div>
-            </div>
-
-            <input type="hidden" name="location" value="Schmidt ND">
-
-            <div class="button-row">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-ghost">Current Data</button>
-            </div>
-          </form>
-        </section>
-
-        <!-- Judson -->
-        <section id="content7">
-          <form class="location-form" action="/customgaugegraph/" method="POST">
-            {% csrf_token %}
-            <h3>Judson, ND</h3>
-
-            <div>
-              <div class="field-label">Data Type</div>
-              <select required name="data2see">
-                <option value="" disabled selected>Choose Data Point</option>
-                <option value="Gauge Height">Gauge Height</option>
-                <option value="Elevation">Elevation</option>
-                <option value="Discharge">Discharge</option>
-                <option value="Water Temperature">Water Temperature</option>
-              </select>
-            </div>
-
-            <div class="date-row">
-              <div>
-                <div class="field-label">Start Date</div>
-                <input type="date" name="start-date" required>
-              </div>
-              <div>
-                <div class="field-label">End Date</div>
-                <input type="date" name="end-date" required>
-              </div>
-            </div>
-
-            <input type="hidden" name="location" value="Judson ND">
-
-            <div class="button-row">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-ghost">Current Data</button>
-            </div>
-          </form>
-        </section>
-
-        <!-- Mandan -->
-        <section id="content8">
-          <form class="location-form" action="/customgaugegraph/" method="POST">
-            {% csrf_token %}
-            <h3>Mandan, ND</h3>
-
-            <div>
-              <div class="field-label">Data Type</div>
-              <select required name="data2see">
-                <option value="" disabled selected>Choose Data Point</option>
-                <option value="Gauge Height">Gauge Height</option>
-                <option value="Elevation">Elevation</option>
-                <option value="Discharge">Discharge</option>
-                <option value="Water Temperature">Water Temperature</option>
-              </select>
-            </div>
-
-            <div class="date-row">
-              <div>
-                <div class="field-label">Start Date</div>
-                <input type="date" name="start-date" required>
-              </div>
-              <div>
-                <div class="field-label">End Date</div>
-                <input type="date" name="end-date" required>
-              </div>
-            </div>
-
-            <input type="hidden" name="location" value="Mandan ND">
-
-            <div class="button-row">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-ghost">Current Data</button>
-            </div>
-          </form>
-        </section>
-
-        <!-- Breien -->
-        <section id="content9">
-          <form class="location-form" action="/customgaugegraph/" method="POST">
-            {% csrf_token %}
-            <h3>Breien, ND</h3>
-
-            <div>
-              <div class="field-label">Data Type</div>
-              <select required name="data2see">
-                <option value="" disabled selected>Choose Data Point</option>
-                <option value="Gauge Height">Gauge Height</option>
-                <option value="Elevation">Elevation</option>
-                <option value="Discharge">Discharge</option>
-                <option value="Water Temperature">Water Temperature</option>
-              </select>
-            </div>
-
-            <div class="date-row">
-              <div>
-                <div class="field-label">Start Date</div>
-                <input type="date" name="start-date" required>
-              </div>
-              <div>
-                <div class="field-label">End Date</div>
-                <input type="date" name="end-date" required>
-              </div>
-            </div>
-
-            <input type="hidden" name="location" value="Breien ND">
-
-            <div class="button-row">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-ghost">Current Data</button>
-            </div>
-          </form>
-        </section>
-
-        <!-- Wakpala -->
-        <section id="content10">
-          <form class="location-form" action="/customgaugegraph/" method="POST">
-            {% csrf_token %}
-            <h3>Wakpala, SD</h3>
-
-            <div>
-              <div class="field-label">Data Type</div>
-              <select required name="data2see">
-                <option value="" disabled selected>Choose Data Point</option>
-                <option value="Gauge Height">Gauge Height</option>
-                <option value="Elevation">Elevation</option>
-                <option value="Discharge">Discharge</option>
-                <option value="Water Temperature">Water Temperature</option>
-              </select>
-            </div>
-
-            <div class="date-row">
-              <div>
-                <div class="field-label">Start Date</div>
-                <input type="date" name="start-date" required>
-              </div>
-              <div>
-                <div class="field-label">End Date</div>
-                <input type="date" name="end-date" required>
-              </div>
-            </div>
-
-            <input type="hidden" name="location" value="Wakpala SD">
-
-            <div class="button-row">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-ghost">Current Data</button>
-            </div>
-          </form>
-        </section>
-
-        <!-- Little Eagle -->
-        <section id="content11">
-          <form class="location-form" action="/customgaugegraph/" method="POST">
-            {% csrf_token %}
-            <h3>Little Eagle, SD</h3>
-
-            <div>
-              <div class="field-label">Data Type</div>
-              <select required name="data2see">
-                <option value="" disabled selected>Choose Data Point</option>
-                <option value="Gauge Height">Gauge Height</option>
-                <option value="Elevation">Elevation</option>
-                <option value="Discharge">Discharge</option>
-                <option value="Water Temperature">Water Temperature</option>
-              </select>
-            </div>
-
-            <div class="date-row">
-              <div>
-                <div class="field-label">Start Date</div>
-                <input type="date" name="start-date" required>
-              </div>
-              <div>
-                <div class="field-label">End Date</div>
-                <input type="date" name="end-date" required>
-              </div>
-            </div>
-
-            <input type="hidden" name="location" value="Little Eagle SD">
-
-            <div class="button-row">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-ghost">Current Data</button>
-            </div>
-          </form>
-        </section>
-
-        <!-- Cash -->
-        <section id="content12">
-          <form class="location-form" action="/customgaugegraph/" method="POST">
-            {% csrf_token %}
-            <h3>Cash, SD</h3>
-
-            <div>
-              <div class="field-label">Data Type</div>
-              <select required name="data2see">
-                <option value="" disabled selected>Choose Data Point</option>
-                <option value="Gauge Height">Gauge Height</option>
-                <option value="Elevation">Elevation</option>
-                <option value="Discharge">Discharge</option>
-                <option value="Water Temperature">Water Temperature</option>
-              </select>
-            </div>
-
-            <div class="date-row">
-              <div>
-                <div class="field-label">Start Date</div>
-                <input type="date" name="start-date" required>
-              </div>
-              <div>
-                <div class="field-label">End Date</div>
-                <input type="date" name="end-date" required>
-              </div>
-            </div>
-
-            <input type="hidden" name="location" value="Cash SD">
-
-            <div class="button-row">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-ghost">Current Data</button>
-            </div>
-          </form>
-        </section>
-
-        <!-- Whitehorse -->
-        <section id="content13">
-          <form class="location-form" action="/customgaugegraph/" method="POST">
-            {% csrf_token %}
-            <h3>Whitehorse, SD</h3>
-
-            <div>
-              <div class="field-label">Data Type</div>
-              <select required name="data2see">
-                <option value="" disabled selected>Choose Data Point</option>
-                <option value="Gauge Height">Gauge Height</option>
-                <option value="Elevation">Elevation</option>
-                <option value="Discharge">Discharge</option>
-                <option value="Water Temperature">Water Temperature</option>
-              </select>
-            </div>
-
-            <div class="date-row">
-              <div>
-                <div class="field-label">Start Date</div>
-                <input type="date" name="start-date" required>
-              </div>
-              <div>
-                <div class="field-label">End Date</div>
-                <input type="date" name="end-date" required>
-              </div>
-            </div>
-
-            <input type="hidden" name="location" value="Whitehorse SD">
-
-            <div class="button-row">
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-ghost">Current Data</button>
-            </div>
-          </form>
-        </section>
-
-      </main>
+        {% endfor %}
+      </div>
     </div>
   </div>
 
@@ -1300,6 +835,67 @@ function renderHtmlIntoSlot(slot, html) {
       document
         .querySelectorAll('section form[action="/customgaugegraph/"]')
         .forEach(attachHandlers);
+
+      // Wire the reusable custom-location form to pick endpoint and input name
+      (function wireCustomForm() {
+        const customForm = document.getElementById('custom-location-form');
+        if (!customForm) return;
+
+        const locSelect = document.getElementById('custom-location-select');
+        const hiddenLoc = customForm.querySelector('input[type="hidden"][name="location"]');
+        const dataSel = customForm.querySelector('select[name="data2see"]');
+        const currentBtn = Array.from(customForm.querySelectorAll('button'))
+          .find(b => /current\s*data/i.test(b.textContent || ''));
+
+        function populateMetricsForLoc(locKey) {
+          // clear existing options
+          dataSel.innerHTML = '<option value="" disabled selected>Choose Data Point</option>';
+          try {
+            const index = window.graphIndex || {};
+            const info = index[locKey] || null;
+            if (info && info.metrics) {
+              Object.keys(info.metrics).forEach(m => {
+                const opt = document.createElement('option'); opt.value = m; opt.textContent = m; dataSel.appendChild(opt);
+              });
+              return;
+            }
+          } catch (e) {}
+
+          // fallback defaults
+          ['Gauge Height','Elevation','Discharge','Water Temperature'].forEach(m => {
+            const opt = document.createElement('option'); opt.value = m; opt.textContent = m; dataSel.appendChild(opt);
+          });
+        }
+
+        locSelect.addEventListener('change', () => {
+          const opt = locSelect.selectedOptions[0];
+          if (!opt) return;
+          const endpoint = opt.dataset.endpoint || '/customgaugegraph/';
+          const inputName = opt.dataset.inputname || 'location';
+          customForm.setAttribute('action', endpoint);
+          hiddenLoc.name = inputName;
+          hiddenLoc.value = opt.value;
+          const locKey = (opt.value || '').replace(/\s+(ND|SD)$/i, '').trim();
+          populateMetricsForLoc(locKey);
+        });
+
+        if (currentBtn) {
+          currentBtn.addEventListener('click', () => {
+            const end = new Date(); end.setHours(0,0,0,0);
+            const start = new Date(end);
+            start.setMonth(start.getMonth() - 1);
+            customForm.querySelector('input[name="start-date"]').value = isoDate(start);
+            customForm.querySelector('input[name="end-date"]').value = isoDate(end);
+            // ensure we have a dataset selected
+            const first = Array.from(dataSel.options).find(o => !o.disabled && o.value);
+            if (first) dataSel.value = first.value;
+            customForm.requestSubmit();
+          });
+        }
+
+        // Attach existing probe+render handlers to custom form
+        try { attachHandlers(customForm); } catch (e) { /* ignore */ }
+      })();
     });
   </script>
 </body>

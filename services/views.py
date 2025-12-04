@@ -6,7 +6,7 @@ from datetime import datetime
 import json
 import sqlite3
 from services.backend import custom_graph as custom_graph
-from services.backend.datasources.config import SQL_CONVERSION, LOCATION_TO_TABLE, DB_PATH
+from services.backend.datasources.config import SQL_CONVERSION, LOCATION_TO_TABLE, DB_PATH, TABLE_SCHEMAS
 from django.template.defaulttags import csrf_token
 from config import settings
 from django.shortcuts import redirect, render
@@ -142,11 +142,28 @@ def maptabs(request):
         conn = None
         curr = None
 
-    # Gather list of locations that appear in the tabs (matching the template)
-    locations = [
-        'Hazen','Stanton','Washburn','Price','Bismarck','Schmidt','Judson',
-        'Mandan','Breien','Wakpala','Little Eagle','Cash','Whitehorse'
-    ]
+    # Gather list of locations by scanning the Measurements DB tables.
+    locations = []
+    location_table_map = {}
+    try:
+        if curr:
+            for table_name in TABLE_SCHEMAS.keys():
+                try:
+                    curr.execute(f"SELECT DISTINCT location FROM \"{table_name}\" WHERE location IS NOT NULL")
+                    rows = curr.fetchall()
+                    for r in rows:
+                        if not r: continue
+                        l = (r[0] or '').strip()
+                        if not l: continue
+                        if l not in location_table_map:
+                            location_table_map[l] = table_name
+                        locations.append(l)
+                except Exception:
+                    # table might not exist; ignore and continue
+                    continue
+        locations = sorted(set(locations))
+    except Exception:
+        locations = []
 
     # reverse mapping column -> display name
     rev = {v: k for k, v in SQL_CONVERSION.items()}
@@ -257,10 +274,36 @@ def maptabs(request):
                         cur[metric.title()] = latest
                 break
 
-    # expose graph_index JSON to template for immediate client-side use
+    # Build location_entries so the template can render per-location forms
+    table_to_endpoint = {
+        'gauge': ('/customgaugegraph/', 'location'),
+        'dam': ('/customdamgraph/', 'dam'),
+        'mesonet': ('/custommesonetgraph/', 'mesonet'),
+        'cocorahs': ('/customcocograph/', 'cocorahs'),
+        'shadehill': ('/customshadehillgraph/', None),
+        'noaa_weather': ('/customnoaagraph/', 'noaa')
+    }
+
+    location_entries = []
+    for loc, opts in location_options.items():
+        table = location_table_map.get(loc, LOCATION_TO_TABLE.get(loc, 'gauge'))
+        endpoint, input_name = table_to_endpoint.get(table, ('/customgaugegraph/', 'location'))
+        location_entries.append({'location': loc, 'metrics': opts, 'endpoint': endpoint, 'input_name': input_name})
+
+    # default date range for quick buttons: last 30 days
+    from datetime import timedelta
+    today = datetime.utcnow().date()
+    default_end = today.isoformat()
+    default_start = (today - timedelta(days=30)).isoformat()
+
+    # expose graph_index JSON and location_entries to template for immediate client-side use
     return render(request, 'HTML/maptabs.html', {
+        'location_entries': location_entries,
         'location_options_json': json.dumps(location_options),
-        'graph_index_json': json.dumps(graph_index)
+        'location_table_map_json': json.dumps(location_table_map),
+        'graph_index_json': json.dumps(graph_index),
+        'default_start': default_start,
+        'default_end': default_end,
     })
 
 
