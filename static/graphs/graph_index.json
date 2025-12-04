@@ -1,0 +1,898 @@
+{
+  "Bismarck": {
+    "metrics": {
+      "Snow Depth": [
+        "cocorahs__Bismarck__snow_depth__20251015_20251030_interactive.html"
+      ],
+      "Discharge": [
+        "gauge__Bismarck__discharge__20240805_20240904_interactive.html"
+      ],
+      "Elevation": [
+        "gauge__Bismarck__elevation__20240805_20240904_interactive.html"
+      ],
+      "Gauge Height": [
+        "gauge__Bismarck__gauge_height__20240805_20240904_interactive.html"
+      ],
+      "Water Temp": [
+        "gauge__Bismarck__water_temp__20240805_20240904_interactive.html"
+      ],
+      "Dew Point": [
+        "noaa__Bismarck__dew_point__20240823_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Bismarck__rel_humidity__20240821_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Bismarck__temperature__20240821_20240911_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Bismarck__wind_chill__20240907_20240907_interactive.html"
+      ],
+      "Precipitation": [
+        "noaa_weather__Bismarck__precipitation__20251015_20251027_interactive.html"
+      ]
+    }
+  },
+  "Bison": {
+    "metrics": {
+      "Precipitation": [
+        "cocorahs__Bison__precipitation__20251016_20251030_interactive.html"
+      ],
+      "Snowfall": [
+        "cocorahs__Bison__snowfall__20251017_20251027_interactive.html"
+      ]
+    }
+  },
+  "Langdon": {
+    "metrics": {
+      "Precipitation": [
+        "cocorahs__Langdon__precipitation__20251015_20251027_interactive.html"
+      ],
+      "Snowfall": [
+        "cocorahs__Langdon__snowfall__20251016_20251026_interactive.html"
+      ]
+    }
+  },
+  "Big Bend": {
+    "metrics": {
+      "Air Temperature": [
+        "dam__Big_Bend__air_temp__20240814_20240904_interactive.html"
+      ],
+      "Elevation": [
+        "dam__Big_Bend__elevation__20240814_20240904_interactive.html"
+      ],
+      "Energy": [
+        "dam__Big_Bend__energy__20240814_20240903_interactive.html"
+      ],
+      "Flow Out": [
+        "dam__Big_Bend__flow_out__20240815_20240903_interactive.html"
+      ],
+      "Flow Power": [
+        "dam__Big_Bend__flow_power__20240814_20240903_interactive.html"
+      ],
+      "Tail Ele": [
+        "dam__Big_Bend__tail_ele__20240814_20240904_interactive.html"
+      ],
+      "Water Temp": [
+        "dam__Big_Bend__water_temp__20240814_20240904_interactive.html"
+      ]
+    }
+  },
+  "Fort Peck": {
+    "metrics": {
+      "Air Temperature": [
+        "dam__Fort_Peck__air_temp__20240814_20240904_interactive.html"
+      ],
+      "Elevation": [
+        "dam__Fort_Peck__elevation__20240814_20240904_interactive.html"
+      ],
+      "Energy": [
+        "dam__Fort_Peck__energy__20240814_20240904_interactive.html"
+      ],
+      "Flow Out": [
+        "dam__Fort_Peck__flow_out__20240814_20240903_interactive.html"
+      ],
+      "Flow Power": [
+        "dam__Fort_Peck__flow_power__20240814_20240904_interactive.html"
+      ],
+      "Flow Spill": [
+        "dam__Fort_Peck__flow_spill__20240828_20240828_interactive.html"
+      ],
+      "Tail Ele": [
+        "dam__Fort_Peck__tail_ele__20240814_20240904_interactive.html"
+      ],
+      "Water Temp": [
+        "dam__Fort_Peck__water_temp__20240814_20240904_interactive.html"
+      ]
+    }
+  },
+  "Fort Randall": {
+    "metrics": {
+      "Air Temperature": [
+        "dam__Fort_Randall__air_temp__20240814_20240904_interactive.html"
+      ],
+      "Elevation": [
+        "dam__Fort_Randall__elevation__20240814_20240904_interactive.html"
+      ],
+      "Flow Out": [
+        "dam__Fort_Randall__flow_out__20240814_20240903_interactive.html"
+      ],
+      "Flow Power": [
+        "dam__Fort_Randall__flow_power__20240814_20240904_interactive.html"
+      ],
+      "Tail Ele": [
+        "dam__Fort_Randall__tail_ele__20240814_20240904_interactive.html"
+      ],
+      "Water Temp": [
+        "dam__Fort_Randall__water_temp__20240814_20240904_interactive.html"
+      ]
+    }
+  },
+  "Garrison": {
+    "metrics": {
+      "Air Temperature": [
+        "dam__Garrison__air_temp__20240814_20240904_interactive.html"
+      ],
+      "Elevation": [
+        "dam__Garrison__elevation__20240814_20240903_interactive.html"
+      ],
+      "Energy": [
+        "dam__Garrison__energy__20240814_20240904_interactive.html"
+      ],
+      "Flow Out": [
+        "dam__Garrison__flow_out__20240814_20240903_interactive.html"
+      ],
+      "Flow Power": [
+        "dam__Garrison__flow_power__20240814_20240904_interactive.html"
+      ],
+      "Tail Ele": [
+        "dam__Garrison__tail_ele__20240814_20240903_interactive.html"
+      ],
+      "Water Temp": [
+        "dam__Garrison__water_temp__20240814_20240904_interactive.html"
+      ],
+      "Dew Point": [
+        "noaa__Garrison__dew_point__20240822_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Garrison__rel_humidity__20240822_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Garrison__temperature__20240821_20240827_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Garrison__wind_chill__20240907_20240907_interactive.html"
+      ]
+    }
+  },
+  "Gavins Point": {
+    "metrics": {
+      "Air Temperature": [
+        "dam__Gavins_Point__air_temp__20240814_20240904_interactive.html"
+      ],
+      "Elevation": [
+        "dam__Gavins_Point__elevation__20240814_20240904_interactive.html"
+      ],
+      "Energy": [
+        "dam__Gavins_Point__energy__20240814_20240904_interactive.html"
+      ],
+      "Flow Out": [
+        "dam__Gavins_Point__flow_out__20240814_20240904_interactive.html"
+      ],
+      "Flow Power": [
+        "dam__Gavins_Point__flow_power__20240815_20240904_interactive.html"
+      ],
+      "Tail Ele": [
+        "dam__Gavins_Point__tail_ele__20240814_20240904_interactive.html"
+      ],
+      "Water Temp": [
+        "dam__Gavins_Point__water_temp__20240814_20240904_interactive.html"
+      ]
+    }
+  },
+  "Oahe": {
+    "metrics": {
+      "Air Temperature": [
+        "dam__Oahe__air_temp__20240814_20240903_interactive.html"
+      ],
+      "Elevation": [
+        "dam__Oahe__elevation__20240814_20240904_interactive.html"
+      ],
+      "Energy": [
+        "dam__Oahe__energy__20240815_20240904_interactive.html"
+      ],
+      "Flow Out": [
+        "dam__Oahe__flow_out__20240814_20240903_interactive.html"
+      ],
+      "Flow Power": [
+        "dam__Oahe__flow_power__20240814_20240904_interactive.html"
+      ],
+      "Tail Ele": [
+        "dam__Oahe__tail_ele__20240814_20240904_interactive.html"
+      ],
+      "Water Temp": [
+        "dam__Oahe__water_temp__20240814_20240903_interactive.html"
+      ]
+    }
+  },
+  "Breien": {
+    "metrics": {
+      "Discharge": [
+        "gauge__Breien__discharge__20240805_20240904_interactive.html"
+      ],
+      "Elevation": [
+        "gauge__Breien__elevation__20240805_20240904_interactive.html"
+      ],
+      "Gauge Height": [
+        "gauge__Breien__gauge_height__20240805_20240904_interactive.html"
+      ]
+    }
+  },
+  "Cash": {
+    "metrics": {
+      "Discharge": [
+        "gauge__Cash__discharge__20240805_20240904_interactive.html"
+      ],
+      "Gauge Height": [
+        "gauge__Cash__gauge_height__20240805_20240904_interactive.html"
+      ]
+    }
+  },
+  "Hazen": {
+    "metrics": {
+      "Discharge": [
+        "gauge__Hazen__discharge__20240805_20240904_interactive.html"
+      ],
+      "Elevation": [
+        "gauge__Hazen__elevation__20240805_20240904_interactive.html"
+      ],
+      "Gauge Height": [
+        "gauge__Hazen__gauge_height__20240805_20240904_interactive.html"
+      ]
+    }
+  },
+  "Judson": {
+    "metrics": {
+      "Discharge": [
+        "gauge__Judson__discharge__20240805_20240904_interactive.html"
+      ],
+      "Elevation": [
+        "gauge__Judson__elevation__20240805_20240904_interactive.html"
+      ],
+      "Gauge Height": [
+        "gauge__Judson__gauge_height__20240805_20240904_interactive.html"
+      ]
+    }
+  },
+  "Little Eagle": {
+    "metrics": {
+      "Discharge": [
+        "gauge__Little_Eagle__discharge__20240805_20240904_interactive.html"
+      ],
+      "Gauge Height": [
+        "gauge__Little_Eagle__gauge_height__20240805_20240904_interactive.html"
+      ]
+    }
+  },
+  "Mandan": {
+    "metrics": {
+      "Discharge": [
+        "gauge__Mandan__discharge__20240805_20240904_interactive.html"
+      ],
+      "Elevation": [
+        "gauge__Mandan__elevation__20240805_20240904_interactive.html"
+      ],
+      "Gauge Height": [
+        "gauge__Mandan__gauge_height__20240805_20240904_interactive.html"
+      ]
+    }
+  },
+  "Price": {
+    "metrics": {
+      "Elevation": [
+        "gauge__Price__elevation__20240805_20240904_interactive.html"
+      ],
+      "Gauge Height": [
+        "gauge__Price__gauge_height__20240805_20240904_interactive.html"
+      ]
+    }
+  },
+  "Schmidt": {
+    "metrics": {
+      "Elevation": [
+        "gauge__Schmidt__elevation__20240805_20240904_interactive.html"
+      ],
+      "Gauge Height": [
+        "gauge__Schmidt__gauge_height__20240805_20240904_interactive.html"
+      ]
+    }
+  },
+  "Stanton": {
+    "metrics": {
+      "Elevation": [
+        "gauge__Stanton__elevation__20240805_20240904_interactive.html"
+      ],
+      "Gauge Height": [
+        "gauge__Stanton__gauge_height__20240805_20240904_interactive.html"
+      ]
+    }
+  },
+  "Wakpala": {
+    "metrics": {
+      "Discharge": [
+        "gauge__Wakpala__discharge__20240805_20240904_interactive.html"
+      ],
+      "Gauge Height": [
+        "gauge__Wakpala__gauge_height__20240805_20240904_interactive.html"
+      ]
+    }
+  },
+  "Washburn": {
+    "metrics": {
+      "Elevation": [
+        "gauge__Washburn__elevation__20240805_20240904_interactive.html"
+      ],
+      "Gauge Height": [
+        "gauge__Washburn__gauge_height__20240805_20240904_interactive.html"
+      ]
+    }
+  },
+  "Whitehorse": {
+    "metrics": {
+      "Discharge": [
+        "gauge__Whitehorse__discharge__20240805_20240904_interactive.html"
+      ],
+      "Gauge Height": [
+        "gauge__Whitehorse__gauge_height__20240805_20240904_interactive.html"
+      ]
+    }
+  },
+  "Carson": {
+    "metrics": {
+      "Average Air Temperature": [
+        "mesonet__Carson__avg_air_temp__20220402_20231014_interactive.html"
+      ],
+      "Average Bar Pressure": [
+        "mesonet__Carson__avg_bar_pressure__20220402_20231014_interactive.html"
+      ],
+      "Average Bare Soil Temp": [
+        "mesonet__Carson__avg_bare_soil_temp__20220402_20231014_interactive.html"
+      ],
+      "Average Dew Point": [
+        "mesonet__Carson__avg_dew_point__20220402_20231014_interactive.html"
+      ],
+      "Average Rel Hum": [
+        "mesonet__Carson__avg_rel_hum__20220402_20231014_interactive.html"
+      ],
+      "Average Turf Soil Temp": [
+        "mesonet__Carson__avg_turf_soil_temp__20220402_20231014_interactive.html"
+      ],
+      "Average Wind Chill": [
+        "mesonet__Carson__avg_wind_chill__20251014_20251022_interactive.html"
+      ],
+      "Average Wind Dir": [
+        "mesonet__Carson__avg_wind_dir__20220402_20231014_interactive.html"
+      ],
+      "Max Wind Speed": [
+        "mesonet__Carson__max_wind_speed__20220402_20231014_interactive.html"
+      ],
+      "Total Rainfall": [
+        "mesonet__Carson__total_rainfall__20240804_20240826_interactive.html"
+      ],
+      "Total Solar Rad": [
+        "mesonet__Carson__total_solar_rad__20240805_20240903_interactive.html"
+      ]
+    }
+  },
+  "Fort Yates": {
+    "metrics": {
+      "Average Air Temperature": [
+        "mesonet__Fort_Yates__avg_air_temp__20220402_20231014_interactive.html"
+      ],
+      "Average Bar Pressure": [
+        "mesonet__Fort_Yates__avg_bar_pressure__20220402_20231014_interactive.html"
+      ],
+      "Average Bare Soil Temp": [
+        "mesonet__Fort_Yates__avg_bare_soil_temp__20220402_20231014_interactive.html"
+      ],
+      "Average Dew Point": [
+        "mesonet__Fort_Yates__avg_dew_point__20220402_20231014_interactive.html"
+      ],
+      "Average Rel Hum": [
+        "mesonet__Fort_Yates__avg_rel_hum__20220402_20231014_interactive.html"
+      ],
+      "Average Turf Soil Temp": [
+        "mesonet__Fort_Yates__avg_turf_soil_temp__20220402_20231014_interactive.html"
+      ],
+      "Average Wind Chill": [
+        "mesonet__Fort_Yates__avg_wind_chill__20251014_20251022_interactive.html"
+      ],
+      "Average Wind Dir": [
+        "mesonet__Fort_Yates__avg_wind_dir__20220402_20231014_interactive.html"
+      ],
+      "Max Wind Speed": [
+        "mesonet__Fort_Yates__max_wind_speed__20220402_20231014_interactive.html"
+      ],
+      "Total Rainfall": [
+        "mesonet__Fort_Yates__total_rainfall__20240805_20240828_interactive.html"
+      ],
+      "Total Solar Rad": [
+        "mesonet__Fort_Yates__total_solar_rad__20240805_20240903_interactive.html"
+      ]
+    }
+  },
+  "Linton": {
+    "metrics": {
+      "Average Air Temperature": [
+        "mesonet__Linton__avg_air_temp__20220402_20231014_interactive.html"
+      ],
+      "Average Bar Pressure": [
+        "mesonet__Linton__avg_bar_pressure__20220402_20231014_interactive.html"
+      ],
+      "Average Bare Soil Temp": [
+        "mesonet__Linton__avg_bare_soil_temp__20220402_20231014_interactive.html"
+      ],
+      "Average Dew Point": [
+        "mesonet__Linton__avg_dew_point__20220402_20231014_interactive.html"
+      ],
+      "Average Rel Hum": [
+        "mesonet__Linton__avg_rel_hum__20220402_20231014_interactive.html"
+      ],
+      "Average Turf Soil Temp": [
+        "mesonet__Linton__avg_turf_soil_temp__20220402_20231014_interactive.html"
+      ],
+      "Average Wind Chill": [
+        "mesonet__Linton__avg_wind_chill__20251015_20251022_interactive.html"
+      ],
+      "Average Wind Dir": [
+        "mesonet__Linton__avg_wind_dir__20220402_20231014_interactive.html"
+      ],
+      "Max Wind Speed": [
+        "mesonet__Linton__max_wind_speed__20220402_20231014_interactive.html"
+      ],
+      "Total Rainfall": [
+        "mesonet__Linton__total_rainfall__20240804_20240828_interactive.html"
+      ],
+      "Total Solar Rad": [
+        "mesonet__Linton__total_solar_rad__20240804_20240903_interactive.html"
+      ],
+      "Dew Point": [
+        "noaa__Linton__dew_point__20240823_20240910_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Linton__rel_humidity__20240822_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Linton__temperature__20240825_20240911_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Linton__wind_chill__20240906_20240908_interactive.html"
+      ]
+    }
+  },
+  "Mott": {
+    "metrics": {
+      "Average Air Temperature": [
+        "mesonet__Mott__avg_air_temp__20220402_20231014_interactive.html"
+      ],
+      "Average Bar Pressure": [
+        "mesonet__Mott__avg_bar_pressure__20220402_20231014_interactive.html"
+      ],
+      "Average Bare Soil Temp": [
+        "mesonet__Mott__avg_bare_soil_temp__20220402_20231014_interactive.html"
+      ],
+      "Average Dew Point": [
+        "mesonet__Mott__avg_dew_point__20220402_20231014_interactive.html"
+      ],
+      "Average Rel Hum": [
+        "mesonet__Mott__avg_rel_hum__20220402_20231014_interactive.html"
+      ],
+      "Average Turf Soil Temp": [
+        "mesonet__Mott__avg_turf_soil_temp__20220402_20231014_interactive.html"
+      ],
+      "Average Wind Chill": [
+        "mesonet__Mott__avg_wind_chill__20251014_20251022_interactive.html"
+      ],
+      "Average Wind Dir": [
+        "mesonet__Mott__avg_wind_dir__20220402_20231014_interactive.html"
+      ],
+      "Max Wind Speed": [
+        "mesonet__Mott__max_wind_speed__20220402_20231014_interactive.html"
+      ],
+      "Total Rainfall": [
+        "mesonet__Mott__total_rainfall__20240804_20240902_interactive.html"
+      ],
+      "Total Solar Rad": [
+        "mesonet__Mott__total_solar_rad__20240805_20240903_interactive.html"
+      ]
+    }
+  },
+  "Baker": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Baker__dew_point__20240821_20240910_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Baker__rel_humidity__20240821_20240909_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Baker__temperature__20240821_20240910_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Baker__wind_chill__20240810_20240810_interactive.html"
+      ]
+    }
+  },
+  "Beach": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Beach__dew_point__20240823_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Beach__rel_humidity__20240821_20240912_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Beach__temperature__20240821_20240911_interactive.html"
+      ]
+    }
+  },
+  "Bowman": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Bowman__dew_point__20240825_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Bowman__rel_humidity__20240821_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Bowman__temperature__20240822_20240911_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Bowman__wind_chill__20240908_20240908_interactive.html"
+      ]
+    }
+  },
+  "Buffalo Harding": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Buffalo_Harding__dew_point__20240821_20240910_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Buffalo_Harding__rel_humidity__20240821_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Buffalo_Harding__temperature__20240822_20240910_interactive.html"
+      ]
+    }
+  },
+  "Custer": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Custer__dew_point__20240821_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Custer__rel_humidity__20240824_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Custer__temperature__20240821_20240911_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Custer__wind_chill__20240809_20240810_interactive.html"
+      ]
+    }
+  },
+  "Dickinson Roosevelt": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Dickinson_Roosevelt__dew_point__20240822_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Dickinson_Roosevelt__rel_humidity__20240822_20240910_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Dickinson_Roosevelt__temperature__20240822_20240911_interactive.html"
+      ]
+    }
+  },
+  "Faith": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Faith__dew_point__20240822_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Faith__rel_humidity__20240824_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Faith__temperature__20240821_20240911_interactive.html"
+      ]
+    }
+  },
+  "Glen": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Glen__dew_point__20240821_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Glen__rel_humidity__20240821_20240909_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Glen__temperature__20240821_20240911_interactive.html"
+      ]
+    }
+  },
+  "Glendive Dawson": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Glendive_Dawson__dew_point__20240821_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Glendive_Dawson__rel_humidity__20240821_20240910_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Glendive_Dawson__temperature__20240821_20240911_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Glendive_Dawson__wind_chill__20240907_20240907_interactive.html"
+      ]
+    }
+  },
+  "Hazen Mercer": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Hazen_Mercer__dew_point__20240821_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Hazen_Mercer__rel_humidity__20240825_20240911_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Hazen_Mercer__wind_chill__20240905_20240907_interactive.html"
+      ]
+    }
+  },
+  "Hettinger": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Hettinger__dew_point__20240821_20240912_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Hettinger__rel_humidity__20240822_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Hettinger__temperature__20240821_20240911_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Hettinger__wind_chill__20240810_20240907_interactive.html"
+      ]
+    }
+  },
+  "Miles City Wiley": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Miles_City_Wiley__dew_point__20240821_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Miles_City_Wiley__rel_humidity__20240821_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Miles_City_Wiley__temperature__20240822_20240911_interactive.html"
+      ]
+    }
+  },
+  "Minot": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Minot__dew_point__20240823_20240910_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Minot__rel_humidity__20240823_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Minot__temperature__20240822_20240910_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Minot__wind_chill__20240810_20240907_interactive.html"
+      ],
+      "Min Temp": [
+        "noaa_weather__Minot__min_temp__20231025_20231030_interactive.html"
+      ],
+      "Precipitation": [
+        "noaa_weather__Minot__precipitation__20251021_20251026_interactive.html"
+      ]
+    }
+  },
+  "Mobridge": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Mobridge__dew_point__20240822_20240908_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Mobridge__rel_humidity__20240821_20240910_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Mobridge__temperature__20240821_20240911_interactive.html"
+      ]
+    }
+  },
+  "Philip": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Philip__dew_point__20240822_20240907_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Philip__rel_humidity__20240822_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Philip__temperature__20240824_20240912_interactive.html"
+      ]
+    }
+  },
+  "Pierre": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Pierre__dew_point__20240821_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Pierre__rel_humidity__20240823_20240910_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Pierre__temperature__20240823_20240911_interactive.html"
+      ]
+    }
+  },
+  "Rapid City": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Rapid_City__dew_point__20240821_20240907_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Rapid_City__rel_humidity__20240822_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Rapid_City__temperature__20240821_20240911_interactive.html"
+      ]
+    }
+  },
+  "Sidney Richland": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Sidney_Richland__dew_point__20240821_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Sidney_Richland__rel_humidity__20240821_20240907_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Sidney_Richland__temperature__20240821_20240910_interactive.html"
+      ]
+    }
+  },
+  "Spearfish Clyde": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Spearfish_Clyde__dew_point__20240821_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Spearfish_Clyde__rel_humidity__20240821_20240910_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Spearfish_Clyde__temperature__20240821_20240911_interactive.html"
+      ]
+    }
+  },
+  "Stanley": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Stanley__dew_point__20240821_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Stanley__rel_humidity__20240821_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Stanley__temperature__20240824_20240911_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Stanley__wind_chill__20240810_20240905_interactive.html"
+      ]
+    }
+  },
+  "Tioga": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Tioga__dew_point__20240821_20240909_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Tioga__rel_humidity__20240823_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Tioga__temperature__20240822_20240911_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Tioga__wind_chill__20240810_20240907_interactive.html"
+      ]
+    }
+  },
+  "Watford City": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Watford_City__dew_point__20240821_20240911_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Watford_City__rel_humidity__20240821_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Watford_City__temperature__20240822_20240911_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Watford_City__wind_chill__20240906_20240906_interactive.html"
+      ]
+    }
+  },
+  "Williston Basin": {
+    "metrics": {
+      "Dew Point": [
+        "noaa__Williston_Basin__dew_point__20240822_20240908_interactive.html"
+      ],
+      "Rel Humidity": [
+        "noaa__Williston_Basin__rel_humidity__20240822_20240911_interactive.html"
+      ],
+      "Temperature": [
+        "noaa__Williston_Basin__temperature__20240822_20240911_interactive.html"
+      ],
+      "Wind Chill": [
+        "noaa__Williston_Basin__wind_chill__20240905_20240905_interactive.html"
+      ]
+    }
+  },
+  "Shadehill": {
+    "metrics": {
+      "Daily Max Air Temperature": [
+        "shadehill__Shadehill__daily_max_air_temp__20240428_20240527_interactive.html"
+      ],
+      "Daily Mean Air Temperature": [
+        "shadehill__Shadehill__daily_mean_air_temp__20240428_20240527_interactive.html"
+      ],
+      "Daily Mean Comp Inflow": [
+        "shadehill__Shadehill__daily_mean_comp_inflow__20251015_20251029_interactive.html"
+      ],
+      "Daily Mean Gate Opening": [
+        "shadehill__Shadehill__daily_mean_gate_opening__20251015_20251029_interactive.html"
+      ],
+      "Daily Mean River Dis": [
+        "shadehill__Shadehill__daily_mean_river_dis__20251015_20251029_interactive.html"
+      ],
+      "Daily Mean Spill Dis": [
+        "shadehill__Shadehill__daily_mean_spill_dis__20251015_20251029_interactive.html"
+      ],
+      "Daily Mean Tot Dis": [
+        "shadehill__Shadehill__daily_mean_tot_dis__20251015_20251029_interactive.html"
+      ],
+      "Daily Min Air Temperature": [
+        "shadehill__Shadehill__daily_min_air_temp__20240428_20240527_interactive.html"
+      ],
+      "Res Forebay Elev": [
+        "shadehill__Shadehill__res_forebay_elev__20251015_20251029_interactive.html"
+      ],
+      "Res Stor Content": [
+        "shadehill__Shadehill__res_stor_content__20251015_20251029_interactive.html"
+      ],
+      "Tot Precip Daily": [
+        "shadehill__Shadehill__tot_precip_daily__20251015_20251029_interactive.html"
+      ],
+      "Tot Year Precip": [
+        "shadehill__Shadehill__tot_year_precip__20251015_20251029_interactive.html"
+      ]
+    }
+  },
+  "380001": {
+    "metrics": {
+      "Nitrate Nitrite": [
+        "water_quality__380001__nitrate_nitrite__19930120_19960515_interactive.html"
+      ],
+      "Ph": [
+        "water_quality__380001__ph__19930120_19960626_interactive.html"
+      ],
+      "Total Phosphorus": [
+        "water_quality__380001__total_phosphorus__19930120_19960626_interactive.html"
+      ]
+    }
+  }
+}

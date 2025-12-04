@@ -1,0 +1,798 @@
+{
+  "Unknown": {
+    "cocorahs__Bismarck__snow_depth__20251015_20251030_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\cocorahs__Bismarck__snow_depth__20251015_20251030_interactive.html"
+    ],
+    "cocorahs__Bison__precipitation__20251016_20251030_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\cocorahs__Bison__precipitation__20251016_20251030_interactive.html"
+    ],
+    "cocorahs__Bison__snowfall__20251017_20251027_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\cocorahs__Bison__snowfall__20251017_20251027_interactive.html"
+    ],
+    "cocorahs__Langdon__precipitation__20251015_20251027_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\cocorahs__Langdon__precipitation__20251015_20251027_interactive.html"
+    ],
+    "cocorahs__Langdon__snowfall__20251016_20251026_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\cocorahs__Langdon__snowfall__20251016_20251026_interactive.html"
+    ],
+    "dam__Big_Bend__air_temp__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Big_Bend__air_temp__20240814_20240904_interactive.html"
+    ],
+    "dam__Big_Bend__elevation__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Big_Bend__elevation__20240814_20240904_interactive.html"
+    ],
+    "dam__Big_Bend__energy__20240814_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Big_Bend__energy__20240814_20240903_interactive.html"
+    ],
+    "dam__Big_Bend__flow_out__20240815_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Big_Bend__flow_out__20240815_20240903_interactive.html"
+    ],
+    "dam__Big_Bend__flow_power__20240814_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Big_Bend__flow_power__20240814_20240903_interactive.html"
+    ],
+    "dam__Big_Bend__tail_ele__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Big_Bend__tail_ele__20240814_20240904_interactive.html"
+    ],
+    "dam__Big_Bend__water_temp__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Big_Bend__water_temp__20240814_20240904_interactive.html"
+    ],
+    "dam__Fort_Peck__air_temp__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Peck__air_temp__20240814_20240904_interactive.html"
+    ],
+    "dam__Fort_Peck__elevation__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Peck__elevation__20240814_20240904_interactive.html"
+    ],
+    "dam__Fort_Peck__energy__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Peck__energy__20240814_20240904_interactive.html"
+    ],
+    "dam__Fort_Peck__flow_out__20240814_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Peck__flow_out__20240814_20240903_interactive.html"
+    ],
+    "dam__Fort_Peck__flow_power__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Peck__flow_power__20240814_20240904_interactive.html"
+    ],
+    "dam__Fort_Peck__flow_spill__20240828_20240828_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Peck__flow_spill__20240828_20240828_interactive.html"
+    ],
+    "dam__Fort_Peck__tail_ele__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Peck__tail_ele__20240814_20240904_interactive.html"
+    ],
+    "dam__Fort_Peck__water_temp__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Peck__water_temp__20240814_20240904_interactive.html"
+    ],
+    "dam__Fort_Randall__air_temp__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Randall__air_temp__20240814_20240904_interactive.html"
+    ],
+    "dam__Fort_Randall__elevation__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Randall__elevation__20240814_20240904_interactive.html"
+    ],
+    "dam__Fort_Randall__flow_out__20240814_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Randall__flow_out__20240814_20240903_interactive.html"
+    ],
+    "dam__Fort_Randall__flow_power__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Randall__flow_power__20240814_20240904_interactive.html"
+    ],
+    "dam__Fort_Randall__tail_ele__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Randall__tail_ele__20240814_20240904_interactive.html"
+    ],
+    "dam__Fort_Randall__water_temp__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Fort_Randall__water_temp__20240814_20240904_interactive.html"
+    ],
+    "dam__Garrison__air_temp__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Garrison__air_temp__20240814_20240904_interactive.html"
+    ],
+    "dam__Garrison__elevation__20240814_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Garrison__elevation__20240814_20240903_interactive.html"
+    ],
+    "dam__Garrison__energy__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Garrison__energy__20240814_20240904_interactive.html"
+    ],
+    "dam__Garrison__flow_out__20240814_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Garrison__flow_out__20240814_20240903_interactive.html"
+    ],
+    "dam__Garrison__flow_power__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Garrison__flow_power__20240814_20240904_interactive.html"
+    ],
+    "dam__Garrison__tail_ele__20240814_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Garrison__tail_ele__20240814_20240903_interactive.html"
+    ],
+    "dam__Garrison__water_temp__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Garrison__water_temp__20240814_20240904_interactive.html"
+    ],
+    "dam__Gavins_Point__air_temp__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Gavins_Point__air_temp__20240814_20240904_interactive.html"
+    ],
+    "dam__Gavins_Point__elevation__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Gavins_Point__elevation__20240814_20240904_interactive.html"
+    ],
+    "dam__Gavins_Point__energy__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Gavins_Point__energy__20240814_20240904_interactive.html"
+    ],
+    "dam__Gavins_Point__flow_out__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Gavins_Point__flow_out__20240814_20240904_interactive.html"
+    ],
+    "dam__Gavins_Point__flow_power__20240815_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Gavins_Point__flow_power__20240815_20240904_interactive.html"
+    ],
+    "dam__Gavins_Point__tail_ele__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Gavins_Point__tail_ele__20240814_20240904_interactive.html"
+    ],
+    "dam__Gavins_Point__water_temp__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Gavins_Point__water_temp__20240814_20240904_interactive.html"
+    ],
+    "dam__Oahe__air_temp__20240814_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Oahe__air_temp__20240814_20240903_interactive.html"
+    ],
+    "dam__Oahe__elevation__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Oahe__elevation__20240814_20240904_interactive.html"
+    ],
+    "dam__Oahe__energy__20240815_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Oahe__energy__20240815_20240904_interactive.html"
+    ],
+    "dam__Oahe__flow_out__20240814_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Oahe__flow_out__20240814_20240903_interactive.html"
+    ],
+    "dam__Oahe__flow_power__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Oahe__flow_power__20240814_20240904_interactive.html"
+    ],
+    "dam__Oahe__tail_ele__20240814_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Oahe__tail_ele__20240814_20240904_interactive.html"
+    ],
+    "dam__Oahe__water_temp__20240814_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\dam__Oahe__water_temp__20240814_20240903_interactive.html"
+    ],
+    "gauge__Bismarck__discharge__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Bismarck__discharge__20240805_20240904_interactive.html"
+    ],
+    "gauge__Bismarck__elevation__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Bismarck__elevation__20240805_20240904_interactive.html"
+    ],
+    "gauge__Bismarck__gauge_height__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Bismarck__gauge_height__20240805_20240904_interactive.html"
+    ],
+    "gauge__Bismarck__water_temp__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Bismarck__water_temp__20240805_20240904_interactive.html"
+    ],
+    "gauge__Breien__discharge__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Breien__discharge__20240805_20240904_interactive.html"
+    ],
+    "gauge__Breien__elevation__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Breien__elevation__20240805_20240904_interactive.html"
+    ],
+    "gauge__Breien__gauge_height__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Breien__gauge_height__20240805_20240904_interactive.html"
+    ],
+    "gauge__Cash__discharge__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Cash__discharge__20240805_20240904_interactive.html"
+    ],
+    "gauge__Cash__gauge_height__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Cash__gauge_height__20240805_20240904_interactive.html"
+    ],
+    "gauge__Hazen__discharge__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Hazen__discharge__20240805_20240904_interactive.html"
+    ],
+    "gauge__Hazen__elevation__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Hazen__elevation__20240805_20240904_interactive.html"
+    ],
+    "gauge__Hazen__gauge_height__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Hazen__gauge_height__20240805_20240904_interactive.html"
+    ],
+    "gauge__Judson__discharge__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Judson__discharge__20240805_20240904_interactive.html"
+    ],
+    "gauge__Judson__elevation__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Judson__elevation__20240805_20240904_interactive.html"
+    ],
+    "gauge__Judson__gauge_height__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Judson__gauge_height__20240805_20240904_interactive.html"
+    ],
+    "gauge__Little_Eagle__discharge__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Little_Eagle__discharge__20240805_20240904_interactive.html"
+    ],
+    "gauge__Little_Eagle__gauge_height__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Little_Eagle__gauge_height__20240805_20240904_interactive.html"
+    ],
+    "gauge__Mandan__discharge__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Mandan__discharge__20240805_20240904_interactive.html"
+    ],
+    "gauge__Mandan__elevation__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Mandan__elevation__20240805_20240904_interactive.html"
+    ],
+    "gauge__Mandan__gauge_height__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Mandan__gauge_height__20240805_20240904_interactive.html"
+    ],
+    "gauge__Price__elevation__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Price__elevation__20240805_20240904_interactive.html"
+    ],
+    "gauge__Price__gauge_height__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Price__gauge_height__20240805_20240904_interactive.html"
+    ],
+    "gauge__Schmidt__elevation__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Schmidt__elevation__20240805_20240904_interactive.html"
+    ],
+    "gauge__Schmidt__gauge_height__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Schmidt__gauge_height__20240805_20240904_interactive.html"
+    ],
+    "gauge__Stanton__elevation__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Stanton__elevation__20240805_20240904_interactive.html"
+    ],
+    "gauge__Stanton__gauge_height__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Stanton__gauge_height__20240805_20240904_interactive.html"
+    ],
+    "gauge__Wakpala__discharge__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Wakpala__discharge__20240805_20240904_interactive.html"
+    ],
+    "gauge__Wakpala__gauge_height__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Wakpala__gauge_height__20240805_20240904_interactive.html"
+    ],
+    "gauge__Washburn__elevation__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Washburn__elevation__20240805_20240904_interactive.html"
+    ],
+    "gauge__Washburn__gauge_height__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Washburn__gauge_height__20240805_20240904_interactive.html"
+    ],
+    "gauge__Whitehorse__discharge__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Whitehorse__discharge__20240805_20240904_interactive.html"
+    ],
+    "gauge__Whitehorse__gauge_height__20240805_20240904_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\gauge__Whitehorse__gauge_height__20240805_20240904_interactive.html"
+    ],
+    "mesonet__Carson__avg_air_temp__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Carson__avg_air_temp__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Carson__avg_bar_pressure__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Carson__avg_bar_pressure__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Carson__avg_bare_soil_temp__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Carson__avg_bare_soil_temp__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Carson__avg_dew_point__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Carson__avg_dew_point__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Carson__avg_rel_hum__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Carson__avg_rel_hum__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Carson__avg_turf_soil_temp__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Carson__avg_turf_soil_temp__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Carson__avg_wind_chill__20251014_20251022_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Carson__avg_wind_chill__20251014_20251022_interactive.html"
+    ],
+    "mesonet__Carson__avg_wind_dir__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Carson__avg_wind_dir__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Carson__max_wind_speed__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Carson__max_wind_speed__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Carson__total_rainfall__20240804_20240826_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Carson__total_rainfall__20240804_20240826_interactive.html"
+    ],
+    "mesonet__Carson__total_solar_rad__20240805_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Carson__total_solar_rad__20240805_20240903_interactive.html"
+    ],
+    "mesonet__Fort_Yates__avg_air_temp__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Fort_Yates__avg_air_temp__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Fort_Yates__avg_bar_pressure__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Fort_Yates__avg_bar_pressure__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Fort_Yates__avg_bare_soil_temp__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Fort_Yates__avg_bare_soil_temp__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Fort_Yates__avg_dew_point__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Fort_Yates__avg_dew_point__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Fort_Yates__avg_rel_hum__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Fort_Yates__avg_rel_hum__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Fort_Yates__avg_turf_soil_temp__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Fort_Yates__avg_turf_soil_temp__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Fort_Yates__avg_wind_chill__20251014_20251022_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Fort_Yates__avg_wind_chill__20251014_20251022_interactive.html"
+    ],
+    "mesonet__Fort_Yates__avg_wind_dir__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Fort_Yates__avg_wind_dir__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Fort_Yates__max_wind_speed__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Fort_Yates__max_wind_speed__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Fort_Yates__total_rainfall__20240805_20240828_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Fort_Yates__total_rainfall__20240805_20240828_interactive.html"
+    ],
+    "mesonet__Fort_Yates__total_solar_rad__20240805_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Fort_Yates__total_solar_rad__20240805_20240903_interactive.html"
+    ],
+    "mesonet__Linton__avg_air_temp__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Linton__avg_air_temp__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Linton__avg_bar_pressure__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Linton__avg_bar_pressure__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Linton__avg_bare_soil_temp__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Linton__avg_bare_soil_temp__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Linton__avg_dew_point__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Linton__avg_dew_point__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Linton__avg_rel_hum__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Linton__avg_rel_hum__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Linton__avg_turf_soil_temp__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Linton__avg_turf_soil_temp__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Linton__avg_wind_chill__20251015_20251022_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Linton__avg_wind_chill__20251015_20251022_interactive.html"
+    ],
+    "mesonet__Linton__avg_wind_dir__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Linton__avg_wind_dir__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Linton__max_wind_speed__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Linton__max_wind_speed__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Linton__total_rainfall__20240804_20240828_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Linton__total_rainfall__20240804_20240828_interactive.html"
+    ],
+    "mesonet__Linton__total_solar_rad__20240804_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Linton__total_solar_rad__20240804_20240903_interactive.html"
+    ],
+    "mesonet__Mott__avg_air_temp__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Mott__avg_air_temp__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Mott__avg_bar_pressure__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Mott__avg_bar_pressure__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Mott__avg_bare_soil_temp__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Mott__avg_bare_soil_temp__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Mott__avg_dew_point__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Mott__avg_dew_point__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Mott__avg_rel_hum__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Mott__avg_rel_hum__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Mott__avg_turf_soil_temp__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Mott__avg_turf_soil_temp__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Mott__avg_wind_chill__20251014_20251022_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Mott__avg_wind_chill__20251014_20251022_interactive.html"
+    ],
+    "mesonet__Mott__avg_wind_dir__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Mott__avg_wind_dir__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Mott__max_wind_speed__20220402_20231014_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Mott__max_wind_speed__20220402_20231014_interactive.html"
+    ],
+    "mesonet__Mott__total_rainfall__20240804_20240902_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Mott__total_rainfall__20240804_20240902_interactive.html"
+    ],
+    "mesonet__Mott__total_solar_rad__20240805_20240903_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\mesonet__Mott__total_solar_rad__20240805_20240903_interactive.html"
+    ],
+    "noaa__Baker__dew_point__20240821_20240910_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Baker__dew_point__20240821_20240910_interactive.html"
+    ],
+    "noaa__Baker__rel_humidity__20240821_20240909_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Baker__rel_humidity__20240821_20240909_interactive.html"
+    ],
+    "noaa__Baker__temperature__20240821_20240910_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Baker__temperature__20240821_20240910_interactive.html"
+    ],
+    "noaa__Baker__wind_chill__20240810_20240810_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Baker__wind_chill__20240810_20240810_interactive.html"
+    ],
+    "noaa__Beach__dew_point__20240823_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Beach__dew_point__20240823_20240911_interactive.html"
+    ],
+    "noaa__Beach__rel_humidity__20240821_20240912_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Beach__rel_humidity__20240821_20240912_interactive.html"
+    ],
+    "noaa__Beach__temperature__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Beach__temperature__20240821_20240911_interactive.html"
+    ],
+    "noaa__Bismarck__dew_point__20240823_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Bismarck__dew_point__20240823_20240911_interactive.html"
+    ],
+    "noaa__Bismarck__rel_humidity__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Bismarck__rel_humidity__20240821_20240911_interactive.html"
+    ],
+    "noaa__Bismarck__temperature__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Bismarck__temperature__20240821_20240911_interactive.html"
+    ],
+    "noaa__Bismarck__wind_chill__20240907_20240907_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Bismarck__wind_chill__20240907_20240907_interactive.html"
+    ],
+    "noaa__Bowman__dew_point__20240825_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Bowman__dew_point__20240825_20240911_interactive.html"
+    ],
+    "noaa__Bowman__rel_humidity__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Bowman__rel_humidity__20240821_20240911_interactive.html"
+    ],
+    "noaa__Bowman__temperature__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Bowman__temperature__20240822_20240911_interactive.html"
+    ],
+    "noaa__Bowman__wind_chill__20240908_20240908_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Bowman__wind_chill__20240908_20240908_interactive.html"
+    ],
+    "noaa__Buffalo_Harding__dew_point__20240821_20240910_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Buffalo_Harding__dew_point__20240821_20240910_interactive.html"
+    ],
+    "noaa__Buffalo_Harding__rel_humidity__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Buffalo_Harding__rel_humidity__20240821_20240911_interactive.html"
+    ],
+    "noaa__Buffalo_Harding__temperature__20240822_20240910_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Buffalo_Harding__temperature__20240822_20240910_interactive.html"
+    ],
+    "noaa__Custer__dew_point__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Custer__dew_point__20240821_20240911_interactive.html"
+    ],
+    "noaa__Custer__rel_humidity__20240824_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Custer__rel_humidity__20240824_20240911_interactive.html"
+    ],
+    "noaa__Custer__temperature__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Custer__temperature__20240821_20240911_interactive.html"
+    ],
+    "noaa__Custer__wind_chill__20240809_20240810_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Custer__wind_chill__20240809_20240810_interactive.html"
+    ],
+    "noaa__Dickinson_Roosevelt__dew_point__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Dickinson_Roosevelt__dew_point__20240822_20240911_interactive.html"
+    ],
+    "noaa__Dickinson_Roosevelt__rel_humidity__20240822_20240910_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Dickinson_Roosevelt__rel_humidity__20240822_20240910_interactive.html"
+    ],
+    "noaa__Dickinson_Roosevelt__temperature__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Dickinson_Roosevelt__temperature__20240822_20240911_interactive.html"
+    ],
+    "noaa__Faith__dew_point__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Faith__dew_point__20240822_20240911_interactive.html"
+    ],
+    "noaa__Faith__rel_humidity__20240824_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Faith__rel_humidity__20240824_20240911_interactive.html"
+    ],
+    "noaa__Faith__temperature__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Faith__temperature__20240821_20240911_interactive.html"
+    ],
+    "noaa__Garrison__dew_point__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Garrison__dew_point__20240822_20240911_interactive.html"
+    ],
+    "noaa__Garrison__rel_humidity__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Garrison__rel_humidity__20240822_20240911_interactive.html"
+    ],
+    "noaa__Garrison__temperature__20240821_20240827_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Garrison__temperature__20240821_20240827_interactive.html"
+    ],
+    "noaa__Garrison__wind_chill__20240907_20240907_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Garrison__wind_chill__20240907_20240907_interactive.html"
+    ],
+    "noaa__Glen__dew_point__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Glen__dew_point__20240821_20240911_interactive.html"
+    ],
+    "noaa__Glen__rel_humidity__20240821_20240909_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Glen__rel_humidity__20240821_20240909_interactive.html"
+    ],
+    "noaa__Glen__temperature__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Glen__temperature__20240821_20240911_interactive.html"
+    ],
+    "noaa__Glendive_Dawson__dew_point__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Glendive_Dawson__dew_point__20240821_20240911_interactive.html"
+    ],
+    "noaa__Glendive_Dawson__rel_humidity__20240821_20240910_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Glendive_Dawson__rel_humidity__20240821_20240910_interactive.html"
+    ],
+    "noaa__Glendive_Dawson__temperature__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Glendive_Dawson__temperature__20240821_20240911_interactive.html"
+    ],
+    "noaa__Glendive_Dawson__wind_chill__20240907_20240907_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Glendive_Dawson__wind_chill__20240907_20240907_interactive.html"
+    ],
+    "noaa__Hazen_Mercer__dew_point__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Hazen_Mercer__dew_point__20240821_20240911_interactive.html"
+    ],
+    "noaa__Hazen_Mercer__rel_humidity__20240825_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Hazen_Mercer__rel_humidity__20240825_20240911_interactive.html"
+    ],
+    "noaa__Hazen_Mercer__wind_chill__20240905_20240907_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Hazen_Mercer__wind_chill__20240905_20240907_interactive.html"
+    ],
+    "noaa__Hettinger__dew_point__20240821_20240912_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Hettinger__dew_point__20240821_20240912_interactive.html"
+    ],
+    "noaa__Hettinger__rel_humidity__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Hettinger__rel_humidity__20240822_20240911_interactive.html"
+    ],
+    "noaa__Hettinger__temperature__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Hettinger__temperature__20240821_20240911_interactive.html"
+    ],
+    "noaa__Hettinger__wind_chill__20240810_20240907_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Hettinger__wind_chill__20240810_20240907_interactive.html"
+    ],
+    "noaa__Linton__dew_point__20240823_20240910_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Linton__dew_point__20240823_20240910_interactive.html"
+    ],
+    "noaa__Linton__rel_humidity__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Linton__rel_humidity__20240822_20240911_interactive.html"
+    ],
+    "noaa__Linton__temperature__20240825_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Linton__temperature__20240825_20240911_interactive.html"
+    ],
+    "noaa__Linton__wind_chill__20240906_20240908_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Linton__wind_chill__20240906_20240908_interactive.html"
+    ],
+    "noaa__Miles_City_Wiley__dew_point__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Miles_City_Wiley__dew_point__20240821_20240911_interactive.html"
+    ],
+    "noaa__Miles_City_Wiley__rel_humidity__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Miles_City_Wiley__rel_humidity__20240821_20240911_interactive.html"
+    ],
+    "noaa__Miles_City_Wiley__temperature__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Miles_City_Wiley__temperature__20240822_20240911_interactive.html"
+    ],
+    "noaa__Minot__dew_point__20240823_20240910_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Minot__dew_point__20240823_20240910_interactive.html"
+    ],
+    "noaa__Minot__rel_humidity__20240823_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Minot__rel_humidity__20240823_20240911_interactive.html"
+    ],
+    "noaa__Minot__temperature__20240822_20240910_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Minot__temperature__20240822_20240910_interactive.html"
+    ],
+    "noaa__Minot__wind_chill__20240810_20240907_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Minot__wind_chill__20240810_20240907_interactive.html"
+    ],
+    "noaa__Mobridge__dew_point__20240822_20240908_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Mobridge__dew_point__20240822_20240908_interactive.html"
+    ],
+    "noaa__Mobridge__rel_humidity__20240821_20240910_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Mobridge__rel_humidity__20240821_20240910_interactive.html"
+    ],
+    "noaa__Mobridge__temperature__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Mobridge__temperature__20240821_20240911_interactive.html"
+    ],
+    "noaa__Philip__dew_point__20240822_20240907_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Philip__dew_point__20240822_20240907_interactive.html"
+    ],
+    "noaa__Philip__rel_humidity__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Philip__rel_humidity__20240822_20240911_interactive.html"
+    ],
+    "noaa__Philip__temperature__20240824_20240912_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Philip__temperature__20240824_20240912_interactive.html"
+    ],
+    "noaa__Pierre__dew_point__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Pierre__dew_point__20240821_20240911_interactive.html"
+    ],
+    "noaa__Pierre__rel_humidity__20240823_20240910_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Pierre__rel_humidity__20240823_20240910_interactive.html"
+    ],
+    "noaa__Pierre__temperature__20240823_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Pierre__temperature__20240823_20240911_interactive.html"
+    ],
+    "noaa__Rapid_City__dew_point__20240821_20240907_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Rapid_City__dew_point__20240821_20240907_interactive.html"
+    ],
+    "noaa__Rapid_City__rel_humidity__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Rapid_City__rel_humidity__20240822_20240911_interactive.html"
+    ],
+    "noaa__Rapid_City__temperature__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Rapid_City__temperature__20240821_20240911_interactive.html"
+    ],
+    "noaa__Sidney_Richland__dew_point__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Sidney_Richland__dew_point__20240821_20240911_interactive.html"
+    ],
+    "noaa__Sidney_Richland__rel_humidity__20240821_20240907_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Sidney_Richland__rel_humidity__20240821_20240907_interactive.html"
+    ],
+    "noaa__Sidney_Richland__temperature__20240821_20240910_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Sidney_Richland__temperature__20240821_20240910_interactive.html"
+    ],
+    "noaa__Spearfish_Clyde__dew_point__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Spearfish_Clyde__dew_point__20240821_20240911_interactive.html"
+    ],
+    "noaa__Spearfish_Clyde__rel_humidity__20240821_20240910_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Spearfish_Clyde__rel_humidity__20240821_20240910_interactive.html"
+    ],
+    "noaa__Spearfish_Clyde__temperature__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Spearfish_Clyde__temperature__20240821_20240911_interactive.html"
+    ],
+    "noaa__Stanley__dew_point__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Stanley__dew_point__20240821_20240911_interactive.html"
+    ],
+    "noaa__Stanley__rel_humidity__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Stanley__rel_humidity__20240821_20240911_interactive.html"
+    ],
+    "noaa__Stanley__temperature__20240824_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Stanley__temperature__20240824_20240911_interactive.html"
+    ],
+    "noaa__Stanley__wind_chill__20240810_20240905_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Stanley__wind_chill__20240810_20240905_interactive.html"
+    ],
+    "noaa__Tioga__dew_point__20240821_20240909_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Tioga__dew_point__20240821_20240909_interactive.html"
+    ],
+    "noaa__Tioga__rel_humidity__20240823_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Tioga__rel_humidity__20240823_20240911_interactive.html"
+    ],
+    "noaa__Tioga__temperature__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Tioga__temperature__20240822_20240911_interactive.html"
+    ],
+    "noaa__Tioga__wind_chill__20240810_20240907_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Tioga__wind_chill__20240810_20240907_interactive.html"
+    ],
+    "noaa__Watford_City__dew_point__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Watford_City__dew_point__20240821_20240911_interactive.html"
+    ],
+    "noaa__Watford_City__rel_humidity__20240821_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Watford_City__rel_humidity__20240821_20240911_interactive.html"
+    ],
+    "noaa__Watford_City__temperature__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Watford_City__temperature__20240822_20240911_interactive.html"
+    ],
+    "noaa__Watford_City__wind_chill__20240906_20240906_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Watford_City__wind_chill__20240906_20240906_interactive.html"
+    ],
+    "noaa__Williston_Basin__dew_point__20240822_20240908_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Williston_Basin__dew_point__20240822_20240908_interactive.html"
+    ],
+    "noaa__Williston_Basin__rel_humidity__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Williston_Basin__rel_humidity__20240822_20240911_interactive.html"
+    ],
+    "noaa__Williston_Basin__temperature__20240822_20240911_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Williston_Basin__temperature__20240822_20240911_interactive.html"
+    ],
+    "noaa__Williston_Basin__wind_chill__20240905_20240905_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa__Williston_Basin__wind_chill__20240905_20240905_interactive.html"
+    ],
+    "noaa_weather__Bismarck__precipitation__20251015_20251027_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa_weather__Bismarck__precipitation__20251015_20251027_interactive.html"
+    ],
+    "noaa_weather__Minot__min_temp__20231025_20231030_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa_weather__Minot__min_temp__20231025_20231030_interactive.html"
+    ],
+    "noaa_weather__Minot__precipitation__20251021_20251026_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\noaa_weather__Minot__precipitation__20251021_20251026_interactive.html"
+    ],
+    "shadehill__Shadehill__daily_max_air_temp__20240428_20240527_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\shadehill__Shadehill__daily_max_air_temp__20240428_20240527_interactive.html"
+    ],
+    "shadehill__Shadehill__daily_mean_air_temp__20240428_20240527_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\shadehill__Shadehill__daily_mean_air_temp__20240428_20240527_interactive.html"
+    ],
+    "shadehill__Shadehill__daily_mean_comp_inflow__20251015_20251029_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\shadehill__Shadehill__daily_mean_comp_inflow__20251015_20251029_interactive.html"
+    ],
+    "shadehill__Shadehill__daily_mean_gate_opening__20251015_20251029_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\shadehill__Shadehill__daily_mean_gate_opening__20251015_20251029_interactive.html"
+    ],
+    "shadehill__Shadehill__daily_mean_river_dis__20251015_20251029_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\shadehill__Shadehill__daily_mean_river_dis__20251015_20251029_interactive.html"
+    ],
+    "shadehill__Shadehill__daily_mean_spill_dis__20251015_20251029_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\shadehill__Shadehill__daily_mean_spill_dis__20251015_20251029_interactive.html"
+    ],
+    "shadehill__Shadehill__daily_mean_tot_dis__20251015_20251029_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\shadehill__Shadehill__daily_mean_tot_dis__20251015_20251029_interactive.html"
+    ],
+    "shadehill__Shadehill__daily_min_air_temp__20240428_20240527_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\shadehill__Shadehill__daily_min_air_temp__20240428_20240527_interactive.html"
+    ],
+    "shadehill__Shadehill__res_forebay_elev__20251015_20251029_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\shadehill__Shadehill__res_forebay_elev__20251015_20251029_interactive.html"
+    ],
+    "shadehill__Shadehill__res_stor_content__20251015_20251029_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\shadehill__Shadehill__res_stor_content__20251015_20251029_interactive.html"
+    ],
+    "shadehill__Shadehill__tot_precip_daily__20251015_20251029_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\shadehill__Shadehill__tot_precip_daily__20251015_20251029_interactive.html"
+    ],
+    "shadehill__Shadehill__tot_year_precip__20251015_20251029_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\shadehill__Shadehill__tot_year_precip__20251015_20251029_interactive.html"
+    ],
+    "water_quality__380001__nitrate_nitrite__19930120_19960515_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\water_quality__380001__nitrate_nitrite__19930120_19960515_interactive.html"
+    ],
+    "water_quality__380001__ph__19930120_19960626_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\water_quality__380001__ph__19930120_19960626_interactive.html"
+    ],
+    "water_quality__380001__total_phosphorus__19930120_19960626_interactive": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\static\\graphs\\water_quality__380001__total_phosphorus__19930120_19960626_interactive.html"
+    ]
+  },
+  "Big Be": {
+    "Air Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Air Temperature at Big Bend.html"
+    ]
+  },
+  "Fort Peck": {
+    "Air Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Air Temperature at Fort Peck.html"
+    ]
+  },
+  "Fort Randall": {
+    "Air Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Air Temperature at Fort Randall.html"
+    ]
+  },
+  "Garrison": {
+    "Air Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Air Temperature at Garrison.html"
+    ]
+  },
+  "Gavins Point": {
+    "Air Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Air Temperature at Gavins Point.html"
+    ]
+  },
+  "Oahe": {
+    "Air Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Air Temperature at Oahe.html"
+    ]
+  },
+  "Carson": {
+    "Air Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Air Temperature at Carson.html"
+    ],
+    "Bare Soil Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Bare Soil Temperature at Carson.html"
+    ],
+    "Baromatric Pressure": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Baromatric Pressure at Carson.html"
+    ],
+    "Dew Point": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Dew Point at Carson.html"
+    ],
+    "Relative Humidity": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Relative Humidity at Carson.html"
+    ]
+  },
+  "Fort Yates": {
+    "Air Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Air Temperature at Fort Yates.html"
+    ],
+    "Bare Soil Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Bare Soil Temperature at Fort Yates.html"
+    ],
+    "Baromatric Pressure": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Baromatric Pressure at Fort Yates.html"
+    ],
+    "Dew Point": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Dew Point at Fort Yates.html"
+    ],
+    "Relative Humidity": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Relative Humidity at Fort Yates.html"
+    ]
+  },
+  "Linton": {
+    "Air Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Air Temperature at Linton.html"
+    ],
+    "Bare Soil Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Bare Soil Temperature at Linton.html"
+    ],
+    "Baromatric Pressure": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Baromatric Pressure at Linton.html"
+    ],
+    "Dew Point": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Dew Point at Linton.html"
+    ],
+    "Relative Humidity": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Relative Humidity at Linton.html"
+    ]
+  },
+  "Mott": {
+    "Air Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Air Temperature at Mott.html"
+    ],
+    "Bare Soil Temperature": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Bare Soil Temperature at Mott.html"
+    ],
+    "Baromatric Pressure": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Baromatric Pressure at Mott.html"
+    ],
+    "Dew Point": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Dew Point at Mott.html"
+    ],
+    "Relative Humidity": [
+      "D:\\UNIVERSITY MATERIAL\\New-Code-Layout\\staticfiles\\graphs\\Average Relative Humidity at Mott.html"
+    ]
+  }
+}
