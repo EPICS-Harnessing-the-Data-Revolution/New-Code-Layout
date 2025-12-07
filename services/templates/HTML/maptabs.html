@@ -281,6 +281,58 @@
         grid-template-columns: minmax(0, 1fr);
       }
     }
+    
+    @media (max-width: 768px) {
+      .page-wrapper {
+        padding: 0 16px;
+        margin: 16px auto 32px;
+      }
+      
+      .page-heading h1 {
+        font-size: 1.5rem;
+      }
+      
+      .page-heading p {
+        font-size: 0.85rem;
+      }
+      
+      .graph-frame {
+        min-height: 400px;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .page-wrapper {
+        padding: 0 12px;
+      }
+      
+      .page-heading {
+        margin: 16px auto 12px;
+      }
+      
+      .page-heading h1 {
+        font-size: 1.3rem;
+      }
+      
+      .location-form {
+        padding: 16px;
+      }
+      
+      .location-form select,
+      .location-form input[type="date"] {
+        font-size: 0.85rem;
+        padding: 7px 9px;
+      }
+      
+      .button-primary {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+      }
+      
+      .graph-frame {
+        min-height: 350px;
+      }
+    }
   </style>
 </head>
 
