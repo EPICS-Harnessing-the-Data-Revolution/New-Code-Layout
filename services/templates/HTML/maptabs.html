@@ -3,335 +3,90 @@
 <head>
   <title>Interactive Map</title>
   {% load static %}
-  <link rel="stylesheet" href="{% static 'css/maptabs.css' %}">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
   <style>
-    :root {
-      --bg-page: #f5f7fc;
-      --bg-card: #ffffff;
-      --primary: #4c5fd5;
-      --primary-soft: rgba(76,95,213,0.12);
-      --primary-hover: #3c4cc3;
-      --border-subtle: #e2e6f3;
-      --text-main: #111827;
-      --text-muted: #6b7280;
-      --radius-xl: 18px;
-      --radius-lg: 14px;
-      --shadow-soft: 0 10px 30px rgba(15,23,42,0.08);
-      --transition-fast: 0.22s ease;
-      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    :root{
+      --bg-page:#f6f8fc;
+      --bg-card:#ffffff;
+      --primary:#5b61f6;
+      --primary-2:#4c54ea;
+      --primary-soft:rgba(91,97,246,.14);
+      --border:#e5e9f4;
+      --text:#0f172a;
+      --muted:#667085;
+      --radius-xl:18px;
+      --shadow-sm:0 6px 20px rgba(15,23,42,.06);
+      --shadow-md:0 12px 36px rgba(15,23,42,.10);
+      --ctrl-h:48px;
+      --t:.2s ease;
     }
 
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: var(--font-sans);
-      color: var(--text-main);
-      background: var(--bg-page);
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg-page);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif}
+
+    /* Hero */
+    .hero{
+      background:
+        radial-gradient(80% 60% at 10% -20%, #c7d2fe 0%, transparent 60%),
+        radial-gradient(80% 60% at 100% -10%, #fde68a 10%, transparent 60%),
+        linear-gradient(180deg,#fff, #fafbff 90%, transparent 100%);
+      border-bottom:1px solid var(--border);
+    }
+    .hero-inner{max-width:1200px;margin:0 auto;padding:28px 24px 10px;text-align:center;}
+    .title{margin:8px 0 6px;font-size:clamp(24px,3.2vw,34px);font-weight:700;letter-spacing:.2px;}
+    .subtitle{margin:0 auto 18px;max-width:800px;color:var(--muted)}
+
+    .page{max-width:1200px;margin:0 auto;padding:16px 24px 60px}
+
+    /* Card & form */
+    .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm);padding:18px 20px}
+    .station-title{margin:2px 0 10px;font-weight:700}
+
+    .form-grid{
+      display:grid;gap:14px;
+      grid-template-columns:repeat(3,minmax(220px,1fr));
+      align-items:start;
     }
 
-    .page-wrapper {
-      max-width: 1200px;
-      margin: 32px auto 64px;
-      padding: 0 24px;
+    .field{display:grid;grid-template-rows:auto var(--ctrl-h);gap:6px;min-width:0}
+    .label{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+    .control{
+      height:var(--ctrl-h);width:100%;padding:10px 12px;border-radius:12px;
+      background:#fbfcff;border:1px solid #dfe4f3;color:var(--text);font-size:.95rem;outline:none;
+      transition:border var(--t), box-shadow var(--t), background var(--t);
     }
+    .control:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft);background:#fff}
+    select.control{appearance:none;background-image:linear-gradient(45deg,transparent 50%, #98a2b3 50%),linear-gradient(135deg,#98a2b3 50%,transparent 50%),linear-gradient(to right,#dfe4f3,#dfe4f3);background-position:calc(100% - 18px) 18px, calc(100% - 12px) 18px, calc(100% - 2.4rem) 0.6rem;background-size:6px 6px,6px 6px,1px 70%;background-repeat:no-repeat}
 
-    .page-heading {
-  margin: 24px auto 18px;
-  max-width: 720px;
-  text-align: center;
-}
+    .quick-row{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .chip{padding:6px 10px;border-radius:999px;border:1px solid #dfe4f3;background:#fff;color:#3b4353;font-size:.85rem;cursor:pointer;transition:all var(--t)}
+    .chip:hover{border-color:#cfd6ff;background:var(--primary-soft);color:var(--primary)}
 
-    .page-heading h1 {
-  font-size: 1.9rem;
-  margin: 0 0 6px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: #111827;
-}
+    .messages{grid-column:1/-1;display:flex;flex-direction:column;gap:10px}
+    .alert{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;background:#f9fafb;color:#374151;box-shadow:0 1px 0 #f1f5f9 inset}
+    .alert.info{background:#eef2ff;border-color:#c7d2fe;color:#1e3a8a}
+    .alert.error{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+    .alert:empty{display:none}
 
-    .page-heading p {
-  margin: 0;
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  white-space: normal; /* override any global nowrap */
-}
+    .actions{grid-column:1/-1;display:flex;gap:10px;justify-content:flex-end}
+    .btn{padding:10px 18px;border-radius:999px;border:0;cursor:pointer;font-weight:600;font-size:.92rem;transition:transform var(--t), box-shadow var(--t), background var(--t), color var(--t)}
+    .btn-primary{background:var(--primary);color:#fff;box-shadow:0 10px 20px rgba(91,97,246,.25)}
+    .btn-primary:hover{background:var(--primary-2);transform:translateY(-1px);box-shadow:0 14px 28px rgba(91,97,246,.32)}
+    .btn-ghost{background:#fff;color:var(--primary);border:1px solid #cfd6ff}
+    .btn-ghost:hover{background:var(--primary-soft);border-color:var(--primary)}
+
+    .graph-card{margin-top:16px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);box-shadow:var(--shadow-md);overflow:hidden}
+    .graph-frame{display:block;width:100%;min-height:720px;border:0}
+    .graph-loading{padding:16px 18px;color:var(--muted)}
+    .graph-slot{margin-top:18px;border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-md);background:#fff;border:1px solid var(--border)}
 
 
-    /* Tabs */
-
-    .tab-container main {
-      margin-top: 24px;
-    }
-
-    .tab-container main > input[type="radio"] {
-      display: none;
-    }
-
-    .tab-container main > label {
-      display: inline-flex;
-      align-items: center;
-      padding: 9px 15px;
-      margin-right: 6px;
-      margin-bottom: 4px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      cursor: pointer;
-      border-radius: 999px;
-      transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
-      user-select: none;
-    }
-
-    .tab-container main > label:hover {
-      background: var(--primary-soft);
-      color: var(--primary);
-    }
-
-    #tab1:checked + label,
-    #tab2:checked + label,
-    #tab3:checked + label,
-    #tab4:checked + label,
-    #tab5:checked + label,
-    #tab6:checked + label,
-    #tab7:checked + label,
-    #tab8:checked + label,
-    #tab9:checked + label,
-    #tab10:checked + label,
-    #tab11:checked + label,
-    #tab12:checked + label,
-    #tab13:checked + label {
-      color: var(--primary);
-      background: #ffffff;
-      box-shadow: 0 6px 14px rgba(148,163,253,0.25);
-      transform: translateY(-1px);
-    }
-
-    .tab-container section {
-      display: none;
-      margin-top: 14px;
-    }
-
-    #tab1:checked ~ #content1,
-    #tab2:checked ~ #content2,
-    #tab3:checked ~ #content3,
-    #tab4:checked ~ #content4,
-    #tab5:checked ~ #content5,
-    #tab6:checked ~ #content6,
-    #tab7:checked ~ #content7,
-    #tab8:checked ~ #content8,
-    #tab9:checked ~ #content9,
-    #tab10:checked ~ #content10,
-    #tab11:checked ~ #content11,
-    #tab12:checked ~ #content12,
-    #tab13:checked ~ #content13 {
-      display: block;
-    }
-
-    /* Form card */
-
-    .location-form {
-      background: var(--bg-card);
-      padding: 18px 20px 18px;
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-soft);
-      border: 1px solid var(--border-subtle);
-      display: grid;
-      grid-template-columns: minmax(0, 2.2fr) minmax(0, 2fr) minmax(0, 2fr);
-      gap: 12px 18px;
-      align-items: end;
-    }
-
-    .location-form h3 {
-      grid-column: 1 / -1;
-      margin: 0 0 2px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #111827;
-    }
-
-    .field-label {
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .location-form select,
-    .location-form input[type="date"] {
-      width: 100%;
-      padding: 8px 10px;
-      font-size: 0.9rem;
-      border-radius: 10px;
-      border: 1px solid #d0d7ee;
-      background: #f9fafb;
-      color: var(--text-main);
-      outline: none;
-      transition: border var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
-    }
-
-    .location-form select:focus,
-    .location-form input[type="date"]:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-soft);
-      background: #ffffff;
-    }
-
-    .date-row {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .button-row {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-      align-items: center;
-      grid-column: 3 / 4;
-    }
-
-    .btn {
-      padding: 8px 16px;
-      border-radius: 999px;
-      font-size: 0.88rem;
-      font-weight: 500;
-      border: none;
-      cursor: pointer;
-      transition: all var(--transition-fast);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      white-space: nowrap;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: #ffffff;
-      box-shadow: 0 4px 14px rgba(76,95,213,0.35);
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
-      box-shadow: 0 6px 18px rgba(76,95,213,0.5);
-      transform: translateY(-1px);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--primary);
-      border: 1px solid rgba(76,95,213,0.25);
-    }
-
-    .btn-ghost:hover {
-      background: var(--primary-soft);
-      border-color: var(--primary);
-    }
-
-    /* Messages & graph */
-
-    .date-error,
-    .nodata-error,
-    .server-error {
-      font-size: 0.82rem;
-      margin-top: 4px;
-      color: #b91c1c;
-    }
-
-    .graph-slot {
-      margin-top: 18px;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: var(--shadow-soft);
-      background: #ffffff;
-      border: 1px solid var(--border-subtle);
-    }
-
-    .graph-frame {
-      display: block;
-      width: 100%;
-      min-height: 700px;
-      border: 0;
-      border-radius: inherit;
-    }
-
-    .graph-loading {
-      padding: 18px 18px 20px;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    @media (max-width: 899px) {
-      .location-form {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
-      .button-row {
-        grid-column: 1 / -1;
-        justify-content: flex-start;
-        margin-top: 4px;
-      }
-
-      .date-row {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .page-wrapper {
-        padding: 0 16px;
-        margin: 16px auto 32px;
-      }
-      
-      .page-heading h1 {
-        font-size: 1.5rem;
-      }
-      
-      .page-heading p {
-        font-size: 0.85rem;
-      }
-      
-      .graph-frame {
-        min-height: 400px;
-      }
-    }
-    
-    @media (max-width: 640px) {
-      .page-wrapper {
-        padding: 0 12px;
-      }
-      
-      .page-heading {
-        margin: 16px auto 12px;
-      }
-      
-      .page-heading h1 {
-        font-size: 1.3rem;
-      }
-      
-      .location-form {
-        padding: 16px;
-      }
-      
-      .location-form select,
-      .location-form input[type="date"] {
-        font-size: 0.85rem;
-        padding: 7px 9px;
-      }
-      
-      .button-primary {
-        padding: 10px 20px;
-        font-size: 0.85rem;
-      }
-      
-      .graph-frame {
-        min-height: 350px;
-      }
+    @media (max-width: 980px){
+      .form-grid{grid-template-columns:minmax(0,1fr)}
+      .actions{justify-content:flex-start}
     }
   </style>
 </head>
@@ -339,21 +94,23 @@
 <body>
   {% include "HTML/navbar.html" %}
 
-  <div class="page-wrapper">
-    <div class="page-heading">
-      <h1>Missouri River Gauge Dashboard</h1>
-      <p>Select a location, metric, and date range to generate interactive gauge visualizations.</p>
+  <header class="hero">
+    <div class="hero-inner">
+      <h1 class="title">Missouri River Gauge Dashboard</h1>
+      <p class="subtitle">Select a location, metric, and date range to generate interactive gauge visualizations.</p>
     </div>
-    
-    <!-- Reusable custom-location card -->
-    <div style="margin:12px 0;">
-      <form id="custom-location-form" class="location-form" method="POST" action="#">
-        {% csrf_token %}
-        <h3>Custom Location</h3>
+  </header>
 
-        <div>
-          <div class="field-label">Location</div>
-          <select id="custom-location-select" required>
+<main class="page">
+    <!-- Reusable custom-location card -->
+    <div class="card" style="margin-bottom:24px;">
+      <h3 class="station-title">Custom Location</h3>
+      <form id="custom-location-form" class="form-grid" method="POST" action="#">
+        {% csrf_token %}
+
+        <div class="field">
+          <label class="label">Location</label>
+          <select id="custom-location-select" class="control" required>
             <option value="" disabled selected>Select location</option>
             {% for entry in location_entries %}
               <option value="{{ entry.location }}" data-endpoint="{{ entry.endpoint }}" data-inputname="{{ entry.input_name|default:'location' }}">{{ entry.location }}</option>
@@ -361,34 +118,38 @@
           </select>
         </div>
 
-        <div>
-          <div class="field-label">Data Type</div>
-          <select name="data2see" required>
+        <div class="field">
+          <label class="label">Data Type</label>
+          <select name="data2see" class="control" required>
             <option value="" disabled selected>Choose Data Point</option>
           </select>
         </div>
 
-        <div class="date-row">
-          <div>
-            <div class="field-label">Start Date</div>
-            <input type="date" name="start-date" required value="{{ default_start }}">
-          </div>
-          <div>
-            <div class="field-label">End Date</div>
-            <input type="date" name="end-date" required value="{{ default_end }}">
-          </div>
+        <div class="field">
+          <label class="label">Start Date</label>
+          <input type="date" name="start-date" class="control" required value="{{ default_start }}">
+        </div>
+
+        <div class="field">
+          <label class="label">End Date</label>
+          <input type="date" name="end-date" class="control" required value="{{ default_end }}">
         </div>
 
         <input type="hidden" name="location" value="">
 
-        <div class="button-row">
-          <button type="submit" class="btn btn-primary">Generate</button>
-          <button type="button" class="btn btn-ghost">Current Data</button>
+        <div class="messages" aria-live="polite">
+          <div class="alert error date-error"></div>
+          <div class="alert info nodata-error"></div>
+          <div class="alert error server-error"></div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" type="submit">Generate</button>
+          <button class="btn btn-ghost" type="button" data-current>Current Data</button>
         </div>
       </form>
     </div>
-    
-  </div>
+  </main>
 
   <script>
     // Server-injected graph index (scanned each request by maptabs view)
