@@ -41,6 +41,38 @@
 
     .page{max-width:1200px;margin:0 auto;padding:16px 24px 60px}
 
+    /* Location tab strip */
+    .tab-strip{
+      display:flex;
+      gap:8px;
+      padding:12px 0 4px;
+      overflow-x:auto;
+      white-space:nowrap;
+      border-bottom:1px solid #dfe3ef;
+      margin-bottom:16px;
+      scrollbar-width: thin;
+    }
+    .tab-strip::-webkit-scrollbar{height:6px}
+    .tab-strip::-webkit-scrollbar-thumb{background:#d8ddf0;border-radius:999px}
+    .loc-chip{
+      border:1px solid var(--border);
+      background:#fff;
+      color:#3b4353;
+      border-radius:999px;
+      padding:9px 14px;
+      font-weight:600;
+      cursor:pointer;
+      transition:all var(--t);
+      white-space:nowrap;
+    }
+    .loc-chip:hover{box-shadow:0 6px 16px rgba(91,97,246,.18);color:var(--primary);}
+    .loc-chip.active{
+      color:var(--primary);
+      border-color:#dfe4ff;
+      box-shadow:0 8px 18px rgba(91,97,246,.28);
+      transform:translateY(-1px);
+    }
+
     /* Card & form */
     .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm);padding:18px 20px}
     .station-title{margin:2px 0 10px;font-weight:700}
@@ -59,6 +91,7 @@
       transition:border var(--t), box-shadow var(--t), background var(--t);
     }
     .control:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft);background:#fff}
+    .control.readonly{display:flex;align-items:center;height:var(--ctrl-h);background:#f5f7fb;border-style:dashed;color:#475467}
     select.control{appearance:none;background-image:linear-gradient(45deg,transparent 50%, #98a2b3 50%),linear-gradient(135deg,#98a2b3 50%,transparent 50%),linear-gradient(to right,#dfe4f3,#dfe4f3);background-position:calc(100% - 18px) 18px, calc(100% - 12px) 18px, calc(100% - 2.4rem) 0.6rem;background-size:6px 6px,6px 6px,1px 70%;background-repeat:no-repeat}
 
     .quick-row{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -96,27 +129,23 @@
 
   <header class="hero">
     <div class="hero-inner">
-      <h1 class="title">Missouri River Gauge Dashboard</h1>
+      <h1 class="title">Custom Graph Dashboard</h1>
       <p class="subtitle">Select a location, metric, and date range to generate interactive gauge visualizations.</p>
     </div>
   </header>
 
 <main class="page">
+    <div class="tab-strip" id="location-tab-strip">
+      {% for entry in location_entries %}
+        <button type="button" class="loc-chip" data-loc="{{ entry.location }}" data-endpoint="{{ entry.endpoint }}" data-inputname="{{ entry.input_name|default:'location' }}">{{ entry.location }}</button>
+      {% endfor %}
+    </div>
+
     <!-- Reusable custom-location card -->
     <div class="card" style="margin-bottom:24px;">
-      <h3 class="station-title">Custom Location</h3>
+      <h3 class="station-title" id="selected-location-heading">Custom Location</h3>
       <form id="custom-location-form" class="form-grid" method="POST" action="#">
         {% csrf_token %}
-
-        <div class="field">
-          <label class="label">Location</label>
-          <select id="custom-location-select" class="control" required>
-            <option value="" disabled selected>Select location</option>
-            {% for entry in location_entries %}
-              <option value="{{ entry.location }}" data-endpoint="{{ entry.endpoint }}" data-inputname="{{ entry.input_name|default:'location' }}">{{ entry.location }}</option>
-            {% endfor %}
-          </select>
-        </div>
 
         <div class="field">
           <label class="label">Data Type</label>
@@ -127,12 +156,21 @@
 
         <div class="field">
           <label class="label">Start Date</label>
-          <input type="date" name="start-date" class="control" required value="{{ default_start }}">
+          <input type="date" name="start-date" class="control" required placeholder="dd/mm/yyyy" value="">
         </div>
 
         <div class="field">
           <label class="label">End Date</label>
-          <input type="date" name="end-date" class="control" required value="{{ default_end }}">
+          <input type="date" name="end-date" class="control" required placeholder="dd/mm/yyyy" value="">
+        </div>
+
+        <div class="quick-row">
+          <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
+          <button type="button" class="chip" data-range="7d">Last 7 days</button>
+          <button type="button" class="chip" data-range="30d">Last 30 days</button>
+          <button type="button" class="chip" data-range="ytd">YTD</button>
+          <button type="button" class="chip" data-range="1y">Last 1 year</button>
+          <button type="button" class="chip" data-range="clear">Clear</button>
         </div>
 
         <input type="hidden" name="location" value="">
@@ -175,6 +213,17 @@
       const ENABLE_PROBE = true;
       const TREAT_ALL_500_AS_NO_DATA = true;
       const NO_DATA_PATTERNS = [/IndexError/i, /list index out of range/i, /moving_avg/i, /sqlclasses\.py/i];
+
+      // CSRF helper for fetch
+      const getCsrfToken = () => {
+        const name = 'csrftoken=';
+        const cookies = document.cookie ? document.cookie.split(';') : [];
+        for (let c of cookies) {
+          const t = c.trim();
+          if (t.startsWith(name)) return decodeURIComponent(t.slice(name.length));
+        }
+        return '';
+      };
 
       function ensureGraphSlot(form) {
         let slot = form.parentElement.querySelector('.graph-slot');
@@ -360,7 +409,8 @@ function renderHtmlIntoSlot(slot, html) {
             credentials: 'same-origin',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-              'X-Requested-With': 'XMLHttpRequest'
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRFToken': getCsrfToken()
             },
             redirect: 'manual'
           });
@@ -385,6 +435,11 @@ function renderHtmlIntoSlot(slot, html) {
         const endInput   = form.querySelector('input[name="end-date"]');
         const datasetSel = form.querySelector('select[name="data2see"]');
         const locationEl = form.querySelector('input[name="location"]');
+
+        const defaultStartVal = startInput?.value || '';
+        const defaultEndVal = endInput?.value || '';
+        if (startInput) startInput.dataset.defaultValue = defaultStartVal;
+        if (endInput) endInput.dataset.defaultValue = defaultEndVal;
 
         const ensureMsg = (cls) => {
           let el = form.querySelector('.' + cls);
@@ -457,6 +512,43 @@ function renderHtmlIntoSlot(slot, html) {
           });
         }
 
+        // Quick ranges (handled via delegated listener as well)
+        form.querySelectorAll('.quick-row .chip').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const range = btn.dataset.range;
+            if (!range) return;
+
+            if (range === 'clear') {
+              startInput.value = startInput.dataset.defaultValue || defaultStartVal;
+              endInput.value = endInput.dataset.defaultValue || defaultEndVal;
+              return;
+            }
+
+            const end = new Date(); end.setHours(0,0,0,0);
+            let start = new Date(end);
+
+            switch (range) {
+              case '7d':
+                start.setDate(start.getDate() - 7);
+                break;
+              case '30d':
+                start.setDate(start.getDate() - 30);
+                break;
+              case '1y':
+                start.setFullYear(start.getFullYear() - 1);
+                break;
+              case 'ytd':
+                start = new Date(end.getFullYear(), 0, 1);
+                break;
+              default:
+                return;
+            }
+
+            startInput.value = isoDate(start);
+            endInput.value = isoDate(end);
+          });
+        });
+
         form.addEventListener('submit', async (e) => {
           if (!form.checkValidity()) { form.reportValidity(); return; }
           if (!validateDates()) { e.preventDefault(); return; }
@@ -472,7 +564,7 @@ function renderHtmlIntoSlot(slot, html) {
             const loc = (locationEl?.value || '').replace(/\s+(ND|SD)$/i, '');
             slot.innerHTML = '';
             nodataError.textContent =
-              `ℹ️ No data for "${datasetSel.value}" at ${loc} in that date range.`;
+              `No graph is available for ${loc || 'this location'} with that metric and date range. Please choose another range or metric.`;
             nodataError.style.display = 'block';
             return;
           }
@@ -509,7 +601,8 @@ function renderHtmlIntoSlot(slot, html) {
               credentials: 'same-origin',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': getCsrfToken()
               },
               redirect: 'manual'
             });
@@ -519,7 +612,7 @@ function renderHtmlIntoSlot(slot, html) {
               renderHtmlIntoSlot(slot, html);
             } else if (resp.status >= 500 && TREAT_ALL_500_AS_NO_DATA) {
               slot.innerHTML = '';
-              nodataError.textContent = 'ℹ️ No data for the selected range.';
+              nodataError.textContent = 'No graph is available for the selected range. Try a different range or metric.';
               nodataError.style.display = 'block';
             } else {
               slot.innerHTML = '';
@@ -533,6 +626,32 @@ function renderHtmlIntoSlot(slot, html) {
               '⚠️ Network error while requesting the graph.';
             serverError.style.display = 'block';
           }
+        });
+      }
+
+      // Use server-injected graph index and update forms
+      function populateMetricsForLoc(selectEl, locKey) {
+        if (!selectEl) return;
+        selectEl.innerHTML = '<option value="" disabled selected>Choose Data Point</option>';
+        try {
+          const index = window.graphIndex || {};
+          const info = index[locKey] || null;
+          if (info && info.metrics) {
+            Object.keys(info.metrics).forEach(m => {
+              const opt = document.createElement('option');
+              opt.value = m;
+              opt.textContent = m;
+              selectEl.appendChild(opt);
+            });
+            return;
+          }
+        } catch (e) {}
+
+        ['Gauge Height','Elevation','Discharge','Water Temperature'].forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = m;
+          opt.textContent = m;
+          selectEl.appendChild(opt);
         });
       }
 
@@ -632,48 +751,47 @@ function renderHtmlIntoSlot(slot, html) {
         .querySelectorAll('section form[action="/customgaugegraph/"]')
         .forEach(attachHandlers);
 
+      // Delegated quick-range handling as a fallback (in case handlers haven't attached yet)
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.quick-row .chip');
+        if (!btn) return;
+        const form = btn.closest('form');
+        if (!form) return;
+        const startInput = form.querySelector('input[name="start-date"]');
+        const endInput = form.querySelector('input[name="end-date"]');
+        if (!startInput || !endInput) return;
+
+        const range = btn.dataset.range;
+        if (!range) return;
+
+        if (range === 'clear') {
+          startInput.value = startInput.dataset.defaultValue || startInput.value;
+          endInput.value = endInput.dataset.defaultValue || endInput.value;
+          return;
+        }
+
+        const end = new Date(); end.setHours(0,0,0,0);
+        let start = new Date(end);
+        switch (range) {
+          case '7d': start.setDate(start.getDate() - 7); break;
+          case '30d': start.setDate(start.getDate() - 30); break;
+          case '1y': start.setFullYear(start.getFullYear() - 1); break;
+          case 'ytd': start = new Date(end.getFullYear(), 0, 1); break;
+          default: return;
+        }
+        startInput.value = isoDate(start);
+        endInput.value = isoDate(end);
+      });
+
       // Wire the reusable custom-location form to pick endpoint and input name
       (function wireCustomForm() {
         const customForm = document.getElementById('custom-location-form');
         if (!customForm) return;
 
-        const locSelect = document.getElementById('custom-location-select');
         const hiddenLoc = customForm.querySelector('input[type="hidden"][name="location"]');
         const dataSel = customForm.querySelector('select[name="data2see"]');
         const currentBtn = Array.from(customForm.querySelectorAll('button'))
           .find(b => /current\s*data/i.test(b.textContent || ''));
-
-        function populateMetricsForLoc(locKey) {
-          // clear existing options
-          dataSel.innerHTML = '<option value="" disabled selected>Choose Data Point</option>';
-          try {
-            const index = window.graphIndex || {};
-            const info = index[locKey] || null;
-            if (info && info.metrics) {
-              Object.keys(info.metrics).forEach(m => {
-                const opt = document.createElement('option'); opt.value = m; opt.textContent = m; dataSel.appendChild(opt);
-              });
-              return;
-            }
-          } catch (e) {}
-
-          // fallback defaults
-          ['Gauge Height','Elevation','Discharge','Water Temperature'].forEach(m => {
-            const opt = document.createElement('option'); opt.value = m; opt.textContent = m; dataSel.appendChild(opt);
-          });
-        }
-
-        locSelect.addEventListener('change', () => {
-          const opt = locSelect.selectedOptions[0];
-          if (!opt) return;
-          const endpoint = opt.dataset.endpoint || '/customgaugegraph/';
-          const inputName = opt.dataset.inputname || 'location';
-          customForm.setAttribute('action', endpoint);
-          hiddenLoc.name = inputName;
-          hiddenLoc.value = opt.value;
-          const locKey = (opt.value || '').replace(/\s+(ND|SD)$/i, '').trim();
-          populateMetricsForLoc(locKey);
-        });
 
         if (currentBtn) {
           currentBtn.addEventListener('click', () => {
@@ -691,6 +809,52 @@ function renderHtmlIntoSlot(slot, html) {
 
         // Attach existing probe+render handlers to custom form
         try { attachHandlers(customForm); } catch (e) { /* ignore */ }
+      })();
+
+      (function wireTabStrip() {
+        const strip = document.getElementById('location-tab-strip');
+        const customForm = document.getElementById('custom-location-form');
+        if (!strip || !customForm) return;
+
+        const chips = Array.from(strip.querySelectorAll('.loc-chip'));
+        const hiddenLoc = customForm.querySelector('input[type="hidden"]');
+        const dataSel = customForm.querySelector('select[name="data2see"]');
+        const heading = document.getElementById('selected-location-heading');
+
+        function setActive(chip) {
+          chips.forEach(c => c.classList.toggle('active', c === chip));
+        }
+
+        function applyChip(chip) {
+          if (!chip) return;
+          const loc = chip.dataset.loc || chip.textContent.trim();
+          const endpoint = chip.dataset.endpoint || '/customgaugegraph/';
+          const inputName = chip.dataset.inputname || 'location';
+
+          setActive(chip);
+
+          customForm.setAttribute('action', endpoint);
+          if (hiddenLoc) {
+            hiddenLoc.name = inputName;
+            hiddenLoc.value = loc;
+          }
+          if (heading) {
+            heading.textContent = loc || 'Custom Location';
+          }
+          const locKey = (loc || '').replace(/\s+(ND|SD)$/i, '').trim();
+          populateMetricsForLoc(dataSel, locKey);
+
+          const first = dataSel
+            ? Array.from(dataSel.options).find(o => !o.disabled && o.value)
+            : null;
+          if (first) dataSel.value = first.value;
+
+          strip.scrollTo({ left: Math.max(0, chip.offsetLeft - 20), behavior: 'smooth' });
+        }
+
+        chips.forEach(chip => chip.addEventListener('click', () => applyChip(chip)));
+
+        if (!hiddenLoc?.value && chips[0]) applyChip(chips[0]);
       })();
     });
   </script>
