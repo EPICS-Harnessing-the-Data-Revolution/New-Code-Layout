@@ -19,13 +19,19 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 59px 66px 277px;
-  overflow: hidden;
+  overflow-x: hidden;
   width: 100%;
 }
 
 @media (max-width: 991px) {
   .landing-page {
-    padding: 59px 20px 100px;
+    padding: 20px 20px 60px;
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-page {
+    padding: 10px 15px 40px;
   }
 }
 
@@ -208,6 +214,18 @@ body {
   color: #000000;
 }
 
+@media (max-width: 640px) {
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .button {
+    width: 100%;
+  }
+}
+
 .section-image {
   width: 100%;
   border-radius: 50px;
@@ -294,7 +312,15 @@ body {
   background-color: #ffffff;
   overflow: hidden;
   width: 409px;
+  max-width: 100%;
   min-width: 240px;
+}
+
+@media (max-width: 640px) {
+  .service-card {
+    width: 100%;
+    min-width: unset;
+  }
 }
 
 .card-image-container {
@@ -394,6 +420,15 @@ body {
 /* Contact section */
 .contact-section {
   margin-top: 50px;
+  padding: 20px;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .contact-section {
+    margin-top: 30px;
+    padding: 15px;
+  }
 }
 
 .contact-text {
@@ -410,8 +445,23 @@ body {
   text-align: center;
 }
 
+.contact-link {
+  color: #1f242f;
+  text-decoration: underline;
+}
+
 @media (max-width: 991px) {
   .contact-section {
     margin-top: 40px;
+  }
+  
+  .contact-text {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .contact-text {
+    font-size: 16px;
   }
 }

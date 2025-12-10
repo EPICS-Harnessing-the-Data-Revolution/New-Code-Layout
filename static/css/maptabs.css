@@ -100,10 +100,25 @@ input:checked + label {
     margin: 0;
     font-size: 18px;
   }
+  
+  .tab-row button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
 }
+
 @media screen and (max-width: 400px) {
   label {
     padding: 15px;
+  }
+  
+  .tab-row {
+    gap: 6px;
+  }
+  
+  .tab-row button {
+    font-size: 11px;
+    padding: 5px 10px;
   }
 }
 tabs { width: 100%; }

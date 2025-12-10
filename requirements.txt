@@ -12,9 +12,9 @@ six==1.17.0 #transitive dependency of pandas
 sqlparse==0.5.3 #transitive dependency of django
 tzdata #transitive dependency of pandas, (UNPINNED, change later if needed)
 urllib3==2.5.0 #transitive dependency of requests
-whitenoise
-matplotlib
-plotly
+whitenoise==6.11.0
+matplotlib==3.10.7
+plotly==6.5.0
 #sqlite3 #might not need this, check later, including cause of errors in running locally
 #The following cannot be in a requirements file.
 #python==3.11

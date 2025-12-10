@@ -394,6 +394,9 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYWxleGlzMTMiLCJhIjoiY2xkeGk4bXpvMDJmeTNwbXV2b
 
       
         });
+        
+        // Hover tooltips disabled
+        /*
         const popup = new mapboxgl.Popup({
           closeButton: false,
           closeOnClick: false
@@ -419,13 +422,14 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYWxleGlzMTMiLCJhIjoiY2xkeGk4bXpvMDJmeTNwbXV2b
 
           // Populate the popup and set its coordinates
           // based on the feature found.
-          popup.setLngLat(coordinates).setHTML(description).addTo(map);
-          });
+          //popup.setLngLat(coordinates).setHTML(description).addTo(map);
+          //});
            
-        map.on('mouseleave', 'points', () => {
-          map.getCanvas().style.cursor = '';
-          popup.remove();
-          });
+        //map.on('mouseleave', 'points', () => {
+          //map.getCanvas().style.cursor = '';
+          //popup.remove();
+          //});
+        //*/
 
         }
         );
