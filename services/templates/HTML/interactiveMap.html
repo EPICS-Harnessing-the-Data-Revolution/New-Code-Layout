@@ -21,6 +21,7 @@
 <body>
 <style>
   #map { top: 20%; left: 10%; width: 80%; height: 70%}
+
   .modal {
   position: relative;
   top: 100vh; /* Position modal 100% from the top */
@@ -38,6 +39,26 @@
   width: 100%;
   max-width: 95%; /* Set maximum width for content within modal */
   margin: 0 auto; /* Center content horizontally */
+  }
+
+  @media screen and (max-width: 768px) {
+    #map-legend {
+      display: none;
+    }
+    
+    .modal {
+      position: relative;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 15px;
+      max-height: none;
+      overflow-y: auto;
+    }
+    
+    .modal-content {
+      max-width: 100%;
+    }
   }
 </style>
     <div id="map"></div>
