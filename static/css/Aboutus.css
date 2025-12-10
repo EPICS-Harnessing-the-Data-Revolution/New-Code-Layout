@@ -23,7 +23,14 @@ body {
 
 @media (max-width: 991px) {
   .about-us-header {
-    padding-top: 100px;
+    padding-top: 80px;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-us-header {
+    padding-top: 40px;
+    padding-bottom: 20px;
   }
 }
 
@@ -234,6 +241,15 @@ body {
   .description-text {
     max-width: 100%;
     margin-top: 40px;
+    font-size: 18px;
+    line-height: 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .description-text {
+    font-size: 16px;
+    line-height: 26px;
   }
 }
 
@@ -327,18 +343,35 @@ body {
 }
 
 /* Arch Image */
-.team-image {
-justify-content: center;
-align-items: center;
-border-radius: 32px;
-background-color: #eff2f6;
-display: flex;
-min-height: 377px;
-flex-grow: 1;
-/* padding: 141px 10px; */
-gap: 10px;
-width: 100%;
-box-sizing: border-box;
+.team-image,
+.tribe-image {
+  justify-content: center;
+  align-items: center;
+  border-radius: 32px;
+  background-color: #eff2f6;
+  display: flex;
+  min-height: 377px;
+  flex-grow: 1;
+  /* padding: 141px 10px; */
+  gap: 10px;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 991px) {
+  .team-image,
+  .tribe-image {
+    min-height: 250px;
+  }
+}
+
+@media (max-width: 640px) {
+  .team-image,
+  .tribe-image {
+    min-height: 200px;
+  }
 }
 
 /* Page Footer */

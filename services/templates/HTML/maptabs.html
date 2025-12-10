@@ -5,7 +5,8 @@
   {% load static %}
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="{% static 'css/Heading.css' %}">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
   <style>
     :root{
       --bg-page:#f6f8fc;
@@ -40,99 +41,37 @@
 
     .page{max-width:1200px;margin:0 auto;padding:16px 24px 60px}
 
-    /* Tabs */
-.tabs{display:block}
-
-/* scrollable chip row ONLY */
-.tab-strip{
-  overflow-x:auto;
-  white-space:nowrap;
-  padding-bottom:6px;
-  border-bottom:1px solid #dfe3ef;
-  margin-bottom:8px;
-}
-.tab-strip > input[type="radio"]{display:none}
-
-.tab-strip > label{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:10px 14px;
-  margin:0 8px 4px 0;
-  border-radius:999px;
-  background:#fff;
-  border:1px solid var(--border);
-  color:#3b4353;
-  cursor:pointer;
-  transition:all var(--t);
-}
-.tab-strip > label:hover{
-  box-shadow:0 6px 16px rgba(91,97,246,.18);
-  color:var(--primary);
-}
-
-/* active tab chip */
-#tab1:checked + label,
-#tab2:checked + label,
-#tab3:checked + label,
-#tab4:checked + label,
-#tab5:checked + label,
-#tab6:checked + label,
-#tab7:checked + label,
-#tab8:checked + label,
-#tab9:checked + label,
-#tab10:checked + label,
-#tab11:checked + label,
-#tab12:checked + label,
-#tab13:checked + label{
-  color:var(--primary);
-  border-color:#dfe4ff;
-  box-shadow:0 8px 18px rgba(91,97,246,.28);
-  transform:translateY(-1px);
-}
-
-
-    /* active tab chip (uses adjacent-sibling selector) */
-    #tab1:checked + label,
-    #tab2:checked + label,
-    #tab3:checked + label,
-    #tab4:checked + label,
-    #tab5:checked + label,
-    #tab6:checked + label,
-    #tab7:checked + label,
-    #tab8:checked + label,
-    #tab9:checked + label,
-    #tab10:checked + label,
-    #tab11:checked + label,
-    #tab12:checked + label,
-    #tab13:checked + label{
+    /* Location tab strip */
+    .tab-strip{
+      display:flex;
+      gap:8px;
+      padding:12px 0 4px;
+      overflow-x:auto;
+      white-space:nowrap;
+      border-bottom:1px solid #dfe3ef;
+      margin-bottom:16px;
+      scrollbar-width: thin;
+    }
+    .tab-strip::-webkit-scrollbar{height:6px}
+    .tab-strip::-webkit-scrollbar-thumb{background:#d8ddf0;border-radius:999px}
+    .loc-chip{
+      border:1px solid var(--border);
+      background:#fff;
+      color:#3b4353;
+      border-radius:999px;
+      padding:9px 14px;
+      font-weight:600;
+      cursor:pointer;
+      transition:all var(--t);
+      white-space:nowrap;
+    }
+    .loc-chip:hover{box-shadow:0 6px 16px rgba(91,97,246,.18);color:var(--primary);}
+    .loc-chip.active{
       color:var(--primary);
       border-color:#dfe4ff;
       box-shadow:0 8px 18px rgba(91,97,246,.28);
       transform:translateY(-1px);
     }
-
-    /* Sections block (sibling of the radios) */
-.sections{margin-top:16px}
-.sections section{display:none}
-
-/* show the matching section when a tab is checked (uses :has) */
-.tabs:has(#tab1:checked)  .sections #content1,
-.tabs:has(#tab2:checked)  .sections #content2,
-.tabs:has(#tab3:checked)  .sections #content3,
-.tabs:has(#tab4:checked)  .sections #content4,
-.tabs:has(#tab5:checked)  .sections #content5,
-.tabs:has(#tab6:checked)  .sections #content6,
-.tabs:has(#tab7:checked)  .sections #content7,
-.tabs:has(#tab8:checked)  .sections #content8,
-.tabs:has(#tab9:checked)  .sections #content9,
-.tabs:has(#tab10:checked) .sections #content10,
-.tabs:has(#tab11:checked) .sections #content11,
-.tabs:has(#tab12:checked) .sections #content12,
-.tabs:has(#tab13:checked) .sections #content13{
-  display:block;
-}
-
 
     /* Card & form */
     .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm);padding:18px 20px}
@@ -152,6 +91,7 @@
       transition:border var(--t), box-shadow var(--t), background var(--t);
     }
     .control:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft);background:#fff}
+    .control.readonly{display:flex;align-items:center;height:var(--ctrl-h);background:#f5f7fb;border-style:dashed;color:#475467}
     select.control{appearance:none;background-image:linear-gradient(45deg,transparent 50%, #98a2b3 50%),linear-gradient(135deg,#98a2b3 50%,transparent 50%),linear-gradient(to right,#dfe4f3,#dfe4f3);background-position:calc(100% - 18px) 18px, calc(100% - 12px) 18px, calc(100% - 2.4rem) 0.6rem;background-size:6px 6px,6px 6px,1px 70%;background-repeat:no-repeat}
 
     .quick-row{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -174,6 +114,8 @@
     .graph-card{margin-top:16px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);box-shadow:var(--shadow-md);overflow:hidden}
     .graph-frame{display:block;width:100%;min-height:720px;border:0}
     .graph-loading{padding:16px 18px;color:var(--muted)}
+    .graph-slot{margin-top:18px;border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-md);background:#fff;border:1px solid var(--border)}
+
 
     @media (max-width: 980px){
       .form-grid{grid-template-columns:minmax(0,1fr)}
@@ -187,73 +129,65 @@
 
   <header class="hero">
     <div class="hero-inner">
-      <h1 class="title">Missouri River Gauge Dashboard</h1>
-      <p class="subtitle">Pick a station, choose a metric, and visualize the data across any date range. Quick ranges are one tap.</p>
+      <h1 class="title">Custom Graph Dashboard</h1>
+      <p class="subtitle">Select a location, metric, and date range to generate interactive gauge visualizations.</p>
     </div>
   </header>
 
 <main class="page">
-  <div class="tabs">
-    <div class="tab-strip">
-      <input id="tab1"  type="radio" name="tabs" checked><label for="tab1">Hazen</label>
-      <input id="tab2"  type="radio" name="tabs"><label for="tab2">Stanton</label>
-      <input id="tab3"  type="radio" name="tabs"><label for="tab3">Washburn</label>
-      <input id="tab4"  type="radio" name="tabs"><label for="tab4">Price</label>
-      <input id="tab5"  type="radio" name="tabs"><label for="tab5">Bismarck</label>
-      <input id="tab6"  type="radio" name="tabs"><label for="tab6">Schmidt</label>
-      <input id="tab7"  type="radio" name="tabs"><label for="tab7">Judson</label>
-      <input id="tab8"  type="radio" name="tabs"><label for="tab8">Mandan</label>
-      <input id="tab9"  type="radio" name="tabs"><label for="tab9">Breien</label>
-      <input id="tab10" type="radio" name="tabs"><label for="tab10">Wakpala</label>
-      <input id="tab11" type="radio" name="tabs"><label for="tab11">Little Eagle</label>
-      <input id="tab12" type="radio" name="tabs"><label for="tab12">Cash</label>
-      <input id="tab13" type="radio" name="tabs"><label for="tab13">Whitehorse</label>
+    <div class="tab-strip" id="location-tab-strip">
+      {% for entry in location_entries %}
+        <button type="button" class="loc-chip" data-loc="{{ entry.location }}" data-endpoint="{{ entry.endpoint }}" data-inputname="{{ entry.input_name|default:'location' }}">{{ entry.location }}</button>
+      {% endfor %}
     </div>
-    
+
     <!-- Reusable custom-location card -->
-    <div style="margin:12px 0;">
-      <form id="custom-location-form" class="location-form" method="POST" action="#">
+    <div class="card" style="margin-bottom:24px;">
+      <h3 class="station-title" id="selected-location-heading">Custom Location</h3>
+      <form id="custom-location-form" class="form-grid" method="POST" action="#">
         {% csrf_token %}
-        <h3>Custom Location</h3>
 
-        <div>
-          <div class="field-label">Location</div>
-          <select id="custom-location-select" required>
-            <option value="" disabled selected>Select location</option>
-            {% for entry in location_entries %}
-              <option value="{{ entry.location }}" data-endpoint="{{ entry.endpoint }}" data-inputname="{{ entry.input_name|default:'location' }}">{{ entry.location }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <div class="field-label">Data Type</div>
-          <select name="data2see" required>
+        <div class="field">
+          <label class="label">Data Type</label>
+          <select name="data2see" class="control" required>
             <option value="" disabled selected>Choose Data Point</option>
           </select>
         </div>
 
-        <div class="date-row">
-          <div>
-            <div class="field-label">Start Date</div>
-            <input type="date" name="start-date" required value="{{ default_start }}">
-          </div>
-          <div>
-            <div class="field-label">End Date</div>
-            <input type="date" name="end-date" required value="{{ default_end }}">
-          </div>
+        <div class="field">
+          <label class="label">Start Date</label>
+          <input type="date" name="start-date" class="control" required placeholder="dd/mm/yyyy" value="">
+        </div>
+
+        <div class="field">
+          <label class="label">End Date</label>
+          <input type="date" name="end-date" class="control" required placeholder="dd/mm/yyyy" value="">
+        </div>
+
+        <div class="quick-row">
+          <span class="label" style="text-transform:none;color:#475467">Quick ranges:</span>
+          <button type="button" class="chip" data-range="7d">Last 7 days</button>
+          <button type="button" class="chip" data-range="30d">Last 30 days</button>
+          <button type="button" class="chip" data-range="ytd">YTD</button>
+          <button type="button" class="chip" data-range="1y">Last 1 year</button>
+          <button type="button" class="chip" data-range="clear">Clear</button>
         </div>
 
         <input type="hidden" name="location" value="">
 
-        <div class="button-row">
-          <button type="submit" class="btn btn-primary">Generate</button>
-          <button type="button" class="btn btn-ghost">Current Data</button>
+        <div class="messages" aria-live="polite">
+          <div class="alert error date-error"></div>
+          <div class="alert info nodata-error"></div>
+          <div class="alert error server-error"></div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" type="submit">Generate</button>
+          <button class="btn btn-ghost" type="button" data-current>Current Data</button>
         </div>
       </form>
     </div>
-    
-  </div>
+  </main>
 
   <script>
     // Server-injected graph index (scanned each request by maptabs view)
@@ -279,6 +213,17 @@
       const ENABLE_PROBE = true;
       const TREAT_ALL_500_AS_NO_DATA = true;
       const NO_DATA_PATTERNS = [/IndexError/i, /list index out of range/i, /moving_avg/i, /sqlclasses\.py/i];
+
+      // CSRF helper for fetch
+      const getCsrfToken = () => {
+        const name = 'csrftoken=';
+        const cookies = document.cookie ? document.cookie.split(';') : [];
+        for (let c of cookies) {
+          const t = c.trim();
+          if (t.startsWith(name)) return decodeURIComponent(t.slice(name.length));
+        }
+        return '';
+      };
 
       function ensureGraphSlot(form) {
         let slot = form.parentElement.querySelector('.graph-slot');
@@ -336,22 +281,44 @@ document.querySelectorAll('.graph-card .graph-loading')
       card.scrollIntoView({behavior:'smooth',block:'nearest'});
     }
 
-    async function probeHasData(form){
-      const action=form.getAttribute('action')||window.location.pathname;
-      const fd=new FormData(form); fd.append('check_only','1');
-      try{
-        const resp = await fetch(action,{
-          method:'POST',
-          body:new URLSearchParams(fd),
-          credentials:'same-origin',
-          headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8','X-Requested-With':'XMLHttpRequest'},
-          redirect:'manual'
-        });
-        if(resp.status===200) return {ok:true, html:await resp.text()};
-        if(resp.status>=500) return {empty:true};
-        return {error:true,status:resp.status,html:await resp.text().catch(()=> '')};
-      }catch(e){return {network:true};}
-    }
+    resize();
+    setTimeout(resize, 350);
+    setTimeout(resize, 1200);
+    window.addEventListener('resize', resize);
+  });
+
+  slot.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+
+      async function probeHasData(form) {
+        if (!ENABLE_PROBE) return { state: 'skip' };
+
+        const action = form.getAttribute('action') || window.location.pathname;
+        const fd = new FormData(form);
+        fd.append('check_only', '1');
+
+        try {
+          const resp = await fetch(action, {
+            method: 'POST',
+            body: new URLSearchParams(fd),
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRFToken': getCsrfToken()
+            },
+            redirect: 'manual'
+          });
+
+          if (resp.status === 200) return { state: 'hasData', html: await resp.text() };
+
+          if (resp.status >= 500) {
+            if (TREAT_ALL_500_AS_NO_DATA) return { state: 'empty' };
+            const text = await resp.text().catch(() => '');
+            const looksNoData = NO_DATA_PATTERNS.some(rx => rx.test(text));
+            return looksNoData ? { state: 'empty' } : { state: 'serverError', status: resp.status, html: text };
+          }
 
     function attach(form){
       const start = form.querySelector('input[name="start-date"]');
@@ -401,10 +368,74 @@ document.querySelectorAll('.graph-card .graph-loading')
         return true;
       }
 
-      form.addEventListener('submit', async (ev)=>{
-        if(!form.checkValidity()) return;
-        if(!valid()){ ev.preventDefault(); return; }
-        ev.preventDefault();
+      function attachHandlers(form) {
+        const startInput = form.querySelector('input[name="start-date"]');
+        const endInput   = form.querySelector('input[name="end-date"]');
+        const datasetSel = form.querySelector('select[name="data2see"]');
+        const locationEl = form.querySelector('input[name="location"]');
+
+        const defaultStartVal = startInput?.value || '';
+        const defaultEndVal = endInput?.value || '';
+        if (startInput) startInput.dataset.defaultValue = defaultStartVal;
+        if (endInput) endInput.dataset.defaultValue = defaultEndVal;
+
+        const ensureMsg = (cls) => {
+          let el = form.querySelector('.' + cls);
+          if (!el) {
+            el = document.createElement('p');
+            el.className = cls;
+            el.style.cssText = 'margin-top:6px;font-weight:500;display:none;';
+            endInput.insertAdjacentElement('afterend', el);
+          }
+          return el;
+        };
+
+        const dateError   = ensureMsg('date-error');
+        const nodataError = ensureMsg('nodata-error');
+        const serverError = ensureMsg('server-error');
+
+        const clearMsgs = () => {
+          [dateError, nodataError, serverError].forEach(el => {
+            el.textContent = '';
+            el.style.display = 'none';
+          });
+        };
+
+        function validateDates() {
+          clearMsgs();
+          if (!startInput.value || !endInput.value) return false;
+
+          const s = normDate(startInput.value);
+          const e = normDate(endInput.value);
+
+          if (s > today) {
+            dateError.textContent = '⚠️ Start date cannot be in the future.';
+            dateError.style.display = 'block';
+            return false;
+          }
+          if (e > today) {
+            dateError.textContent = '⚠️ End date cannot be in the future.';
+            dateError.style.display = 'block';
+            return false;
+          }
+          if (s > e) {
+            dateError.textContent = '⚠️ Start date must be earlier than end date.';
+            dateError.style.display = 'block';
+            return false;
+          }
+          return true;
+        }
+
+        // "Current Data" button → last month through today
+        const currentBtn =
+          Array.from(form.querySelectorAll('button[type="button"], button:not([type])'))
+            .find(b => /current\s*data/i.test(b.textContent || ''));
+
+        if (currentBtn) {
+          currentBtn.addEventListener('click', () => {
+            const end = new Date(); end.setHours(0,0,0,0);
+            const start = new Date(end);
+            start.setMonth(start.getMonth() - 1);
 
         const card=graphCardFor(form);
         card.innerHTML='<div class="graph-loading">Generating graph…</div>';
@@ -434,6 +465,43 @@ document.querySelectorAll('.graph-card .graph-loading')
       });
     }
 
+        // Quick ranges (handled via delegated listener as well)
+        form.querySelectorAll('.quick-row .chip').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const range = btn.dataset.range;
+            if (!range) return;
+
+            if (range === 'clear') {
+              startInput.value = startInput.dataset.defaultValue || defaultStartVal;
+              endInput.value = endInput.dataset.defaultValue || defaultEndVal;
+              return;
+            }
+
+            const end = new Date(); end.setHours(0,0,0,0);
+            let start = new Date(end);
+
+            switch (range) {
+              case '7d':
+                start.setDate(start.getDate() - 7);
+                break;
+              case '30d':
+                start.setDate(start.getDate() - 30);
+                break;
+              case '1y':
+                start.setFullYear(start.getFullYear() - 1);
+                break;
+              case 'ytd':
+                start = new Date(end.getFullYear(), 0, 1);
+                break;
+              default:
+                return;
+            }
+
+            startInput.value = isoDate(start);
+            endInput.value = isoDate(end);
+          });
+        });
+
         form.addEventListener('submit', async (e) => {
           if (!form.checkValidity()) { form.reportValidity(); return; }
           if (!validateDates()) { e.preventDefault(); return; }
@@ -449,7 +517,7 @@ document.querySelectorAll('.graph-card .graph-loading')
             const loc = (locationEl?.value || '').replace(/\s+(ND|SD)$/i, '');
             slot.innerHTML = '';
             nodataError.textContent =
-              `ℹ️ No data for "${datasetSel.value}" at ${loc} in that date range.`;
+              `No graph is available for ${loc || 'this location'} with that metric and date range. Please choose another range or metric.`;
             nodataError.style.display = 'block';
             return;
           }
@@ -486,7 +554,8 @@ document.querySelectorAll('.graph-card .graph-loading')
               credentials: 'same-origin',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': getCsrfToken()
               },
               redirect: 'manual'
             });
@@ -496,7 +565,7 @@ document.querySelectorAll('.graph-card .graph-loading')
               renderHtmlIntoSlot(slot, html);
             } else if (resp.status >= 500 && TREAT_ALL_500_AS_NO_DATA) {
               slot.innerHTML = '';
-              nodataError.textContent = 'ℹ️ No data for the selected range.';
+              nodataError.textContent = 'No graph is available for the selected range. Try a different range or metric.';
               nodataError.style.display = 'block';
             } else {
               slot.innerHTML = '';
@@ -510,6 +579,32 @@ document.querySelectorAll('.graph-card .graph-loading')
               '⚠️ Network error while requesting the graph.';
             serverError.style.display = 'block';
           }
+        });
+      }
+
+      // Use server-injected graph index and update forms
+      function populateMetricsForLoc(selectEl, locKey) {
+        if (!selectEl) return;
+        selectEl.innerHTML = '<option value="" disabled selected>Choose Data Point</option>';
+        try {
+          const index = window.graphIndex || {};
+          const info = index[locKey] || null;
+          if (info && info.metrics) {
+            Object.keys(info.metrics).forEach(m => {
+              const opt = document.createElement('option');
+              opt.value = m;
+              opt.textContent = m;
+              selectEl.appendChild(opt);
+            });
+            return;
+          }
+        } catch (e) {}
+
+        ['Gauge Height','Elevation','Discharge','Water Temperature'].forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = m;
+          opt.textContent = m;
+          selectEl.appendChild(opt);
         });
       }
 
@@ -609,48 +704,47 @@ document.querySelectorAll('.graph-card .graph-loading')
         .querySelectorAll('section form[action="/customgaugegraph/"]')
         .forEach(attachHandlers);
 
+      // Delegated quick-range handling as a fallback (in case handlers haven't attached yet)
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.quick-row .chip');
+        if (!btn) return;
+        const form = btn.closest('form');
+        if (!form) return;
+        const startInput = form.querySelector('input[name="start-date"]');
+        const endInput = form.querySelector('input[name="end-date"]');
+        if (!startInput || !endInput) return;
+
+        const range = btn.dataset.range;
+        if (!range) return;
+
+        if (range === 'clear') {
+          startInput.value = startInput.dataset.defaultValue || startInput.value;
+          endInput.value = endInput.dataset.defaultValue || endInput.value;
+          return;
+        }
+
+        const end = new Date(); end.setHours(0,0,0,0);
+        let start = new Date(end);
+        switch (range) {
+          case '7d': start.setDate(start.getDate() - 7); break;
+          case '30d': start.setDate(start.getDate() - 30); break;
+          case '1y': start.setFullYear(start.getFullYear() - 1); break;
+          case 'ytd': start = new Date(end.getFullYear(), 0, 1); break;
+          default: return;
+        }
+        startInput.value = isoDate(start);
+        endInput.value = isoDate(end);
+      });
+
       // Wire the reusable custom-location form to pick endpoint and input name
       (function wireCustomForm() {
         const customForm = document.getElementById('custom-location-form');
         if (!customForm) return;
 
-        const locSelect = document.getElementById('custom-location-select');
         const hiddenLoc = customForm.querySelector('input[type="hidden"][name="location"]');
         const dataSel = customForm.querySelector('select[name="data2see"]');
         const currentBtn = Array.from(customForm.querySelectorAll('button'))
           .find(b => /current\s*data/i.test(b.textContent || ''));
-
-        function populateMetricsForLoc(locKey) {
-          // clear existing options
-          dataSel.innerHTML = '<option value="" disabled selected>Choose Data Point</option>';
-          try {
-            const index = window.graphIndex || {};
-            const info = index[locKey] || null;
-            if (info && info.metrics) {
-              Object.keys(info.metrics).forEach(m => {
-                const opt = document.createElement('option'); opt.value = m; opt.textContent = m; dataSel.appendChild(opt);
-              });
-              return;
-            }
-          } catch (e) {}
-
-          // fallback defaults
-          ['Gauge Height','Elevation','Discharge','Water Temperature'].forEach(m => {
-            const opt = document.createElement('option'); opt.value = m; opt.textContent = m; dataSel.appendChild(opt);
-          });
-        }
-
-        locSelect.addEventListener('change', () => {
-          const opt = locSelect.selectedOptions[0];
-          if (!opt) return;
-          const endpoint = opt.dataset.endpoint || '/customgaugegraph/';
-          const inputName = opt.dataset.inputname || 'location';
-          customForm.setAttribute('action', endpoint);
-          hiddenLoc.name = inputName;
-          hiddenLoc.value = opt.value;
-          const locKey = (opt.value || '').replace(/\s+(ND|SD)$/i, '').trim();
-          populateMetricsForLoc(locKey);
-        });
 
         if (currentBtn) {
           currentBtn.addEventListener('click', () => {
@@ -668,6 +762,52 @@ document.querySelectorAll('.graph-card .graph-loading')
 
         // Attach existing probe+render handlers to custom form
         try { attachHandlers(customForm); } catch (e) { /* ignore */ }
+      })();
+
+      (function wireTabStrip() {
+        const strip = document.getElementById('location-tab-strip');
+        const customForm = document.getElementById('custom-location-form');
+        if (!strip || !customForm) return;
+
+        const chips = Array.from(strip.querySelectorAll('.loc-chip'));
+        const hiddenLoc = customForm.querySelector('input[type="hidden"]');
+        const dataSel = customForm.querySelector('select[name="data2see"]');
+        const heading = document.getElementById('selected-location-heading');
+
+        function setActive(chip) {
+          chips.forEach(c => c.classList.toggle('active', c === chip));
+        }
+
+        function applyChip(chip) {
+          if (!chip) return;
+          const loc = chip.dataset.loc || chip.textContent.trim();
+          const endpoint = chip.dataset.endpoint || '/customgaugegraph/';
+          const inputName = chip.dataset.inputname || 'location';
+
+          setActive(chip);
+
+          customForm.setAttribute('action', endpoint);
+          if (hiddenLoc) {
+            hiddenLoc.name = inputName;
+            hiddenLoc.value = loc;
+          }
+          if (heading) {
+            heading.textContent = loc || 'Custom Location';
+          }
+          const locKey = (loc || '').replace(/\s+(ND|SD)$/i, '').trim();
+          populateMetricsForLoc(dataSel, locKey);
+
+          const first = dataSel
+            ? Array.from(dataSel.options).find(o => !o.disabled && o.value)
+            : null;
+          if (first) dataSel.value = first.value;
+
+          strip.scrollTo({ left: Math.max(0, chip.offsetLeft - 20), behavior: 'smooth' });
+        }
+
+        chips.forEach(chip => chip.addEventListener('click', () => applyChip(chip)));
+
+        if (!hiddenLoc?.value && chips[0]) applyChip(chips[0]);
       })();
     });
   </script>

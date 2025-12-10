@@ -11,6 +11,34 @@ body {
   right: 0;
 }
 
+@media (max-width: 768px) {
+  #map {
+    position: relative !important;
+    width: 100% !important;
+    height: 60vh !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+  
+  .modal {
+    position: fixed !important;
+    top: 10vh !important;
+    left: 5% !important;
+    width: 90% !important;
+    max-height: 80vh !important;
+  }
+  
+  #map-legend {
+    bottom: 5% !important;
+    right: 5% !important;
+    font-size: 12px;
+  }
+  
+  #map-legend li {
+    font-size: 14px;
+  }
+}
+
 .modal {
   position: fixed;
   top: 15vh; /* Position modal 15% from the top */

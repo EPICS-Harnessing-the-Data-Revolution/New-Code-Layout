@@ -25,10 +25,15 @@
         />
         </a>
       </div>
-      <nav class="nav-menu">
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+        <span class="menu-toggle-bar"></span>
+        <span class="menu-toggle-bar"></span>
+        <span class="menu-toggle-bar"></span>
+      </button>
+      <nav class="nav-menu" id="nav-menu">
         <a href="/" class="nav-link">Home</a>
         <a href="/about" class="nav-link">About Us</a>
-        <div class="dropdown">
+        <div class="dropdown" id="services-dropdown">
           <a href="#" class="nav-link">Services ▼</a>
           <div class="dropdown-content">
             <a href="/map" class="dropdown-link">Interactive Map</a>
@@ -45,5 +50,34 @@
         {% endif %} -->
       </nav>
     </header>
+    <script>
+      // Mobile menu toggle
+      const menuToggle = document.getElementById('menu-toggle');
+      const navMenu = document.getElementById('nav-menu');
+      const servicesDropdown = document.getElementById('services-dropdown');
+      
+      if (menuToggle) {
+        menuToggle.addEventListener('click', function() {
+          navMenu.classList.toggle('open');
+        });
+      }
+      
+      // Mobile dropdown toggle
+      if (servicesDropdown && window.innerWidth <= 640) {
+        const dropdownLink = servicesDropdown.querySelector('.nav-link');
+        dropdownLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          servicesDropdown.classList.toggle('active');
+        });
+      }
+      
+      // Close menu when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.navbar')) {
+          navMenu.classList.remove('open');
+          servicesDropdown.classList.remove('active');
+        }
+      });
+    </script>
   </body>
 </html>
