@@ -235,154 +235,50 @@
         return slot;
       }
 
-function renderHtmlIntoSlot(slot, html) {
-  slot.innerHTML = '';
-  const srcdoc = html.includes('<base')
-    ? html
-    : html.replace('<head>', `<head><base href="${window.location.origin}/">`);
+    // Normalize all graph placeholders across sections
+document.querySelectorAll('.graph-card .graph-loading')
+  .forEach(el => { el.innerHTML = 'Choose a range and press <b>Submit</b>.'; });
 
-  const iframe = document.createElement('iframe');
-  iframe.className = 'graph-frame';
-  iframe.title = 'Graph';
-  iframe.srcdoc = srcdoc;
-  slot.appendChild(iframe);
 
-  function resize() {
-    try {
-      const doc = iframe.contentDocument || iframe.contentWindow.document;
-      const h = Math.max(
-        doc.body.scrollHeight, doc.documentElement.scrollHeight,
-        doc.body.offsetHeight, doc.documentElement.offsetHeight
-      );
-      iframe.style.height = Math.max(500, h + 16) + 'px';
-    } catch (_) {}
-  }
+    // set max=today on all date inputs
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('input[type="date"]').forEach(i => i.max = toISO(today));
+    });
 
-  iframe.addEventListener('load', () => {
-    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    function graphCardFor(form){ return form.closest('section').querySelector('.graph-card'); }
 
-    // Find plot + optional stats table
-    let graphEl = doc.querySelector('.js-plotly-plot, .plotly-graph-div, #graph, #graph-container');
-    let statsEl = null;
+    function renderToGraph(card, html){
+      card.innerHTML = '';
+      const srcdoc = html.includes('<base') ? html : html.replace('<head>', `<head><base href="${window.location.origin}/">`);
+      const iframe = document.createElement('iframe');
+      iframe.className = 'graph-frame'; iframe.title = 'Graph'; iframe.srcdoc = srcdoc;
+      card.appendChild(iframe);
 
-    if (graphEl) {
-      statsEl =
-        graphEl.parentElement?.querySelector('table') ||
-        (graphEl.nextElementSibling && graphEl.nextElementSibling.tagName === 'TABLE'
-          ? graphEl.nextElementSibling
-          : null);
-    }
-    if (!statsEl) statsEl = doc.querySelector('table');
+      function resize(){
+        try{
+          const d=iframe.contentDocument || iframe.contentWindow.document;
+          const h=Math.max(d.body.scrollHeight, d.documentElement.scrollHeight, d.body.offsetHeight, d.documentElement.offsetHeight);
+          iframe.style.height = Math.max(600, h+18) + 'px';
+        }catch(_){}
+      }
 
-    if (graphEl) {
-      // Wrap nicely
-      const wrapper = doc.createElement('div');
-      wrapper.className = 'plot-wrapper';
-      wrapper.appendChild(graphEl);
-      if (statsEl) wrapper.appendChild(statsEl);
-
-      doc.body.innerHTML = '';
-      doc.body.appendChild(wrapper);
-
-      // Inline styles inside iframe just for the plot
-      const style = doc.createElement('style');
-      style.textContent = `
-        html, body {
-          height: 100%;
-          margin: 0;
-          padding: 0;
-          background: transparent;
-          font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        }
-
-        .plot-wrapper {
-          box-sizing: border-box;
-          width: 100%;
-          max-width: 1100px;
-          margin: 16px auto;
-          padding: 16px 18px 18px;
-          border-radius: 18px;
-          background: #ffffff;
-          border: 1px solid #e2e6f3;
-          box-shadow: 0 10px 26px rgba(15,23,42,0.09);
-        }
-
-        .plot-container.plotly {
-          width: 100% !important;
-          height: 100% !important;
-        }
-
-        .main-svg {
-          width: 100% !important;
-        }
-
-        /* Title */
-        .gtitle {
-          font-size: 18px !important;
-          font-weight: 600 !important;
-          fill: #111827 !important;
-        }
-
-        /* Axes + labels */
-        .xtick text,
-        .ytick text,
-        .legendtext {
-          fill: #4b5563 !important;
-          font-size: 11px !important;
-        }
-
-        .xtitle, .ytitle {
-          font-size: 11px !important;
-          fill: #6b7280 !important;
-        }
-
-        /* Modebar (toolbar) */
-        .modebar {
-          top: 8px !important;
-          right: 8px !important;
-        }
-        .modebar-btn {
-          opacity: 0.55;
-        }
-        .modebar-btn:hover {
-          opacity: 1;
-        }
-        .logo {
-          display: none !important; /* hide Plotly logo if present */
-        }
-
-        table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-top: 10px;
-          font-size: 0.8rem;
-          color: #4b5563;
-        }
-        table td,
-        table th {
-          padding: .4rem .6rem;
-          border-bottom: 1px solid #e5e7eb;
-        }
-        table th {
-          font-weight: 600;
-          background: #f9fafb;
-        }
-      `;
-      doc.head.appendChild(style);
-    } else {
-      // Non-plot fallback cleanup
-      const style = doc.createElement('style');
-      style.textContent = `
-        header, nav, .navbar, .Heading, .site-header, .site-footer, footer {
-          display:none !important;
-        }
-        body {
-          margin: 0;
-          padding: 12px 14px;
-          font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        }
-      `;
-      doc.head.appendChild(style);
+      iframe.addEventListener('load', ()=>{
+        const d=iframe.contentDocument || iframe.contentWindow.document;
+        const style = d.createElement('style');
+        style.textContent = `
+          html,body{margin:0;height:100%;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff}
+          .plot-container.plotly{width:100%!important;height:100%!important}
+          .main-svg{width:100%!important}
+          .gtitle{font-weight:700!important;fill:#0f172a!important}
+          .xtick text,.ytick text,.legendtext{fill:#4b5563!important}
+          .modebar{top:6px!important;right:6px!important}
+          .logo{display:none!important}
+        `;
+        d.head.appendChild(style);
+        resize(); setTimeout(resize, 350); setTimeout(resize, 1200);
+        window.addEventListener('resize', resize);
+      });
+      card.scrollIntoView({behavior:'smooth',block:'nearest'});
     }
 
     resize();
@@ -424,10 +320,52 @@ function renderHtmlIntoSlot(slot, html) {
             return looksNoData ? { state: 'empty' } : { state: 'serverError', status: resp.status, html: text };
           }
 
-          return { state: 'unknown', status: resp.status, html: await resp.text().catch(() => '') };
-        } catch (err) {
-          return { state: 'networkError', error: err };
-        }
+    function attach(form){
+      const start = form.querySelector('input[name="start-date"]');
+      const end   = form.querySelector('input[name="end-date"]');
+      const sel   = form.querySelector('select[name="data2see"]');
+      const locEl = form.querySelector('input[name="location"]');
+
+      const dateErr = form.querySelector('.date-error');
+      const noData  = form.querySelector('.nodata-error');
+      const srvErr  = form.querySelector('.server-error');
+      const msgs=[dateErr,noData,srvErr];
+      const clear = ()=> msgs.forEach(m=>{m.textContent=''; m.style.display='none';});
+      const show  = (el,txt)=>{el.textContent=txt; el.style.display='flex';};
+
+      // quick ranges
+      form.querySelectorAll('.chip[data-range]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const r=btn.dataset.range;
+          if(r==='clear'){ start.value=''; end.value=''; return; }
+          const e=new Date(); e.setHours(0,0,0,0);
+          let s=new Date(e);
+          if(r==='7d') s.setDate(s.getDate()-7);
+          if(r==='30d') s.setDate(s.getDate()-30);
+          if(r==='1y') s.setFullYear(s.getFullYear()-1);
+          if(r==='ytd') s=new Date(e.getFullYear(),0,1);
+          start.value=toISO(s); end.value=toISO(e);
+        });
+      });
+
+      // current data = last 30 days
+      const current = form.querySelector('[data-current]');
+      current?.addEventListener('click', ()=>{
+        const e=new Date(); e.setHours(0,0,0,0);
+        const s=new Date(e); s.setMonth(s.getMonth()-1);
+        start.value=toISO(s); end.value=toISO(e);
+        if(!sel.value){ const first=[...sel.options].find(o=>!o.disabled&&o.value); if(first) sel.value=first.value; }
+        form.requestSubmit();
+      });
+
+      function valid(){
+        clear();
+        if(!start.value||!end.value) return false;
+        const s=norm(start.value), e=norm(end.value);
+        if(s>today){ show(dateErr,'⚠️ Start date cannot be in the future.'); return false; }
+        if(e>today){ show(dateErr,'⚠️ End date cannot be in the future.');   return false; }
+        if(s>e){     show(dateErr,'⚠️ Start date must be earlier than end date.'); return false; }
+        return true;
       }
 
       function attachHandlers(form) {
@@ -499,18 +437,33 @@ function renderHtmlIntoSlot(slot, html) {
             const start = new Date(end);
             start.setMonth(start.getMonth() - 1);
 
-            endInput.value = isoDate(end);
-            startInput.value = isoDate(start);
+        const card=graphCardFor(form);
+        card.innerHTML='<div class="graph-loading">Generating graph…</div>';
 
-            if (!datasetSel.value) {
-              const firstReal = Array.from(datasetSel.options)
-                .find(opt => !opt.disabled && opt.value);
-              if (firstReal) datasetSel.value = firstReal.value;
-            }
+        const res=await probeHasData(form);
+        clear();
 
-            form.requestSubmit();
-          });
+        if(res?.ok && res.html){ renderToGraph(card,res.html); return; }
+        if(res?.empty){
+          card.innerHTML='';
+          const loc=(locEl?.value||'').replace(/\s+(ND|SD)$/i,'');
+          show(noData, `ℹ️ No data for "${sel.value}" at ${loc} in that date range.`);
+          return;
         }
+        if(res?.network){ card.innerHTML=''; show(srvErr,'⚠️ Network error while requesting the graph.'); return; }
+        if(res?.error){   card.innerHTML=''; show(srvErr,`⚠️ Error while generating the graph (${res.status||'unknown'}).`); return; }
+
+        // Fallback
+        try{
+          const action=form.getAttribute('action')||window.location.pathname;
+          const body=new URLSearchParams(new FormData(form));
+          const r=await fetch(action,{method:'POST',body,credentials:'same-origin',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8','X-Requested-With':'XMLHttpRequest'}});
+          const html=await r.text();
+          if(r.status===200){ renderToGraph(card,html); }
+          else{ card.innerHTML=''; show(noData,'ℹ️ No data for the selected range.'); }
+        }catch(e){ card.innerHTML=''; show(srvErr,'⚠️ Network error while requesting the graph.'); }
+      });
+    }
 
         // Quick ranges (handled via delegated listener as well)
         form.querySelectorAll('.quick-row .chip').forEach(btn => {
