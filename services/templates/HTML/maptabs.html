@@ -193,19 +193,18 @@
     // Server-injected graph index (scanned each request by maptabs view)
     window.graphIndex = {{ graph_index_json|default:'{}'|safe }};
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      const today = new Date(); today.setHours(0,0,0,0);
+    document.addEventListener('DOMContentLoaded', () => {
+      const today = new Date(); today.setHours(0, 0, 0, 0);
 
       const normDate = v => {
         const d = new Date(v);
-        d.setHours(0,0,0,0);
+        d.setHours(0, 0, 0, 0);
         return d;
       };
-
       const isoDate = d => {
         const y = d.getFullYear();
-        const m = String(d.getMonth()+1).padStart(2,'0');
-        const day = String(d.getDate()).padStart(2,'0');
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
         return `${y}-${m}-${day}`;
       };
 
@@ -235,61 +234,43 @@
         return slot;
       }
 
-    // Normalize all graph placeholders across sections
-document.querySelectorAll('.graph-card .graph-loading')
-  .forEach(el => { el.innerHTML = 'Choose a range and press <b>Submit</b>.'; });
+      function renderToGraph(slot, html) {
+        slot.innerHTML = '';
+        const srcdoc = html.includes('<base')
+          ? html
+          : html.replace('<head>', `<head><base href="${window.location.origin}/">`);
+        const iframe = document.createElement('iframe');
+        iframe.className = 'graph-frame';
+        iframe.title = 'Graph';
+        iframe.srcdoc = srcdoc;
+        slot.appendChild(iframe);
 
+        function resize() {
+          try {
+            const d = iframe.contentDocument || iframe.contentWindow.document;
+            const h = Math.max(d.body.scrollHeight, d.documentElement.scrollHeight, d.body.offsetHeight, d.documentElement.offsetHeight);
+            iframe.style.height = Math.max(600, h + 18) + 'px';
+          } catch (_e) {}
+        }
 
-    // set max=today on all date inputs
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('input[type="date"]').forEach(i => i.max = toISO(today));
-    });
-
-    function graphCardFor(form){ return form.closest('section').querySelector('.graph-card'); }
-
-    function renderToGraph(card, html){
-      card.innerHTML = '';
-      const srcdoc = html.includes('<base') ? html : html.replace('<head>', `<head><base href="${window.location.origin}/">`);
-      const iframe = document.createElement('iframe');
-      iframe.className = 'graph-frame'; iframe.title = 'Graph'; iframe.srcdoc = srcdoc;
-      card.appendChild(iframe);
-
-      function resize(){
-        try{
-          const d=iframe.contentDocument || iframe.contentWindow.document;
-          const h=Math.max(d.body.scrollHeight, d.documentElement.scrollHeight, d.body.offsetHeight, d.documentElement.offsetHeight);
-          iframe.style.height = Math.max(600, h+18) + 'px';
-        }catch(_){}
+        iframe.addEventListener('load', () => {
+          const d = iframe.contentDocument || iframe.contentWindow.document;
+          const style = d.createElement('style');
+          style.textContent = `
+            html,body{margin:0;height:100%;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff}
+            .plot-container.plotly{width:100%!important;height:100%!important}
+            .main-svg{width:100%!important}
+            .gtitle{font-weight:700!important;fill:#0f172a!important}
+            .xtick text,.ytick text,.legendtext{fill:#4b5563!important}
+            .modebar{top:6px!important;right:6px!important}
+            .logo{display:none!important}
+          `;
+          d.head.appendChild(style);
+          resize(); setTimeout(resize, 350); setTimeout(resize, 1200);
+          window.addEventListener('resize', resize);
+        });
+        slot.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
-
-      iframe.addEventListener('load', ()=>{
-        const d=iframe.contentDocument || iframe.contentWindow.document;
-        const style = d.createElement('style');
-        style.textContent = `
-          html,body{margin:0;height:100%;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff}
-          .plot-container.plotly{width:100%!important;height:100%!important}
-          .main-svg{width:100%!important}
-          .gtitle{font-weight:700!important;fill:#0f172a!important}
-          .xtick text,.ytick text,.legendtext{fill:#4b5563!important}
-          .modebar{top:6px!important;right:6px!important}
-          .logo{display:none!important}
-        `;
-        d.head.appendChild(style);
-        resize(); setTimeout(resize, 350); setTimeout(resize, 1200);
-        window.addEventListener('resize', resize);
-      });
-      card.scrollIntoView({behavior:'smooth',block:'nearest'});
-    }
-
-    resize();
-    setTimeout(resize, 350);
-    setTimeout(resize, 1200);
-    window.addEventListener('resize', resize);
-  });
-
-  slot.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
 
       async function probeHasData(form) {
         if (!ENABLE_PROBE) return { state: 'skip' };
@@ -312,65 +293,21 @@ document.querySelectorAll('.graph-card .graph-loading')
           });
 
           if (resp.status === 200) return { state: 'hasData', html: await resp.text() };
-
           if (resp.status >= 500) {
             if (TREAT_ALL_500_AS_NO_DATA) return { state: 'empty' };
             const text = await resp.text().catch(() => '');
             const looksNoData = NO_DATA_PATTERNS.some(rx => rx.test(text));
             return looksNoData ? { state: 'empty' } : { state: 'serverError', status: resp.status, html: text };
           }
-
-    function attach(form){
-      const start = form.querySelector('input[name="start-date"]');
-      const end   = form.querySelector('input[name="end-date"]');
-      const sel   = form.querySelector('select[name="data2see"]');
-      const locEl = form.querySelector('input[name="location"]');
-
-      const dateErr = form.querySelector('.date-error');
-      const noData  = form.querySelector('.nodata-error');
-      const srvErr  = form.querySelector('.server-error');
-      const msgs=[dateErr,noData,srvErr];
-      const clear = ()=> msgs.forEach(m=>{m.textContent=''; m.style.display='none';});
-      const show  = (el,txt)=>{el.textContent=txt; el.style.display='flex';};
-
-      // quick ranges
-      form.querySelectorAll('.chip[data-range]').forEach(btn=>{
-        btn.addEventListener('click', ()=>{
-          const r=btn.dataset.range;
-          if(r==='clear'){ start.value=''; end.value=''; return; }
-          const e=new Date(); e.setHours(0,0,0,0);
-          let s=new Date(e);
-          if(r==='7d') s.setDate(s.getDate()-7);
-          if(r==='30d') s.setDate(s.getDate()-30);
-          if(r==='1y') s.setFullYear(s.getFullYear()-1);
-          if(r==='ytd') s=new Date(e.getFullYear(),0,1);
-          start.value=toISO(s); end.value=toISO(e);
-        });
-      });
-
-      // current data = last 30 days
-      const current = form.querySelector('[data-current]');
-      current?.addEventListener('click', ()=>{
-        const e=new Date(); e.setHours(0,0,0,0);
-        const s=new Date(e); s.setMonth(s.getMonth()-1);
-        start.value=toISO(s); end.value=toISO(e);
-        if(!sel.value){ const first=[...sel.options].find(o=>!o.disabled&&o.value); if(first) sel.value=first.value; }
-        form.requestSubmit();
-      });
-
-      function valid(){
-        clear();
-        if(!start.value||!end.value) return false;
-        const s=norm(start.value), e=norm(end.value);
-        if(s>today){ show(dateErr,'⚠️ Start date cannot be in the future.'); return false; }
-        if(e>today){ show(dateErr,'⚠️ End date cannot be in the future.');   return false; }
-        if(s>e){     show(dateErr,'⚠️ Start date must be earlier than end date.'); return false; }
-        return true;
+          return { state: 'networkError', status: resp.status };
+        } catch (_err) {
+          return { state: 'networkError' };
+        }
       }
 
       function attachHandlers(form) {
         const startInput = form.querySelector('input[name="start-date"]');
-        const endInput   = form.querySelector('input[name="end-date"]');
+        const endInput = form.querySelector('input[name="end-date"]');
         const datasetSel = form.querySelector('select[name="data2see"]');
         const locationEl = form.querySelector('input[name="location"]');
 
@@ -390,117 +327,57 @@ document.querySelectorAll('.graph-card .graph-loading')
           return el;
         };
 
-        const dateError   = ensureMsg('date-error');
+        const dateError = ensureMsg('date-error');
         const nodataError = ensureMsg('nodata-error');
         const serverError = ensureMsg('server-error');
-
-        const clearMsgs = () => {
-          [dateError, nodataError, serverError].forEach(el => {
-            el.textContent = '';
-            el.style.display = 'none';
-          });
-        };
+        const clearMsgs = () => [dateError, nodataError, serverError].forEach(el => { el.textContent = ''; el.style.display = 'none'; });
 
         function validateDates() {
           clearMsgs();
           if (!startInput.value || !endInput.value) return false;
-
           const s = normDate(startInput.value);
           const e = normDate(endInput.value);
-
-          if (s > today) {
-            dateError.textContent = '⚠️ Start date cannot be in the future.';
-            dateError.style.display = 'block';
-            return false;
-          }
-          if (e > today) {
-            dateError.textContent = '⚠️ End date cannot be in the future.';
-            dateError.style.display = 'block';
-            return false;
-          }
-          if (s > e) {
-            dateError.textContent = '⚠️ Start date must be earlier than end date.';
-            dateError.style.display = 'block';
-            return false;
-          }
+          if (s > today) { dateError.textContent = '⚠️ Start date cannot be in the future.'; dateError.style.display = 'block'; return false; }
+          if (e > today) { dateError.textContent = '⚠️ End date cannot be in the future.'; dateError.style.display = 'block'; return false; }
+          if (s > e) { dateError.textContent = '⚠️ Start date must be earlier than end date.'; dateError.style.display = 'block'; return false; }
           return true;
         }
 
-        // "Current Data" button → last month through today
-        const currentBtn =
-          Array.from(form.querySelectorAll('button[type="button"], button:not([type])'))
-            .find(b => /current\s*data/i.test(b.textContent || ''));
-
-        if (currentBtn) {
-          currentBtn.addEventListener('click', () => {
-            const end = new Date(); end.setHours(0,0,0,0);
-            const start = new Date(end);
-            start.setMonth(start.getMonth() - 1);
-
-        const card=graphCardFor(form);
-        card.innerHTML='<div class="graph-loading">Generating graph…</div>';
-
-        const res=await probeHasData(form);
-        clear();
-
-        if(res?.ok && res.html){ renderToGraph(card,res.html); return; }
-        if(res?.empty){
-          card.innerHTML='';
-          const loc=(locEl?.value||'').replace(/\s+(ND|SD)$/i,'');
-          show(noData, `ℹ️ No data for "${sel.value}" at ${loc} in that date range.`);
-          return;
-        }
-        if(res?.network){ card.innerHTML=''; show(srvErr,'⚠️ Network error while requesting the graph.'); return; }
-        if(res?.error){   card.innerHTML=''; show(srvErr,`⚠️ Error while generating the graph (${res.status||'unknown'}).`); return; }
-
-        // Fallback
-        try{
-          const action=form.getAttribute('action')||window.location.pathname;
-          const body=new URLSearchParams(new FormData(form));
-          const r=await fetch(action,{method:'POST',body,credentials:'same-origin',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8','X-Requested-With':'XMLHttpRequest'}});
-          const html=await r.text();
-          if(r.status===200){ renderToGraph(card,html); }
-          else{ card.innerHTML=''; show(noData,'ℹ️ No data for the selected range.'); }
-        }catch(e){ card.innerHTML=''; show(srvErr,'⚠️ Network error while requesting the graph.'); }
-      });
-    }
-
-        // Quick ranges (handled via delegated listener as well)
+        // Quick ranges
         form.querySelectorAll('.quick-row .chip').forEach(btn => {
           btn.addEventListener('click', () => {
             const range = btn.dataset.range;
             if (!range) return;
-
             if (range === 'clear') {
               startInput.value = startInput.dataset.defaultValue || defaultStartVal;
               endInput.value = endInput.dataset.defaultValue || defaultEndVal;
               return;
             }
-
-            const end = new Date(); end.setHours(0,0,0,0);
+            const end = new Date(); end.setHours(0, 0, 0, 0);
             let start = new Date(end);
-
-            switch (range) {
-              case '7d':
-                start.setDate(start.getDate() - 7);
-                break;
-              case '30d':
-                start.setDate(start.getDate() - 30);
-                break;
-              case '1y':
-                start.setFullYear(start.getFullYear() - 1);
-                break;
-              case 'ytd':
-                start = new Date(end.getFullYear(), 0, 1);
-                break;
-              default:
-                return;
-            }
-
+            if (range === '7d') start.setDate(start.getDate() - 7);
+            if (range === '30d') start.setDate(start.getDate() - 30);
+            if (range === '1y') start.setFullYear(start.getFullYear() - 1);
+            if (range === 'ytd') start = new Date(end.getFullYear(), 0, 1);
             startInput.value = isoDate(start);
             endInput.value = isoDate(end);
           });
         });
+
+        // Current Data button → last month
+        const currentBtn = Array.from(form.querySelectorAll('button[type="button"], button:not([type])'))
+          .find(b => /current\s*data/i.test(b.textContent || ''));
+        if (currentBtn) {
+          currentBtn.addEventListener('click', () => {
+            const end = new Date(); end.setHours(0, 0, 0, 0);
+            const start = new Date(end); start.setMonth(start.getMonth() - 1);
+            startInput.value = isoDate(start);
+            endInput.value = isoDate(end);
+            const first = Array.from(datasetSel.options).find(o => !o.disabled && o.value);
+            if (first) datasetSel.value = first.value;
+            form.requestSubmit();
+          });
+        }
 
         form.addEventListener('submit', async (e) => {
           if (!form.checkValidity()) { form.reportValidity(); return; }
@@ -516,37 +393,30 @@ document.querySelectorAll('.graph-card .graph-loading')
           if (res.state === 'empty') {
             const loc = (locationEl?.value || '').replace(/\s+(ND|SD)$/i, '');
             slot.innerHTML = '';
-            nodataError.textContent =
-              `No graph is available for ${loc || 'this location'} with that metric and date range. Please choose another range or metric.`;
+            nodataError.textContent = `No graph is available for ${loc || 'this location'} with that metric and date range. Please choose another range or metric.`;
             nodataError.style.display = 'block';
             return;
           }
-
           if (res.state === 'serverError') {
             slot.innerHTML = '';
-            serverError.textContent =
-              `⚠️ Server error while generating the graph (${res.status}).`;
+            serverError.textContent = `⚠️ Server error while generating the graph (${res.status}).`;
             serverError.style.display = 'block';
             return;
           }
-
           if (res.state === 'networkError') {
             slot.innerHTML = '';
-            serverError.textContent =
-              '⚠️ Network error while requesting the graph.';
+            serverError.textContent = '⚠️ Network error while requesting the graph.';
             serverError.style.display = 'block';
             return;
           }
-
           if (res.state === 'hasData' && res.html) {
-            renderHtmlIntoSlot(slot, res.html);
+            renderToGraph(slot, res.html);
             return;
           }
 
-          // Fallback: normal fetch and render
+          // Fallback: normal fetch
           const action = form.getAttribute('action') || window.location.pathname;
           const fd = new FormData(form);
-
           try {
             const resp = await fetch(action, {
               method: 'POST',
@@ -559,30 +429,26 @@ document.querySelectorAll('.graph-card .graph-loading')
               },
               redirect: 'manual'
             });
-
             const html = await resp.text();
             if (resp.status === 200) {
-              renderHtmlIntoSlot(slot, html);
+              renderToGraph(slot, html);
             } else if (resp.status >= 500 && TREAT_ALL_500_AS_NO_DATA) {
               slot.innerHTML = '';
               nodataError.textContent = 'No graph is available for the selected range. Try a different range or metric.';
               nodataError.style.display = 'block';
             } else {
               slot.innerHTML = '';
-              serverError.textContent =
-                `⚠️ Could not render graph (${resp.status}).`;
+              serverError.textContent = `⚠️ Could not render graph (${resp.status}).`;
               serverError.style.display = 'block';
             }
-          } catch (err) {
+          } catch (_err) {
             slot.innerHTML = '';
-            serverError.textContent =
-              '⚠️ Network error while requesting the graph.';
+            serverError.textContent = '⚠️ Network error while requesting the graph.';
             serverError.style.display = 'block';
           }
         });
       }
 
-      // Use server-injected graph index and update forms
       function populateMetricsForLoc(selectEl, locKey) {
         if (!selectEl) return;
         selectEl.innerHTML = '<option value="" disabled selected>Choose Data Point</option>';
@@ -598,9 +464,8 @@ document.querySelectorAll('.graph-card .graph-loading')
             });
             return;
           }
-        } catch (e) {}
-
-        ['Gauge Height','Elevation','Discharge','Water Temperature'].forEach(m => {
+        } catch (_e) {}
+        ['Gauge Height', 'Elevation', 'Discharge', 'Water Temperature'].forEach(m => {
           const opt = document.createElement('option');
           opt.value = m;
           opt.textContent = m;
@@ -608,162 +473,44 @@ document.querySelectorAll('.graph-card .graph-loading')
         });
       }
 
-      // Use server-injected graph index and update forms
-      function updateFormsFromIndex() {
+      function updateFormsFromIndex(form) {
         try {
           const index = window.graphIndex || {};
+          const locInput = form.querySelector('input[name="location"]');
+          const select = form.querySelector('select[name="data2see"]');
+          if (!locInput || !select) return;
 
-          document.querySelectorAll('section form[action="/customgaugegraph/"]').forEach(form => {
-            const locInput = form.querySelector('input[name="location"]');
-            const select = form.querySelector('select[name="data2see"]');
-            if (!locInput || !select) return;
+          const locKey = (locInput.value || '').replace(/\s+(ND|SD)$/i, '').trim();
+          const info = index[locKey];
+          if (!info || !info.metrics) return;
 
-            // Normalize location key used in index (strip trailing ND/SD)
-            const locKey = (locInput.value || '').replace(/\s+(ND|SD)$/i, '').trim();
-            const info = index[locKey];
-            if (!info || !info.metrics) {
-              // show small notice if there are no graphs for this location
-              let el = form.querySelector('.nodata-indicator');
-              if (!el) {
-                el = document.createElement('p');
-                el.className = 'nodata-indicator';
-                el.style.cssText = 'margin-top:6px;color:#b91c1c;font-weight:600;';
-                select.insertAdjacentElement('afterend', el);
-              }
-              el.textContent = 'No historical graphs available for this location.';
-              return;
+          const metrics = Object.keys(info.metrics || {});
+          const existingValues = Array.from(select.options).map(o => o.value);
+          metrics.forEach(m => {
+            const found = existingValues.find(ev => ev.toLowerCase() === m.toLowerCase());
+            if (!found) {
+              const opt = document.createElement('option');
+              opt.value = m;
+              opt.textContent = m;
+              select.appendChild(opt);
             }
-
-            const metrics = Object.keys(info.metrics || {});
-            const existingValues = Array.from(select.options).map(o => o.value);
-
-            // Add any missing metric options
-            metrics.forEach(m => {
-              const found = existingValues.find(ev => ev.toLowerCase() === m.toLowerCase());
-              if (!found) {
-                const opt = document.createElement('option');
-                opt.value = m;
-                opt.textContent = m;
-                select.appendChild(opt);
-              }
-            });
-
-            // Attach last-updated metadata to options by scanning filenames
-            const metricFiles = info.metrics || {};
-            Object.entries(metricFiles).forEach(([metric, files]) => {
-              let maxDate = null;
-              files.forEach(fn => {
-                // look for patterns like YYYYMMDD_YYYYMMDD_interactive
-                const m = fn.match(/(\d{6,8})_(\d{6,8})_interactive/i);
-                if (m) {
-                  const end = m[2];
-                  if (end.length === 8) {
-                    const dstr = `${end.slice(0,4)}-${end.slice(4,6)}-${end.slice(6,8)}`;
-                    if (!maxDate || dstr > maxDate) maxDate = dstr;
-                  }
-                } else {
-                  // try single date token
-                  const m2 = fn.match(/(\d{8})_interactive/);
-                  if (m2) {
-                    const d = m2[1];
-                    const dstr = `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}`;
-                    if (!maxDate || dstr > maxDate) maxDate = dstr;
-                  }
-                }
-              });
-
-              const opt = Array.from(select.options)
-                .find(o => o.value.toLowerCase() === metric.toLowerCase());
-              if (opt && maxDate) opt.dataset.lastUpdated = maxDate;
-            });
-
-            // show a small note about last-updated for the selected metric
-            let note = form.querySelector('.graph-last-updated');
-            if (!note) {
-              note = document.createElement('p');
-              note.className = 'graph-last-updated';
-              note.style.cssText = 'margin-top:6px;font-size:0.9rem;color:#374151;';
-              select.insertAdjacentElement('afterend', note);
-            }
-            function updateNote() {
-              const sel = select.value;
-              const opt = Array.from(select.options).find(o => o.value.toLowerCase() === sel.toLowerCase());
-              note.textContent = opt && opt.dataset.lastUpdated ? `Last graph update: ${opt.dataset.lastUpdated}` : '';
-            }
-            select.addEventListener('change', updateNote);
-            updateNote();
           });
         } catch (err) {
           console.warn('Could not process graph index', err);
         }
       }
 
-      updateFormsFromIndex();
+      // set max=today on all date inputs
+      document.querySelectorAll('input[type="date"]').forEach(i => i.max = isoDate(today));
 
-      document
-        .querySelectorAll('section form[action="/customgaugegraph/"]')
-        .forEach(attachHandlers);
-
-      // Delegated quick-range handling as a fallback (in case handlers haven't attached yet)
-      document.addEventListener('click', (e) => {
-        const btn = e.target.closest('.quick-row .chip');
-        if (!btn) return;
-        const form = btn.closest('form');
-        if (!form) return;
-        const startInput = form.querySelector('input[name="start-date"]');
-        const endInput = form.querySelector('input[name="end-date"]');
-        if (!startInput || !endInput) return;
-
-        const range = btn.dataset.range;
-        if (!range) return;
-
-        if (range === 'clear') {
-          startInput.value = startInput.dataset.defaultValue || startInput.value;
-          endInput.value = endInput.dataset.defaultValue || endInput.value;
-          return;
-        }
-
-        const end = new Date(); end.setHours(0,0,0,0);
-        let start = new Date(end);
-        switch (range) {
-          case '7d': start.setDate(start.getDate() - 7); break;
-          case '30d': start.setDate(start.getDate() - 30); break;
-          case '1y': start.setFullYear(start.getFullYear() - 1); break;
-          case 'ytd': start = new Date(end.getFullYear(), 0, 1); break;
-          default: return;
-        }
-        startInput.value = isoDate(start);
-        endInput.value = isoDate(end);
-      });
-
-      // Wire the reusable custom-location form to pick endpoint and input name
+      // Wire the reusable custom-location form
       (function wireCustomForm() {
         const customForm = document.getElementById('custom-location-form');
         if (!customForm) return;
-
-        const hiddenLoc = customForm.querySelector('input[type="hidden"][name="location"]');
-        const dataSel = customForm.querySelector('select[name="data2see"]');
-        const currentBtn = Array.from(customForm.querySelectorAll('button'))
-          .find(b => /current\s*data/i.test(b.textContent || ''));
-
-        if (currentBtn) {
-          currentBtn.addEventListener('click', () => {
-            const end = new Date(); end.setHours(0,0,0,0);
-            const start = new Date(end);
-            start.setMonth(start.getMonth() - 1);
-            customForm.querySelector('input[name="start-date"]').value = isoDate(start);
-            customForm.querySelector('input[name="end-date"]').value = isoDate(end);
-            // ensure we have a dataset selected
-            const first = Array.from(dataSel.options).find(o => !o.disabled && o.value);
-            if (first) dataSel.value = first.value;
-            customForm.requestSubmit();
-          });
-        }
-
-        // Attach existing probe+render handlers to custom form
-        try { attachHandlers(customForm); } catch (e) { /* ignore */ }
+        attachHandlers(customForm);
       })();
 
+      // Wire tabs to update the single form
       (function wireTabStrip() {
         const strip = document.getElementById('location-tab-strip');
         const customForm = document.getElementById('custom-location-form');
@@ -785,28 +532,24 @@ document.querySelectorAll('.graph-card .graph-loading')
           const inputName = chip.dataset.inputname || 'location';
 
           setActive(chip);
-
           customForm.setAttribute('action', endpoint);
           if (hiddenLoc) {
             hiddenLoc.name = inputName;
             hiddenLoc.value = loc;
           }
-          if (heading) {
-            heading.textContent = loc || 'Custom Location';
-          }
+          if (heading) heading.textContent = loc || 'Custom Location';
+
           const locKey = (loc || '').replace(/\s+(ND|SD)$/i, '').trim();
           populateMetricsForLoc(dataSel, locKey);
+          updateFormsFromIndex(customForm);
 
-          const first = dataSel
-            ? Array.from(dataSel.options).find(o => !o.disabled && o.value)
-            : null;
+          const first = dataSel ? Array.from(dataSel.options).find(o => !o.disabled && o.value) : null;
           if (first) dataSel.value = first.value;
 
           strip.scrollTo({ left: Math.max(0, chip.offsetLeft - 20), behavior: 'smooth' });
         }
 
         chips.forEach(chip => chip.addEventListener('click', () => applyChip(chip)));
-
         if (!hiddenLoc?.value && chips[0]) applyChip(chips[0]);
       })();
     });

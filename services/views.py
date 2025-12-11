@@ -323,6 +323,10 @@ def _normalize_posted_location(loc: str) -> str:
     if parts and parts[0].lower() == 'little':
         return 'Little Eagle'
     return l
+
+def _is_embed_request(request) -> bool:
+    """Detect if request comes from AJAX/iframe to adjust template chrome."""
+    return request.headers.get('x-requested-with', '').lower() == 'xmlhttprequest'
     
 def tabs(request):
     return render(request, 'graphing/tabs.html')
@@ -510,7 +514,7 @@ def customgaugegraph(request):
             table_html += f"<tr><td>{r['site']}</td><td>{r['mean']}</td><td>{r['sd']}</td><td>{r['median']}</td><td>{r['min']}</td><td>{r['max']}</td><td>{r['range']}</td></tr>"
         table_html += '</table>'
 
-        return render(request, "HTML/graphdisplay.html", context={'plot': plot_div, 'table': table_html})
+        return render(request, "HTML/graphdisplay.html", context={'plot': plot_div, 'table': table_html, 'embed': _is_embed_request(request)})
     finally:
         conn.close()
 
@@ -597,7 +601,7 @@ def customdamgraph(request):
             table_html += f"<tr><td>{r['site']}</td><td>{r['mean']}</td><td>{r['sd']}</td><td>{r['median']}</td><td>{r['min']}</td><td>{r['max']}</td><td>{r['range']}</td></tr>"
         table_html += '</table>'
 
-        return render(request, 'HTML/graphdisplay.html', context={'plot': plot_div, 'table': table_html})
+        return render(request, 'HTML/graphdisplay.html', context={'plot': plot_div, 'table': table_html, 'embed': _is_embed_request(request)})
     finally:
         conn.close()
 
@@ -683,7 +687,7 @@ def custommesonetgraph(request):
             table_html += f"<tr><td>{r['site']}</td><td>{r['mean']}</td><td>{r['sd']}</td><td>{r['median']}</td><td>{r['min']}</td><td>{r['max']}</td><td>{r['range']}</td></tr>"
         table_html += '</table>'
 
-        return render(request, 'HTML/graphdisplay.html', context={'plot': plot_div, 'table': table_html})
+        return render(request, 'HTML/graphdisplay.html', context={'plot': plot_div, 'table': table_html, 'embed': _is_embed_request(request)})
     finally:
         conn.close()
 
@@ -769,7 +773,7 @@ def customcocograph(request):
             table_html += f"<tr><td>{r['site']}</td><td>{r['mean']}</td><td>{r['sd']}</td><td>{r['median']}</td><td>{r['min']}</td><td>{r['max']}</td><td>{r['range']}</td></tr>"
         table_html += '</table>'
 
-        return render(request, 'HTML/graphdisplay.html', context={'plot': plot_div, 'table': table_html})
+        return render(request, 'HTML/graphdisplay.html', context={'plot': plot_div, 'table': table_html, 'embed': _is_embed_request(request)})
     finally:
         conn.close()
 
@@ -851,7 +855,7 @@ def customshadehillgraph(request):
             table_html += f"<tr><td>{r['site']}</td><td>{r['mean']}</td><td>{r['sd']}</td><td>{r['median']}</td><td>{r['min']}</td><td>{r['max']}</td><td>{r['range']}</td></tr>"
         table_html += '</table>'
 
-        return render(request, 'HTML/graphdisplay.html', context={'plot': plot_div, 'table': table_html})
+        return render(request, 'HTML/graphdisplay.html', context={'plot': plot_div, 'table': table_html, 'embed': _is_embed_request(request)})
     finally:
         conn.close()
 
@@ -937,7 +941,7 @@ def customnoaagraph(request):
             table_html += f"<tr><td>{r['site']}</td><td>{r['mean']}</td><td>{r['sd']}</td><td>{r['median']}</td><td>{r['min']}</td><td>{r['max']}</td><td>{r['range']}</td></tr>"
         table_html += '</table>'
 
-        return render(request, 'HTML/graphdisplay.html', context={'plot': plot_div, 'table': table_html})
+        return render(request, 'HTML/graphdisplay.html', context={'plot': plot_div, 'table': table_html, 'embed': _is_embed_request(request)})
     finally:
         conn.close()
 
@@ -1048,6 +1052,6 @@ def generate_maptab_graph(request):
             table_html += f"<tr><td>{r['site']}</td><td>{r['mean']}</td><td>{r['sd']}</td><td>{r['median']}</td><td>{r['min']}</td><td>{r['max']}</td><td>{r['range']}</td></tr>"
         table_html += '</table>'
 
-        return render(request, 'HTML/graphdisplay.html', context={'plot': plot_div, 'table': table_html})
+        return render(request, 'HTML/graphdisplay.html', context={'plot': plot_div, 'table': table_html, 'embed': _is_embed_request(request)})
     finally:
         conn.close()

@@ -20,7 +20,7 @@
         margin-left: 2vw;
       }
     </style>
-    {% include "HTML/navbar.html" %}
+    {% if not embed %}{% include "HTML/navbar.html" %}{% endif %}
     <body>
         <center>
           {% autoescape off %}
