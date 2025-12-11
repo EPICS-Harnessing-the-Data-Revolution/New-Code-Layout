@@ -36,6 +36,8 @@ import csv
 #     else:
 #         return HttpResponse('Invalid request method')
 
+def health(request):
+    return HttpResponse("OK")
 def favorites(request):
     favorites = []
     if request.user.is_authenticated:
